@@ -75,7 +75,12 @@ public class BlancoSfdcJdbcResultSet implements ResultSet {
 		int index = 0;
 		for (; ite.hasNext(); index++) {
 			final XmlObject obj = (XmlObject) ite.next();
-			if (index + 1 == columnIndex) {
+
+			// First one should be : type, value=Account, children=[]}
+			// Second one should be : Id, value=0012800000lbaM2AAI, children=[]}
+
+			// 1 origin for getString
+			if ((index + 1 - 2) == columnIndex) {
 				if (obj.getValue() == null) {
 					return "";
 				}
