@@ -35,11 +35,6 @@ public class AppTest extends TestCase {
 		return new TestSuite(AppTest.class);
 	}
 
-	/**
-	 * Rigourous Test :-)
-	 * 
-	 * @throws Exception
-	 */
 	public void testApp() throws Exception {
 		Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
 		try {
@@ -58,8 +53,8 @@ public class AppTest extends TestCase {
 			final String sql = "SELECT id, NAME FROM Account";
 			final ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				String id = rs.getString("id");
-				String name = rs.getString("name");
+				final String id = rs.getString("id");
+				final String name = rs.getString("name");
 				System.err.println("id: " + id + ", name:" + name);
 			}
 			rs.close();
