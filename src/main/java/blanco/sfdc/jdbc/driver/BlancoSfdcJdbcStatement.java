@@ -32,6 +32,8 @@ public class BlancoSfdcJdbcStatement implements Statement {
 	public ResultSet executeQuery(final String sql) throws SQLException {
 		final List<SObject> resultSetValueList = new ArrayList<SObject>();
 		try {
+			// TODO そもそもこの処理はResultSet側にあるべきのようだが、難易度が高いので一旦保留。
+			// TODO ただし、これを解決しないと、巨大な検索結果の際に全件を持ってきてしまうのでまずい実装だと思う。
 			QueryResult qryResult = conn.getPartnerConnection().query(sql);
 			for (;;) {
 				final SObject[] sObjs = qryResult.getRecords();
