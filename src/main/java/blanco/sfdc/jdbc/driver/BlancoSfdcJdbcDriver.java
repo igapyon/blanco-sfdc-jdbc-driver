@@ -50,6 +50,7 @@ import java.util.logging.Logger;
  * @author Toshiki Iga
  */
 public class BlancoSfdcJdbcDriver implements Driver {
+	public static final String BLANCO_SFDC_JDBC_DRIVER_PREFIX = "blanco:sfdc:jdbc:";
 
 	/**
 	 * Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
@@ -76,13 +77,21 @@ public class BlancoSfdcJdbcDriver implements Driver {
 
 	public boolean acceptsURL(final String url) throws SQLException {
 		System.out.println("trace: url:[" + url + "]");
-		if (url.startsWith("blanco:sfdc:jdbc:")) {
+		if (url.startsWith(BLANCO_SFDC_JDBC_DRIVER_PREFIX)) {
 			return true;
 		}
 		return false;
 	}
 
 	public Connection connect(final String url, final Properties info) throws SQLException {
+		if (false)
+			for (Object obj : info.keySet()) {
+				System.err.println("Connect: info:" + obj);
+			}
+
+		final String user = info.getProperty("user");
+		final String pass = info.getProperty("password");
+
 		// TODO Auto-generated method stub
 		throw new SQLException("Not Implemented.");
 		// return null;
