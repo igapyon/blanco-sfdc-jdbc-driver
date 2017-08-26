@@ -29,12 +29,13 @@ public class BlancoSfdcJdbcStatementTest extends TestCase {
 			final Connection conn = DriverManager.getConnection("blanco:sfdc:jdbc:" + url, user, pass);
 
 			final Statement stmt = conn.createStatement();
-			final String sql = "SELECT Id, Name FROM Account";
+			final String sql = "SELECT Id, Name, LastModifiedDate FROM Account";
 			final ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				final String id = rs.getString("id");
 				final String name = rs.getString("name");
-				// System.err.println("id: " + id + ", name:" + name);
+				final String lastModifiedDate = rs.getString("lastmodifieddate");
+				System.err.println("id: " + id + ", name:" + name + ", LastModifiedDate:" + lastModifiedDate);
 			}
 			rs.close();
 			stmt.close();
@@ -59,12 +60,14 @@ public class BlancoSfdcJdbcStatementTest extends TestCase {
 			final Connection conn = DriverManager.getConnection("blanco:sfdc:jdbc:" + url, user, pass);
 
 			final Statement stmt = conn.createStatement();
-			final String sql = "SELECT Id, Name FROM Account";
+			final String sql = "SELECT Id, Name, LastModifiedDate FROM Account";
 			final ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				final String id = rs.getString(1);
 				final String name = rs.getString(2);
-				System.err.println("id: " + id + ", name:" + name);
+				final String lastModifiedDate = rs.getString(3);
+				// System.err.println("id: " + id + ", name:" + name + ",
+				// LastModifiedDate:" + lastModifiedDate);
 			}
 			rs.close();
 			stmt.close();
