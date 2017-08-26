@@ -134,7 +134,7 @@ public class BlancoSfdcJdbcConnection implements Connection {
 	}
 
 	public DatabaseMetaData getMetaData() throws SQLException {
-		return new BlancoSfdcJdbcDatabaseMetaData();
+		return new BlancoSfdcJdbcDatabaseMetaData(this);
 	}
 
 	public void setReadOnly(boolean readOnly) throws SQLException {
