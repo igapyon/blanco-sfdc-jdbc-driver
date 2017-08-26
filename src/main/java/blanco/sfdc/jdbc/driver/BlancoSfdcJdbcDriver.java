@@ -53,6 +53,8 @@ public class BlancoSfdcJdbcDriver implements Driver {
 
 	/**
 	 * Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
+	 * 
+	 * DriverManager.getConnection("blanco:sfdc:jdbc:https://login.salesforce.com/services/Soap/u/40.0","user","pass");
 	 */
 	static {
 		final BlancoSfdcJdbcDriver driver = new BlancoSfdcJdbcDriver();
@@ -73,9 +75,11 @@ public class BlancoSfdcJdbcDriver implements Driver {
 	}
 
 	public boolean acceptsURL(final String url) throws SQLException {
-		// TODO Auto-generated method stub
 		System.out.println("trace: url:[" + url + "]");
-		throw new SQLException("Not Implemented.");
+		if (url.startsWith("blanco:sfdc:jdbc:")) {
+			return true;
+		}
+		return false;
 	}
 
 	public Connection connect(final String url, final Properties info) throws SQLException {
