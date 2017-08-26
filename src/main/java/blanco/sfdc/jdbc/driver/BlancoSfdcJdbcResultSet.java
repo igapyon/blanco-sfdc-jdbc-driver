@@ -19,10 +19,13 @@ import java.sql.SQLXML;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.bind.XmlObject;
@@ -144,8 +147,43 @@ public class BlancoSfdcJdbcResultSet implements ResultSet {
 		throw new SQLException("Not Implemented.");
 	}
 
-	public Date getDate(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+	protected static java.util.Date soqlDateToDate(final String soqlDateString) {
+		if (soqlDateString == null || soqlDateString.length() == 0) {
+			return null;
+		}
+
+		String workDateString = soqlDateString.replace("T", " ");
+		workDateString = workDateString.replace("Z", "");
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+		// FIXME TODO DO NOT USE JST.
+		final TimeZone jst = TimeZone.getTimeZone("JST");
+
+		try {
+			java.util.Date result = sdf.parse(workDateString);
+
+			final Calendar calForGmt = Calendar.getInstance();
+			calForGmt.setTime(result);
+			calForGmt.add(Calendar.MILLISECOND, jst.getOffset(result.getTime()));
+			result = calForGmt.getTime();
+
+			return result;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e.getMessage(), e);
+		}
+	}
+
+	public Date getDate(final int columnIndex) throws SQLException {
+		final String soqlDateString = getString(columnIndex);
+		final java.util.Date date = soqlDateToDate(soqlDateString);
+		return new Date(date.getTime());
+	}
+
+	public Date getDate(final String columnLabel) throws SQLException {
+		final String soqlDateString = getString(columnLabel);
+		final java.util.Date date = soqlDateToDate(soqlDateString);
+		return new Date(date.getTime());
 	}
 
 	public Time getTime(int columnIndex) throws SQLException {
@@ -201,10 +239,6 @@ public class BlancoSfdcJdbcResultSet implements ResultSet {
 	}
 
 	public byte[] getBytes(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public Date getDate(String columnLabel) throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
 
