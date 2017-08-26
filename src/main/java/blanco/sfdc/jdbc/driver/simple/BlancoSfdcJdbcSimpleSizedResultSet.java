@@ -8,8 +8,9 @@ public abstract class BlancoSfdcJdbcSimpleSizedResultSet extends BlancoSfdcJdbcS
 	protected int resultSetIndex = -1;
 	protected int resultSetSize = 0;
 
-	public BlancoSfdcJdbcSimpleSizedResultSet(final Statement stmt) {
+	public BlancoSfdcJdbcSimpleSizedResultSet(final Statement stmt, final int resultSetSize) {
 		super(stmt);
+		this.resultSetSize = resultSetSize;
 	}
 
 	@Override

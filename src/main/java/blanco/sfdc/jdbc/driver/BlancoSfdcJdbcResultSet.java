@@ -56,9 +56,8 @@ public class BlancoSfdcJdbcResultSet extends BlancoSfdcJdbcSimpleSizedResultSet 
 	protected boolean isClosed = false;
 
 	public BlancoSfdcJdbcResultSet(final Statement stmt, final List<SObject> resultsetValues) {
-		super(stmt);
+		super(stmt, resultsetValues.size());
 		this.resultSetValueList = resultsetValues;
-		resultSetSize = resultsetValues.size();
 	}
 
 	@Override

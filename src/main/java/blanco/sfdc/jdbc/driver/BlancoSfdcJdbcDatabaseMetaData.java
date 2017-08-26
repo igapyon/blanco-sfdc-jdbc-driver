@@ -1,20 +1,14 @@
 package blanco.sfdc.jdbc.driver;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.RowIdLifetime;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.sforce.soap.partner.DescribeGlobalResult;
-import com.sforce.soap.partner.DescribeGlobalSObjectResult;
-import com.sforce.ws.ConnectionException;
+import blanco.sfdc.jdbc.driver.databasemetadata.BlancoSfdcJdbcDatabaseMetaDataTablesStatement;
 
 public class BlancoSfdcJdbcDatabaseMetaData implements DatabaseMetaData {
-
 	protected BlancoSfdcJdbcConnection conn = null;
 
 	public BlancoSfdcJdbcDatabaseMetaData(final BlancoSfdcJdbcConnection conn) {
@@ -537,31 +531,11 @@ public class BlancoSfdcJdbcDatabaseMetaData implements DatabaseMetaData {
 
 	public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types)
 			throws SQLException {
-		final List<String> nameList = new ArrayList<String>();
-		try {
-			final DescribeGlobalResult descResult = conn.getPartnerConnection().describeGlobal();
-			for (DescribeGlobalSObjectResult sobjectResult : descResult.getSobjects()) {
-				System.out.println(sobjectResult.getName());
-			}
-		} catch (ConnectionException ex) {
-	//		throw new IOException(ex);
-		}
-//		return nameList.toArray(new String[nameList.size()]);
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		throw new SQLException("Not Implemented.");
+		@SuppressWarnings("resource")
+		final BlancoSfdcJdbcDatabaseMetaDataTablesStatement stmt = new BlancoSfdcJdbcDatabaseMetaDataTablesStatement(
+				conn, catalog, schemaPattern, tableNamePattern, types);
+		stmt.execute("dummy");
+		return stmt.getResultSet();
 	}
 
 	public ResultSet getSchemas() throws SQLException {
