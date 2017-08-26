@@ -54,505 +54,438 @@ import java.sql.SQLWarning;
 import java.sql.SQLXML;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
-public class BlancoSfdcJdbcPreparedStatement extends BlancoSfdcJdbcStatement implements PreparedStatement {
-	public BlancoSfdcJdbcPreparedStatement(final BlancoSfdcJdbcConnection conn) {
-		super(conn);
+import com.sforce.soap.partner.QueryResult;
+import com.sforce.soap.partner.sobject.SObject;
+import com.sforce.ws.ConnectionException;
+
+public class BlancoSfdcJdbcPreparedStatement implements PreparedStatement {
+	protected BlancoSfdcJdbcConnection conn = null;
+	protected String sql = null;
+
+	protected boolean isClosed = false;
+
+	public BlancoSfdcJdbcPreparedStatement(final BlancoSfdcJdbcConnection conn, final String sql) {
+		this.conn = conn;
+		this.sql = sql;
 	}
 
-	public ResultSet executeQuery(String sql) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+	public ResultSet executeQuery(final String sql) throws SQLException {
+		final List<SObject> resultSetValueList = new ArrayList<SObject>();
+		try {
+			// TODO そもそもこの処理はResultSet側にあるべきのようだが、難易度が高いので一旦保留。
+			// TODO ただし、これを解決しないと、巨大な検索結果の際に全件を持ってきてしまうのでまずい実装だと思う。
+			QueryResult qryResult = conn.getPartnerConnection().query(sql);
+			for (;;) {
+				final SObject[] sObjs = qryResult.getRecords();
+				for (int index = 0; index < sObjs.length; index++) {
+					resultSetValueList.add(sObjs[index]);
+				}
+				if (qryResult.isDone()) {
+					break;
+				}
+				// TODO This should be more better.
+				qryResult = conn.getPartnerConnection().queryMore(qryResult.getQueryLocator());
+			}
+
+			return new BlancoSfdcJdbcResultSet(this, resultSetValueList);
+		} catch (ConnectionException ex) {
+			throw new SQLException(ex);
+		}
+	}
+
+	public ResultSet executeQuery() throws SQLException {
+		return executeQuery(sql);
 	}
 
 	public int executeUpdate(String sql) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void close() throws SQLException {
-		// TODO Auto-generated method stub
-
+		isClosed = true;
 	}
 
 	public int getMaxFieldSize() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setMaxFieldSize(int max) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public int getMaxRows() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setMaxRows(int max) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setEscapeProcessing(boolean enable) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public int getQueryTimeout() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setQueryTimeout(int seconds) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void cancel() throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public SQLWarning getWarnings() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void clearWarnings() throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setCursorName(String name) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public boolean execute(String sql) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public ResultSet getResultSet() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public int getUpdateCount() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public boolean getMoreResults() throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setFetchDirection(int direction) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public int getFetchDirection() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setFetchSize(int rows) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public int getFetchSize() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public int getResultSetConcurrency() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public int getResultSetType() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void addBatch(String sql) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void clearBatch() throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public int[] executeBatch() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public Connection getConnection() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public boolean getMoreResults(int current) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public ResultSet getGeneratedKeys() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public int executeUpdate(String sql, int autoGeneratedKeys) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public int executeUpdate(String sql, int[] columnIndexes) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public int executeUpdate(String sql, String[] columnNames) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public boolean execute(String sql, int autoGeneratedKeys) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public boolean execute(String sql, int[] columnIndexes) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public boolean execute(String sql, String[] columnNames) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public int getResultSetHoldability() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public boolean isClosed() throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		return isClosed;
 	}
 
 	public void setPoolable(boolean poolable) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public boolean isPoolable() throws SQLException {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public void closeOnCompletion() throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public boolean isCloseOnCompletion() throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public <T> T unwrap(Class<T> iface) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public boolean isWrapperFor(Class<?> iface) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public ResultSet executeQuery() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public int executeUpdate() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setNull(int parameterIndex, int sqlType) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setBoolean(int parameterIndex, boolean x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setByte(int parameterIndex, byte x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setShort(int parameterIndex, short x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setInt(int parameterIndex, int x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setLong(int parameterIndex, long x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setFloat(int parameterIndex, float x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setDouble(int parameterIndex, double x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setBigDecimal(int parameterIndex, BigDecimal x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setString(int parameterIndex, String x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setBytes(int parameterIndex, byte[] x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setDate(int parameterIndex, Date x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setTime(int parameterIndex, Time x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setTimestamp(int parameterIndex, Timestamp x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setAsciiStream(int parameterIndex, InputStream x, int length) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setBinaryStream(int parameterIndex, InputStream x, int length) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void clearParameters() throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setObject(int parameterIndex, Object x, int targetSqlType) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setObject(int parameterIndex, Object x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public boolean execute() throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void addBatch() throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setCharacterStream(int parameterIndex, Reader reader, int length) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setRef(int parameterIndex, Ref x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setBlob(int parameterIndex, Blob x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setClob(int parameterIndex, Clob x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setArray(int parameterIndex, Array x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public ResultSetMetaData getMetaData() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setDate(int parameterIndex, Date x, Calendar cal) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setTime(int parameterIndex, Time x, Calendar cal) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setNull(int parameterIndex, int sqlType, String typeName) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setURL(int parameterIndex, URL x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public ParameterMetaData getParameterMetaData() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setRowId(int parameterIndex, RowId x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setNString(int parameterIndex, String value) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setNCharacterStream(int parameterIndex, Reader value, long length) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setNClob(int parameterIndex, NClob value) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setClob(int parameterIndex, Reader reader, long length) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setBlob(int parameterIndex, InputStream inputStream, long length) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setNClob(int parameterIndex, Reader reader, long length) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setAsciiStream(int parameterIndex, InputStream x, long length) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setBinaryStream(int parameterIndex, InputStream x, long length) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setCharacterStream(int parameterIndex, Reader reader, long length) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setAsciiStream(int parameterIndex, InputStream x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setBinaryStream(int parameterIndex, InputStream x) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setCharacterStream(int parameterIndex, Reader reader) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setNCharacterStream(int parameterIndex, Reader value) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setClob(int parameterIndex, Reader reader) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setBlob(int parameterIndex, InputStream inputStream) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 
 	public void setNClob(int parameterIndex, Reader reader) throws SQLException {
-		// TODO Auto-generated method stub
-
+		throw new SQLException("Not Implemented.");
 	}
 }

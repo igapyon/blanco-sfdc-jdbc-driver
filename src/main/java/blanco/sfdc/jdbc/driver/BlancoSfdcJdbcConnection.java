@@ -96,8 +96,8 @@ public class BlancoSfdcJdbcConnection implements Connection {
 		return new BlancoSfdcJdbcStatement(this);
 	}
 
-	public PreparedStatement prepareStatement(String sql) throws SQLException {
-		throw new SQLException("Not Implemented.");
+	public PreparedStatement prepareStatement(final String sql) throws SQLException {
+		return new BlancoSfdcJdbcPreparedStatement(this, sql);
 	}
 
 	public CallableStatement prepareCall(String sql) throws SQLException {
@@ -113,7 +113,8 @@ public class BlancoSfdcJdbcConnection implements Connection {
 	}
 
 	public boolean getAutoCommit() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// NOTE do nothing.
+		return false;
 	}
 
 	public void commit() throws SQLException {
@@ -121,7 +122,7 @@ public class BlancoSfdcJdbcConnection implements Connection {
 	}
 
 	public void rollback() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// NOTE do nothing.
 	}
 
 	public void close() throws SQLException {
@@ -137,11 +138,15 @@ public class BlancoSfdcJdbcConnection implements Connection {
 	}
 
 	public void setReadOnly(boolean readOnly) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		if (readOnly) {
+			// OK
+		} else {
+			throw new SQLException("Not Supported.");
+		}
 	}
 
 	public boolean isReadOnly() throws SQLException {
-		// Read Only !11
+		// Read Only !
 		return true;
 	}
 
@@ -304,5 +309,4 @@ public class BlancoSfdcJdbcConnection implements Connection {
 	public int getNetworkTimeout() throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
-
 }

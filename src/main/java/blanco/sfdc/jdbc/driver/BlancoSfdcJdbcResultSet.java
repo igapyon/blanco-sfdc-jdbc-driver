@@ -64,14 +64,14 @@ import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.bind.XmlObject;
 
 public class BlancoSfdcJdbcResultSet implements ResultSet {
-	protected BlancoSfdcJdbcStatement stmt = null;
+	protected Statement stmt = null;
 
 	protected List<SObject> resultSetValueList;
 	protected int resultSetValueIndex = -1;
 
 	protected boolean isClosed = false;
 
-	public BlancoSfdcJdbcResultSet(final BlancoSfdcJdbcStatement stmt, final List<SObject> resultsetValues) {
+	public BlancoSfdcJdbcResultSet(final Statement stmt, final List<SObject> resultsetValues) {
 		this.stmt = stmt;
 		this.resultSetValueList = resultsetValues;
 	}
