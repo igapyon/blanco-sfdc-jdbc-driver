@@ -51,6 +51,9 @@ import java.util.logging.Logger;
  */
 public class BlancoSfdcJdbcDriver implements Driver {
 
+	/**
+	 * Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
+	 */
 	static {
 		final BlancoSfdcJdbcDriver driver = new BlancoSfdcJdbcDriver();
 
@@ -69,16 +72,16 @@ public class BlancoSfdcJdbcDriver implements Driver {
 		return 1;
 	}
 
-	public Connection connect(final String url, final Properties info) throws SQLException {
-		// TODO Auto-generated method stub
-		throw new SQLException("Not Implemented.");
-		// return null;
-	}
-
 	public boolean acceptsURL(final String url) throws SQLException {
 		// TODO Auto-generated method stub
 		System.out.println("trace: url:[" + url + "]");
 		throw new SQLException("Not Implemented.");
+	}
+
+	public Connection connect(final String url, final Properties info) throws SQLException {
+		// TODO Auto-generated method stub
+		throw new SQLException("Not Implemented.");
+		// return null;
 	}
 
 	public DriverPropertyInfo[] getPropertyInfo(final String url, final Properties info) throws SQLException {
