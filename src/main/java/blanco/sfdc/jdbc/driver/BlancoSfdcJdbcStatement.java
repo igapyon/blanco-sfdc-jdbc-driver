@@ -5,9 +5,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.sforce.soap.partner.QueryResult;
+import com.sforce.soap.partner.sobject.SObject;
+import com.sforce.ws.ConnectionException;
 
 public class BlancoSfdcJdbcStatement implements Statement {
 	protected BlancoSfdcJdbcConnection conn = null;
+
+	protected boolean isClosed = false;
 
 	public BlancoSfdcJdbcStatement(final BlancoSfdcJdbcConnection conn) {
 		this.conn = conn;
@@ -21,8 +29,26 @@ public class BlancoSfdcJdbcStatement implements Statement {
 		throw new SQLException("Not Implemented.");
 	}
 
-	public ResultSet executeQuery(String sql) throws SQLException {
-		throw new SQLException("Not Implemented.");
+	public ResultSet executeQuery(final String sql) throws SQLException {
+		final List<SObject> resultSetValueList = new ArrayList<SObject>();
+		try {
+			QueryResult qryResult = conn.getPartnerConnection().query(sql);
+			for (;;) {
+				final SObject[] sObjs = qryResult.getRecords();
+				for (int index = 0; index < sObjs.length; index++) {
+					resultSetValueList.add(sObjs[index]);
+				}
+				if (qryResult.isDone()) {
+					break;
+				}
+				// TODO This should be more better.
+				qryResult = conn.getPartnerConnection().queryMore(qryResult.getQueryLocator());
+			}
+
+			return new BlancoSfdcJdbcResultSet(this, resultSetValueList);
+		} catch (ConnectionException ex) {
+			throw new SQLException(ex);
+		}
 	}
 
 	public int executeUpdate(String sql) throws SQLException {
@@ -30,7 +56,7 @@ public class BlancoSfdcJdbcStatement implements Statement {
 	}
 
 	public void close() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		isClosed = true;
 	}
 
 	public int getMaxFieldSize() throws SQLException {
@@ -170,7 +196,7 @@ public class BlancoSfdcJdbcStatement implements Statement {
 	}
 
 	public boolean isClosed() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return isClosed;
 	}
 
 	public void setPoolable(boolean poolable) throws SQLException {

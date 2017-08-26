@@ -27,6 +27,12 @@ import com.sforce.ws.ConnectorConfig;
 public class BlancoSfdcJdbcConnection implements Connection {
 	protected PartnerConnection partnerConn = null;
 
+	protected boolean isClosed = false;
+
+	public PartnerConnection getPartnerConnection() {
+		return partnerConn;
+	}
+
 	public BlancoSfdcJdbcConnection(final String url, final String user, final String pass) throws SQLException {
 		try {
 			final ConnectorConfig connectorCfg = new ConnectorConfig();
@@ -86,11 +92,11 @@ public class BlancoSfdcJdbcConnection implements Connection {
 	}
 
 	public void close() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		isClosed = true;
 	}
 
 	public boolean isClosed() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return isClosed;
 	}
 
 	public DatabaseMetaData getMetaData() throws SQLException {

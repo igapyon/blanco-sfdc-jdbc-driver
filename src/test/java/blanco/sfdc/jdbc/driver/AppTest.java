@@ -55,11 +55,12 @@ public class AppTest extends TestCase {
 			final Connection conn = DriverManager.getConnection("blanco:sfdc:jdbc:" + url, user, pass);
 
 			final Statement stmt = conn.createStatement();
-			final String sql = "SELECT id FROM Account";
+			final String sql = "SELECT id, NAME FROM Account";
 			final ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				String id = rs.getString("id");
-				System.out.print("ID: " + id);
+				String name = rs.getString("name");
+				System.err.println("id: " + id + ", name:" + name);
 			}
 			rs.close();
 			stmt.close();
