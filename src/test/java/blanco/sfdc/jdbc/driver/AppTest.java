@@ -1,6 +1,8 @@
 package blanco.sfdc.jdbc.driver;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -34,7 +36,11 @@ public class AppTest extends TestCase {
 	 */
 	public void testApp() throws Exception {
 		Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
-		DriverManager.getConnection("blanco:sfdc:jdbc:https://login.salesforce.com/services/Soap/u/40.0", "user",
-				"pass");
+		try {
+			final Connection conn = DriverManager.getConnection(
+					"blanco:sfdc:jdbc:https://login.salesforce.com/services/Soap/u/40.0", "user", "pass");
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
 	}
 }

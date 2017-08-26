@@ -92,9 +92,7 @@ public class BlancoSfdcJdbcDriver implements Driver {
 		final String user = info.getProperty("user");
 		final String pass = info.getProperty("password");
 
-		// TODO Auto-generated method stub
-		throw new SQLException("Not Implemented.");
-		// return null;
+		return new BlancoSfdcJdbcConnection(url, user, pass);
 	}
 
 	public DriverPropertyInfo[] getPropertyInfo(final String url, final Properties info) throws SQLException {
