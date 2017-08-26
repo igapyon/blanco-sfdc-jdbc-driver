@@ -36,4 +36,5 @@ package blanco.sfdc.jdbc.driver;
 public class BlancoSfdcJdbcConstants {
 	public static final String JDBC_DRIVER_URL_PREFIX = "blanco:sfdc:jdbc:";
 
+	public static final String NOT_SUPPORTED_MESSAGE = "Not Supported.";
 }
