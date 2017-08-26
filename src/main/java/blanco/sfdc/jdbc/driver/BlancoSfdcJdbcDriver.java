@@ -41,6 +41,13 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+/**
+ * mvn archetype:generate -DgroupId=blanco.sfdc.jdbc.driver
+ * -DartifactId=blanco-sfdc-jdbc-driver
+ * -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+ * 
+ * @author Toshiki Iga
+ */
 public class BlancoSfdcJdbcDriver implements Driver {
 	public int getMajorVersion() {
 		return 1;
