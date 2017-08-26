@@ -199,54 +199,6 @@ public abstract class BlancoSfdcJdbcSimpleResultSet implements ResultSet {
 		throw new SQLException("Not Implemented.");
 	}
 
-	public boolean isBeforeFirst() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public boolean isAfterLast() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public boolean isFirst() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public boolean isLast() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void beforeFirst() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void afterLast() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public boolean first() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public boolean last() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public int getRow() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public boolean absolute(int row) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public boolean relative(int rows) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public boolean previous() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
 	public void setFetchDirection(int direction) throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}

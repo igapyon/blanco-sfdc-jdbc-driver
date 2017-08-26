@@ -48,32 +48,22 @@ import java.util.TimeZone;
 import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.bind.XmlObject;
 
-import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleResultSet;
+import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleSizedResultSet;
 
-public class BlancoSfdcJdbcResultSet extends BlancoSfdcJdbcSimpleResultSet {
+public class BlancoSfdcJdbcResultSet extends BlancoSfdcJdbcSimpleSizedResultSet {
 	protected List<SObject> resultSetValueList;
-	protected int resultSetValueIndex = -1;
 
 	protected boolean isClosed = false;
 
 	public BlancoSfdcJdbcResultSet(final Statement stmt, final List<SObject> resultsetValues) {
 		super(stmt);
 		this.resultSetValueList = resultsetValues;
-	}
-
-	public boolean next() throws SQLException {
-		resultSetValueIndex++;
-
-		if (resultSetValueIndex < resultSetValueList.size()) {
-			return true;
-		} else {
-			return false;
-		}
+		resultSetSize = resultsetValues.size();
 	}
 
 	@Override
 	public void close() throws SQLException {
-		resultSetValueIndex = -1;
+		super.close();
 		resultSetValueList = null;
 	}
 
@@ -82,7 +72,7 @@ public class BlancoSfdcJdbcResultSet extends BlancoSfdcJdbcSimpleResultSet {
 	}
 
 	public String getString(int columnIndex) throws SQLException {
-		final XmlObject xmlObj = (XmlObject) resultSetValueList.get(resultSetValueIndex);
+		final XmlObject xmlObj = (XmlObject) resultSetValueList.get(resultSetIndex);
 
 		final Iterator<XmlObject> ite = xmlObj.getChildren();
 		int index = 0;
@@ -105,7 +95,7 @@ public class BlancoSfdcJdbcResultSet extends BlancoSfdcJdbcSimpleResultSet {
 	}
 
 	public String getString(final String columnLabel) throws SQLException {
-		final XmlObject xmlObj = (XmlObject) resultSetValueList.get(resultSetValueIndex);
+		final XmlObject xmlObj = (XmlObject) resultSetValueList.get(resultSetIndex);
 
 		final Iterator<XmlObject> ite = xmlObj.getChildren();
 		for (; ite.hasNext();) {
