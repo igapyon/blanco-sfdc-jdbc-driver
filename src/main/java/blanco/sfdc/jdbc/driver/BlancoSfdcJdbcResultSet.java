@@ -69,7 +69,38 @@ public class BlancoSfdcJdbcResultSet implements ResultSet {
 	}
 
 	public String getString(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		final XmlObject xmlObj = (XmlObject) resultSetValueList.get(resultSetValueIndex);
+
+		final Iterator<XmlObject> ite = xmlObj.getChildren();
+		int index = 0;
+		for (; ite.hasNext(); index++) {
+			final XmlObject obj = (XmlObject) ite.next();
+			if (index + 1 == columnIndex) {
+				if (obj.getValue() == null) {
+					return "";
+				}
+				return obj.getValue().toString();
+			}
+		}
+
+		throw new SQLException("No such column index [" + columnIndex + "]");
+	}
+
+	public String getString(final String columnLabel) throws SQLException {
+		final XmlObject xmlObj = (XmlObject) resultSetValueList.get(resultSetValueIndex);
+
+		final Iterator<XmlObject> ite = xmlObj.getChildren();
+		for (; ite.hasNext();) {
+			final XmlObject obj = (XmlObject) ite.next();
+			if (obj.getName().getLocalPart().compareToIgnoreCase(columnLabel) == 0) {
+				if (obj.getValue() == null) {
+					return "";
+				}
+				return obj.getValue().toString();
+			}
+		}
+
+		throw new SQLException("No such column [" + columnLabel + "]");
 	}
 
 	public boolean getBoolean(int columnIndex) throws SQLException {
@@ -130,23 +161,6 @@ public class BlancoSfdcJdbcResultSet implements ResultSet {
 
 	public InputStream getBinaryStream(int columnIndex) throws SQLException {
 		throw new SQLException("Not Implemented.");
-	}
-
-	public String getString(final String columnLabel) throws SQLException {
-		final XmlObject xmlObj = (XmlObject) resultSetValueList.get(resultSetValueIndex);
-
-		final Iterator<XmlObject> ite = xmlObj.getChildren();
-		for (; ite.hasNext();) {
-			final XmlObject obj = (XmlObject) ite.next();
-			if (obj.getName().getLocalPart().compareToIgnoreCase(columnLabel) == 0) {
-				if (obj.getValue() == null) {
-					return "";
-				}
-				return obj.getValue().toString();
-			}
-		}
-
-		throw new SQLException("No such column [" + columnLabel + "]");
 	}
 
 	public boolean getBoolean(String columnLabel) throws SQLException {
