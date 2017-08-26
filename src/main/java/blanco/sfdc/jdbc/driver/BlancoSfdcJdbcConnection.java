@@ -70,7 +70,7 @@ public class BlancoSfdcJdbcConnection implements Connection {
 		try {
 			final ConnectorConfig connectorCfg = new ConnectorConfig();
 
-			connectorCfg.setAuthEndpoint(url.substring(BlancoSfdcJdbcDriver.BLANCO_SFDC_JDBC_DRIVER_PREFIX.length()));
+			connectorCfg.setAuthEndpoint(url.substring(BlancoSfdcJdbcConstants.JDBC_DRIVER_URL_PREFIX.length()));
 			connectorCfg.setUsername(user);
 			connectorCfg.setPassword(pass);
 
