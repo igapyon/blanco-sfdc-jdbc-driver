@@ -54,7 +54,7 @@ public class BlancoSfdcJdbcConnection implements Connection {
 	}
 
 	public Statement createStatement() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return new BlancoSfdcJdbcStatement(this);
 	}
 
 	public PreparedStatement prepareStatement(String sql) throws SQLException {
