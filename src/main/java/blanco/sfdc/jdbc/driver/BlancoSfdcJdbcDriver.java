@@ -35,6 +35,7 @@ package blanco.sfdc.jdbc.driver;
 
 import java.sql.Connection;
 import java.sql.Driver;
+import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
@@ -49,6 +50,17 @@ import java.util.logging.Logger;
  * @author Toshiki Iga
  */
 public class BlancoSfdcJdbcDriver implements Driver {
+
+	static {
+		final BlancoSfdcJdbcDriver driver = new BlancoSfdcJdbcDriver();
+
+		try {
+			DriverManager.registerDriver(driver);
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
+
 	public int getMajorVersion() {
 		return 1;
 	}
@@ -65,8 +77,8 @@ public class BlancoSfdcJdbcDriver implements Driver {
 
 	public boolean acceptsURL(final String url) throws SQLException {
 		// TODO Auto-generated method stub
+		System.out.println("trace: url:[" + url + "]");
 		throw new SQLException("Not Implemented.");
-		// return null;
 	}
 
 	public DriverPropertyInfo[] getPropertyInfo(final String url, final Properties info) throws SQLException {
@@ -76,7 +88,7 @@ public class BlancoSfdcJdbcDriver implements Driver {
 	}
 
 	public boolean jdbcCompliant() {
-		// TODO Auto-generated method stub
+		// NO!
 		return false;
 	}
 
