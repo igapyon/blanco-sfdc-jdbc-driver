@@ -4,17 +4,12 @@ import java.sql.Date;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
-import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleSizedResultSet;
+import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleResultSet;
 
-public class BlancoSfdcJdbcDatabaseMetaDataTablesResultSet extends BlancoSfdcJdbcSimpleSizedResultSet {
-	protected List<String> nameList = new ArrayList<String>();
-
-	public BlancoSfdcJdbcDatabaseMetaDataTablesResultSet(final Statement stmt, final List<String> nameList) {
-		super(stmt, nameList.size());
-		this.nameList = nameList;
+public class BlancoSfdcJdbcDatabaseMetaDataTablesResultSet extends BlancoSfdcJdbcSimpleResultSet {
+	public BlancoSfdcJdbcDatabaseMetaDataTablesResultSet(final Statement stmt) {
+		super(stmt);
 	}
 
 	public String getString(int columnIndex) throws SQLException {

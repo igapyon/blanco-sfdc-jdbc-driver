@@ -10,6 +10,8 @@ import com.sforce.soap.partner.DescribeGlobalSObjectResult;
 import com.sforce.ws.ConnectionException;
 
 import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
+import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleResultSetRecord;
+import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleResultSetRecordItem;
 import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleStatement;
 
 public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoSfdcJdbcSimpleStatement {
@@ -20,9 +22,10 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoSfdcJdb
 		super(conn);
 	}
 
-
 	@Override
-	public boolean execute(String sql) throws SQLException {
+	public boolean execute(final String sql) throws SQLException {
+		// NOTE ignored sql
+
 		try {
 			final DescribeGlobalResult descResult = conn.getPartnerConnection().describeGlobal();
 			for (DescribeGlobalSObjectResult sobjectResult : descResult.getSobjects()) {
@@ -38,21 +41,54 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoSfdcJdb
 
 	@Override
 	public ResultSet getResultSet() throws SQLException {
-		return new BlancoSfdcJdbcDatabaseMetaDataTablesResultSet(this, nameList);
+		BlancoSfdcJdbcDatabaseMetaDataTablesResultSet rs = new BlancoSfdcJdbcDatabaseMetaDataTablesResultSet(this);
+
+		for (String name : nameList) {
+			BlancoSfdcJdbcSimpleResultSetRecord record = new BlancoSfdcJdbcSimpleResultSetRecord();
+			{
+				final BlancoSfdcJdbcSimpleResultSetRecordItem item = new BlancoSfdcJdbcSimpleResultSetRecordItem();
+				item.setColumnName("TABLE_CAT");
+				item.setColumnValue("tableのCAT");
+				record.getItemList().add(item);
+			}
+
+			{
+				final BlancoSfdcJdbcSimpleResultSetRecordItem item = new BlancoSfdcJdbcSimpleResultSetRecordItem();
+				item.setColumnName("TABLE_SCHEM");
+				item.setColumnValue("");
+				record.getItemList().add(item);
+			}
+
+			{
+				final BlancoSfdcJdbcSimpleResultSetRecordItem item = new BlancoSfdcJdbcSimpleResultSetRecordItem();
+				item.setColumnName("TABLE_NAME");
+				item.setColumnValue(name);
+				record.getItemList().add(item);
+			}
+
+			{
+				final BlancoSfdcJdbcSimpleResultSetRecordItem item = new BlancoSfdcJdbcSimpleResultSetRecordItem();
+				item.setColumnName("TABLE_TYPE");
+				item.setColumnValue("tab type");
+				record.getItemList().add(item);
+			}
+
+			{
+				final BlancoSfdcJdbcSimpleResultSetRecordItem item = new BlancoSfdcJdbcSimpleResultSetRecordItem();
+				item.setColumnName("REMARKS");
+				item.setColumnValue("tab remarks");
+				record.getItemList().add(item);
+			}
+
+			rs.getRecordList().add(record);
+		}
+
+		return rs;
 	}
 
-
-
-	TABLE_CAT	String	The name of the database in which the specified table resides.
-	TABLE_SCHEM	String	The table schema name.
-	TABLE_NAME	String	The table name.
-	TABLE_TYPE	String	"".
-
-	REMARKS	String	The description of the table.
-	TYPE_CAT	String	Not supported by the JDBC driver.
-	TYPE_SCHEM	String	Not supported by the JDBC driver.
-	TYPE_NAME	String	Not supported by the JDBC driver.
-	SELF_REFERENCING_COL_NAME	String	Not supported by the JDBC driver.
-	REF_GENERATION	String	Not supported by the JDBC driver.
-
+	// TYPE_CAT
+	// TYPE_SCHEM
+	// TYPE_NAME
+	// SELF_REFERENCING_COL_NAME
+	// REF_GENERATION
 }

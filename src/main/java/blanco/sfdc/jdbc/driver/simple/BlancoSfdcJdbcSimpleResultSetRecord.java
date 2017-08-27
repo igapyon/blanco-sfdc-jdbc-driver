@@ -9,8 +9,4 @@ public class BlancoSfdcJdbcSimpleResultSetRecord {
 	public List<BlancoSfdcJdbcSimpleResultSetRecordItem> getItemList() {
 		return itemList;
 	}
-
-	public void setItemList(List<BlancoSfdcJdbcSimpleResultSetRecordItem> itemList) {
-		this.itemList = itemList;
-	}
 }

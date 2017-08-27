@@ -48,22 +48,55 @@ import java.util.TimeZone;
 import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.bind.XmlObject;
 
-import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleSizedResultSet;
+import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleResultSet;
+import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleResultSetRecord;
+import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleResultSetRecordItem;
 
-public class BlancoSfdcJdbcResultSet extends BlancoSfdcJdbcSimpleSizedResultSet {
-	protected List<SObject> resultSetValueList;
-
+public class BlancoSfdcJdbcResultSet extends BlancoSfdcJdbcSimpleResultSet {
 	protected boolean isClosed = false;
 
-	public BlancoSfdcJdbcResultSet(final Statement stmt, final List<SObject> resultsetValues) {
-		super(stmt, resultsetValues.size());
-		this.resultSetValueList = resultsetValues;
-	}
+	public BlancoSfdcJdbcResultSet(final Statement stmt, final List<SObject> resultSetValueList) {
+		super(stmt);
 
-	@Override
-	public void close() throws SQLException {
-		super.close();
-		resultSetValueList = null;
+		for (int indexRow = 0; indexRow < resultSetValueList.size(); indexRow++) {
+			final BlancoSfdcJdbcSimpleResultSetRecord record = new BlancoSfdcJdbcSimpleResultSetRecord();
+			getRecordList().add(record);
+
+			final XmlObject xmlObj = (XmlObject) resultSetValueList.get(indexRow);
+
+			String tableName = "N/A";
+			String rowIdString = "";
+
+			final Iterator<XmlObject> ite = xmlObj.getChildren();
+			int index = 0;
+			for (; ite.hasNext(); index++) {
+				final XmlObject obj = (XmlObject) ite.next();
+
+				// First one should be : type, value=Account, children=[]}
+				// Second one should be : Id, value=0012800000lbaM2AAI,
+				// children=[]}
+
+				if (index == 0) {
+					tableName = obj.getValue().toString();
+				} else if (index == 1) {
+					rowIdString = obj.getValue().toString();
+				} else {
+					// 1 origin for getString
+					final BlancoSfdcJdbcSimpleResultSetRecordItem item = new BlancoSfdcJdbcSimpleResultSetRecordItem();
+					record.getItemList().add(item);
+					item.setColumnName(obj.getName().getLocalPart());
+
+					if (obj.getValue() == null) {
+						item.setColumnValue("");
+					} else {
+						item.setColumnValue(obj.getValue().toString());
+					}
+
+					// TODO tablename?
+					// TODO set ID?
+				}
+			}
+		}
 	}
 
 	public boolean wasNull() throws SQLException {
@@ -71,39 +104,16 @@ public class BlancoSfdcJdbcResultSet extends BlancoSfdcJdbcSimpleSizedResultSet 
 	}
 
 	public String getString(int columnIndex) throws SQLException {
-		final XmlObject xmlObj = (XmlObject) resultSetValueList.get(resultSetIndex);
-
-		final Iterator<XmlObject> ite = xmlObj.getChildren();
-		int index = 0;
-		for (; ite.hasNext(); index++) {
-			final XmlObject obj = (XmlObject) ite.next();
-
-			// First one should be : type, value=Account, children=[]}
-			// Second one should be : Id, value=0012800000lbaM2AAI, children=[]}
-
-			// 1 origin for getString
-			if ((index + 1 - 2) == columnIndex) {
-				if (obj.getValue() == null) {
-					return "";
-				}
-				return obj.getValue().toString();
-			}
-		}
-
-		throw new SQLException("No such column index [" + columnIndex + "]");
+		return getRecordList().get(resultSetIndex).getItemList().get(columnIndex - 1).getColumnValue();
 	}
 
 	public String getString(final String columnLabel) throws SQLException {
-		final XmlObject xmlObj = (XmlObject) resultSetValueList.get(resultSetIndex);
 
-		final Iterator<XmlObject> ite = xmlObj.getChildren();
-		for (; ite.hasNext();) {
-			final XmlObject obj = (XmlObject) ite.next();
-			if (obj.getName().getLocalPart().compareToIgnoreCase(columnLabel) == 0) {
-				if (obj.getValue() == null) {
-					return "";
-				}
-				return obj.getValue().toString();
+		for (int index = 0; index < getRecordList().get(resultSetIndex).getItemList().size(); index++) {
+			final BlancoSfdcJdbcSimpleResultSetRecordItem item = getRecordList().get(resultSetIndex).getItemList()
+					.get(index);
+			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
+				return item.getColumnValue();
 			}
 		}
 
