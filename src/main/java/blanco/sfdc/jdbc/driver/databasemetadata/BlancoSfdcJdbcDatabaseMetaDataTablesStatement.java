@@ -39,9 +39,14 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoJdbcSim
 					.describeGlobal();
 			for (DescribeGlobalSObjectResult sobjectResult : descResult.getSobjects()) {
 				if (tableNamePattern != null) {
-					if (tableNamePattern.compareToIgnoreCase(tableNamePattern) != 0) {
+					if (tableNamePattern.compareToIgnoreCase(sobjectResult.getName()) != 0) {
 						continue;
 					}
+				}
+
+				if (sobjectResult.isQueryable() == false) {
+					System.err.println("Skip [" + sobjectResult.getName() + "] it is not queryable.");
+					continue;
 				}
 
 				final BlancoJdbcSimpleResultSetRow record = new BlancoJdbcSimpleResultSetRow();
