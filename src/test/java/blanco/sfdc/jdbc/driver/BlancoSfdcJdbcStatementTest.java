@@ -35,12 +35,11 @@ public class BlancoSfdcJdbcStatementTest extends TestCase {
 			while (rs.next()) {
 				final String id = rs.getString("id");
 				final String name = rs.getString("name");
-				// final java.sql.Date lastModifiedDate =
-				// rs.getDate("LastModifiedDate");
-				final String lastModifiedDate = rs.getString("LastModifiedDate");
+				final java.sql.Date lastModifiedDate = rs.getDate("LastModifiedDate");
+				final java.sql.Timestamp lastModifiedDateTimestamp = rs.getTimestamp("LastModifiedDate");
 
-				if (true)
-					System.err.println("id: " + id + ", name:" + name + ", LastModifiedDate:" + lastModifiedDate);
+				System.err.println("id: " + id + ", name:" + name + ", LastModifiedDate:" + lastModifiedDate
+						+ ", LastModifiedDate2:" + lastModifiedDateTimestamp);
 			}
 			rs.close();
 			stmt.close();
@@ -68,7 +67,7 @@ public class BlancoSfdcJdbcStatementTest extends TestCase {
 		final Statement stmt = conn.createStatement();
 		final String sql = "SELECT Id, Name, LastModifiedDate FROM Account";
 		final ResultSet rs = stmt.executeQuery(sql);
-		if (false)
+		if (true)
 			while (rs.next()) {
 				final String id = rs.getString(1);
 				final String name = rs.getString(2);

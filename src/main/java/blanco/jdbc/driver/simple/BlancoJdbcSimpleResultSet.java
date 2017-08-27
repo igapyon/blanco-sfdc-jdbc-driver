@@ -118,6 +118,30 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 		throw new SQLException("No such column [" + columnLabel + "]");
 	}
 
+	public Timestamp getTimestamp(int columnIndex) throws SQLException {
+		final BlancoJdbcSimpleResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
+		if (column.getColumnValueByDate() == null) {
+			return null;
+		} else {
+			return new java.sql.Timestamp(column.getColumnValueByDate().getTime());
+		}
+	}
+
+	public Timestamp getTimestamp(String columnLabel) throws SQLException {
+		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
+			final BlancoJdbcSimpleResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
+			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
+				if (item.getColumnValueByDate() == null) {
+					return null;
+				} else {
+					return new java.sql.Timestamp(item.getColumnValueByDate().getTime());
+				}
+			}
+		}
+
+		throw new SQLException("No such column [" + columnLabel + "]");
+	}
+
 	public int getInt(int columnIndex) throws SQLException {
 		final BlancoJdbcSimpleResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
 		return column.getColumnValueByInteger();
@@ -186,10 +210,6 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 		throw new SQLException("Not Implemented.");
 	}
 
-	public Timestamp getTimestamp(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
 	public InputStream getAsciiStream(int columnIndex) throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
@@ -235,10 +255,6 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 	}
 
 	public Time getTime(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public Timestamp getTimestamp(String columnLabel) throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
 

@@ -215,9 +215,7 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 			for (; rsmdRs.next();) {
 				final BlancoJdbcSimpleResultSetMetaDataColumn column = new BlancoJdbcSimpleResultSetMetaDataColumn();
 				column.setColumnName(rsmdRs.getString("COLUMN_NAME"));
-				// column.setdatatype
-				System.err.println("  " + rsmdRs.getString("DATA_TYPE"));
-
+				column.setDataType(rsmdRs.getInt("DATA_TYPE"));
 				column.setTypeName(rsmdRs.getString("TYPE_NAME"));
 				column.setTableName(rsmdRs.getString("TABLE_NAME"));
 				column.setColumnSize(Integer.parseInt(rsmdRs.getString("COLUMN_SIZE")));
