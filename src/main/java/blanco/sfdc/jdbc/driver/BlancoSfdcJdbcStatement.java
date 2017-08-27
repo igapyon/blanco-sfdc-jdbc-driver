@@ -158,6 +158,7 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 					case java.sql.Types.TIME_WITH_TIMEZONE:
 					case java.sql.Types.TIMESTAMP:
 					case java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
+						System.out.println("TRACE: Types.DATE se....");
 						column.setColumnValueByDate(soqlDateToDate(column.getColumnValue()));
 						break;
 					}
