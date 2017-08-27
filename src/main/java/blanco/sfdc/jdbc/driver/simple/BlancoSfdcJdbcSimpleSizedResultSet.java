@@ -187,5 +187,4 @@ public abstract class BlancoSfdcJdbcSimpleSizedResultSet extends BlancoSfdcJdbcS
 
 		return true;
 	}
-
 }

@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -25,8 +26,11 @@ public class BlancoSfdcJdbcDatabaseMetaDataTest extends TestCase {
 			final String pass = prop.getProperty("password", "NoPassSpecified");
 
 			final Connection conn = DriverManager.getConnection("blanco:sfdc:jdbc:" + url, user, pass);
-			conn.getMetaData().getTables(null, null, null, null);
-
+			final ResultSet rs = conn.getMetaData().getTables(null, null, null, null);
+for(;rs.next();){
+	rs.getString(columnIndex)
+}
+			
 			conn.close();
 		} catch (SQLException ex) {
 			ex.printStackTrace();

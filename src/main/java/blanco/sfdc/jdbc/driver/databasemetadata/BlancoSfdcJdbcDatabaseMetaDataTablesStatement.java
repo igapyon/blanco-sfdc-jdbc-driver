@@ -40,4 +40,19 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoSfdcJdb
 	public ResultSet getResultSet() throws SQLException {
 		return new BlancoSfdcJdbcDatabaseMetaDataTablesResultSet(this, nameList);
 	}
+
+
+
+	TABLE_CAT	String	The name of the database in which the specified table resides.
+	TABLE_SCHEM	String	The table schema name.
+	TABLE_NAME	String	The table name.
+	TABLE_TYPE	String	"".
+
+	REMARKS	String	The description of the table.
+	TYPE_CAT	String	Not supported by the JDBC driver.
+	TYPE_SCHEM	String	Not supported by the JDBC driver.
+	TYPE_NAME	String	Not supported by the JDBC driver.
+	SELF_REFERENCING_COL_NAME	String	Not supported by the JDBC driver.
+	REF_GENERATION	String	Not supported by the JDBC driver.
+
 }
