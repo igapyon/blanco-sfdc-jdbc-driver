@@ -1,4 +1,4 @@
-package blanco.sfdc.jdbc.driver;
+package blanco.sfdc.jdbc.driver.databasemetadata;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.RowIdLifetime;
 import java.sql.SQLException;
 
-import blanco.sfdc.jdbc.driver.databasemetadata.BlancoSfdcJdbcDatabaseMetaDataTablesStatement;
+import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
 
 public class BlancoSfdcJdbcDatabaseMetaData implements DatabaseMetaData {
 	protected BlancoSfdcJdbcConnection conn = null;
@@ -529,6 +529,9 @@ public class BlancoSfdcJdbcDatabaseMetaData implements DatabaseMetaData {
 		throw new SQLException("Not Implemented.");
 	}
 
+	/**
+	 * TABLES
+	 */
 	public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types)
 			throws SQLException {
 		@SuppressWarnings("resource")

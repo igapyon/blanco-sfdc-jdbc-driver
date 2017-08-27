@@ -57,6 +57,8 @@ import com.sforce.soap.partner.fault.LoginFault;
 import com.sforce.ws.ConnectionException;
 import com.sforce.ws.ConnectorConfig;
 
+import blanco.sfdc.jdbc.driver.databasemetadata.BlancoSfdcJdbcDatabaseMetaData;
+
 public class BlancoSfdcJdbcConnection implements Connection {
 	protected PartnerConnection partnerConn = null;
 

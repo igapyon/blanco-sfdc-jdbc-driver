@@ -27,10 +27,10 @@ public class BlancoSfdcJdbcDatabaseMetaDataTest extends TestCase {
 
 			final Connection conn = DriverManager.getConnection("blanco:sfdc:jdbc:" + url, user, pass);
 			final ResultSet rs = conn.getMetaData().getTables(null, null, null, null);
-for(;rs.next();){
-//	rs.getString(columnIndex);
-}
-			
+			for (int index=0; rs.next();index++) {
+				rs.getString(index);
+			}
+
 			conn.close();
 		} catch (SQLException ex) {
 			ex.printStackTrace();
