@@ -82,11 +82,6 @@ public class BlancoSfdcJdbcDriver implements Driver {
 	}
 
 	public Connection connect(final String url, final Properties info) throws SQLException {
-		if (false)
-			for (Object obj : info.keySet()) {
-				System.err.println("Connect: info:" + obj);
-			}
-
 		final String user = info.getProperty("user");
 		final String pass = info.getProperty("password");
 

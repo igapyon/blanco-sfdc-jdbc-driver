@@ -42,6 +42,7 @@ public class BlancoSfdcJdbcDatabaseMetaDataColumnsStatement extends BlancoJdbcSi
 		final List<String> tableNameList = new ArrayList<String>();
 		{
 			// use tables
+			@SuppressWarnings("resource")
 			final BlancoSfdcJdbcDatabaseMetaDataTablesStatement stmt = new BlancoSfdcJdbcDatabaseMetaDataTablesStatement(
 					(BlancoSfdcJdbcConnection) conn, null, null, null, null);
 			final ResultSet rs = stmt.executeQuery("dummy sql");

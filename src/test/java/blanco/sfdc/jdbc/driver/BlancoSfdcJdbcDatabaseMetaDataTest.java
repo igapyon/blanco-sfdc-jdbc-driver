@@ -33,8 +33,8 @@ public class BlancoSfdcJdbcDatabaseMetaDataTest extends TestCase {
 						System.err.println(rs.getString("TABLE_NAME"));
 						System.err.println("  " + rs.getString("TABLE_TYPE"));
 						System.err.println("  " + rs.getString("REMARKS"));
-						System.err.println("  " + rs.getString("TABLE_CAT"));
-						System.err.println("  " + rs.getString("TABLE_SCHEM"));
+						rs.getString("TABLE_CAT"); // discard
+						rs.getString("TABLE_SCHEM"); // discard
 					}
 				}
 			}
@@ -51,9 +51,9 @@ public class BlancoSfdcJdbcDatabaseMetaDataTest extends TestCase {
 					System.err.println("  " + rs.getString("TABLE_CAT"));
 					System.err.println("  " + rs.getString("TABLE_SCHEM"));
 					System.err.println("  " + rs.getString("NULLABLE"));
-					System.err.println("  " + rs.getString("IS_NULLABLE"));
-					System.err.println("  " + rs.getString("ORDINAL_POSITION"));
-					System.err.println("  " + rs.getString("SCOPE_TABLE"));
+					rs.getString("IS_NULLABLE");// discard
+					rs.getString("ORDINAL_POSITION");// discard
+					rs.getString("SCOPE_TABLE"); // discard
 
 					// DECIMAL_DIGITS int => 小数点以下の桁数。DECIMAL_DIGITS
 					// が適用できないデータ型の場合は、Null が返される。
