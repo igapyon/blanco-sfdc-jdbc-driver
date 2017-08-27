@@ -9,8 +9,8 @@ import com.sforce.soap.partner.DescribeGlobalResult;
 import com.sforce.soap.partner.DescribeGlobalSObjectResult;
 import com.sforce.ws.ConnectionException;
 
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRecord;
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRecordItem;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRow;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetColumn;
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleStatement;
 import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
 
@@ -45,43 +45,43 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoJdbcSim
 		BlancoSfdcJdbcDatabaseMetaDataTablesResultSet rs = new BlancoSfdcJdbcDatabaseMetaDataTablesResultSet(this);
 
 		for (String name : nameList) {
-			BlancoJdbcSimpleResultSetRecord record = new BlancoJdbcSimpleResultSetRecord();
+			BlancoJdbcSimpleResultSetRow record = new BlancoJdbcSimpleResultSetRow();
 			{
-				final BlancoJdbcSimpleResultSetRecordItem item = new BlancoJdbcSimpleResultSetRecordItem();
+				final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
 				item.setColumnName("TABLE_CAT");
 				item.setColumnValue("tableのCAT");
-				record.getItemList().add(item);
+				record.getColumnList().add(item);
 			}
 
 			{
-				final BlancoJdbcSimpleResultSetRecordItem item = new BlancoJdbcSimpleResultSetRecordItem();
+				final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
 				item.setColumnName("TABLE_SCHEM");
 				item.setColumnValue("");
-				record.getItemList().add(item);
+				record.getColumnList().add(item);
 			}
 
 			{
-				final BlancoJdbcSimpleResultSetRecordItem item = new BlancoJdbcSimpleResultSetRecordItem();
+				final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
 				item.setColumnName("TABLE_NAME");
 				item.setColumnValue(name);
-				record.getItemList().add(item);
+				record.getColumnList().add(item);
 			}
 
 			{
-				final BlancoJdbcSimpleResultSetRecordItem item = new BlancoJdbcSimpleResultSetRecordItem();
+				final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
 				item.setColumnName("TABLE_TYPE");
 				item.setColumnValue("tab type");
-				record.getItemList().add(item);
+				record.getColumnList().add(item);
 			}
 
 			{
-				final BlancoJdbcSimpleResultSetRecordItem item = new BlancoJdbcSimpleResultSetRecordItem();
+				final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
 				item.setColumnName("REMARKS");
 				item.setColumnValue("tab remarks");
-				record.getItemList().add(item);
+				record.getColumnList().add(item);
 			}
 
-			rs.getRecordList().add(record);
+			rs.getRowList().add(record);
 		}
 
 		return rs;

@@ -33,7 +33,7 @@
 
 package blanco.jdbc.driver.simple;
 
-public class BlancoJdbcSimpleResultSetRecordItem {
+public class BlancoJdbcSimpleResultSetColumn {
 	protected String columnName = null;
 
 	protected String columnValue = null;

@@ -36,10 +36,10 @@ package blanco.jdbc.driver.simple;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlancoJdbcSimpleResultSetRecord {
-	private List<BlancoJdbcSimpleResultSetRecordItem> itemList = new ArrayList<BlancoJdbcSimpleResultSetRecordItem>();
+public class BlancoJdbcSimpleResultSetRow {
+	private List<BlancoJdbcSimpleResultSetColumn> columnList = new ArrayList<BlancoJdbcSimpleResultSetColumn>();
 
-	public List<BlancoJdbcSimpleResultSetRecordItem> getItemList() {
-		return itemList;
+	public List<BlancoJdbcSimpleResultSetColumn> getColumnList() {
+		return columnList;
 	}
 }

@@ -61,8 +61,8 @@ public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
 
 	private boolean isClosed = false;
 
-	protected List<BlancoJdbcSimpleResultSetRecord> recordList = new ArrayList<BlancoJdbcSimpleResultSetRecord>();
-	protected int resultSetIndex = -1;
+	protected List<BlancoJdbcSimpleResultSetRow> rowList = new ArrayList<BlancoJdbcSimpleResultSetRow>();
+	protected int rowIndex = -1;
 
 	public BlancoJdbcSimpleResultSet(final Statement stmt) {
 		this.stmt = stmt;
@@ -70,11 +70,11 @@ public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
 
 	public void close() throws SQLException {
 		isClosed = true;
-		resultSetIndex = -1;
+		rowIndex = -1;
 	}
 
-	public List<BlancoJdbcSimpleResultSetRecord> getRecordList() {
-		return recordList;
+	public List<BlancoJdbcSimpleResultSetRow> getRowList() {
+		return rowList;
 	}
 
 	public <T> T unwrap(Class<T> iface) throws SQLException {
@@ -769,7 +769,7 @@ public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
 	}
 
 	protected int getCurrentRecordCount() {
-		return recordList.size();
+		return rowList.size();
 	}
 
 	public boolean next() throws SQLException {
@@ -781,9 +781,9 @@ public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
 			return false;
 		}
 
-		resultSetIndex++;
+		rowIndex++;
 
-		if (resultSetIndex < getCurrentRecordCount()) {
+		if (rowIndex < getCurrentRecordCount()) {
 			return true;
 		} else {
 			return false;
@@ -799,9 +799,9 @@ public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
 			return false;
 		}
 
-		resultSetIndex--;
+		rowIndex--;
 
-		if (resultSetIndex >= 0) {
+		if (rowIndex >= 0) {
 			return true;
 		} else {
 			return false;
@@ -813,7 +813,7 @@ public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
 			return false;
 		}
 
-		if (resultSetIndex < 0) {
+		if (rowIndex < 0) {
 			return true;
 		} else {
 			return false;
@@ -825,7 +825,7 @@ public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
 			return false;
 		}
 
-		if (resultSetIndex >= getCurrentRecordCount()) {
+		if (rowIndex >= getCurrentRecordCount()) {
 			return true;
 		} else {
 			return false;
@@ -837,7 +837,7 @@ public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
 			return false;
 		}
 
-		if (resultSetIndex == 0) {
+		if (rowIndex == 0) {
 			return true;
 		} else {
 			return false;
@@ -849,7 +849,7 @@ public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
 			return false;
 		}
 
-		if ((resultSetIndex + 1) == getCurrentRecordCount()) {
+		if ((rowIndex + 1) == getCurrentRecordCount()) {
 			return true;
 		} else {
 			return false;
@@ -857,12 +857,12 @@ public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
 	}
 
 	public void beforeFirst() throws SQLException {
-		resultSetIndex = (-1);
+		rowIndex = (-1);
 	}
 
 	public void afterLast() throws SQLException {
 
-		resultSetIndex = getCurrentRecordCount();
+		rowIndex = getCurrentRecordCount();
 	}
 
 	public boolean first() throws SQLException {
@@ -874,7 +874,7 @@ public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
 			return false;
 		}
 
-		resultSetIndex = 0;
+		rowIndex = 0;
 		return true;
 	}
 
@@ -887,12 +887,12 @@ public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
 			return false;
 		}
 
-		resultSetIndex = getCurrentRecordCount() - 1;
+		rowIndex = getCurrentRecordCount() - 1;
 		return true;
 	}
 
 	public int getRow() throws SQLException {
-		return resultSetIndex;
+		return rowIndex;
 	}
 
 	public boolean absolute(int row) throws SQLException {
@@ -912,7 +912,7 @@ public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
 			return false;
 		}
 
-		resultSetIndex = row;
+		rowIndex = row;
 
 		return true;
 	}
@@ -926,15 +926,15 @@ public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
 			return false;
 		}
 
-		if ((resultSetIndex + rows) < 0) {
+		if ((rowIndex + rows) < 0) {
 			return false;
 		}
 
-		if ((resultSetIndex + rows) >= getCurrentRecordCount()) {
+		if ((rowIndex + rows) >= getCurrentRecordCount()) {
 			return false;
 		}
 
-		resultSetIndex += rows;
+		rowIndex += rows;
 
 		return true;
 	}
