@@ -38,7 +38,9 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.TimeZone;
 
 import com.sforce.soap.partner.QueryResult;
@@ -60,7 +62,7 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 	/**
 	 * NOTE: static field!!!
 	 */
-	protected static BlancoJdbcSimpleResultSetMetaData rsmd = null;
+	protected static Map<String, BlancoJdbcSimpleResultSetMetaData> rsmdMap = new HashMap<String, BlancoJdbcSimpleResultSetMetaData>();
 
 	public BlancoSfdcJdbcStatement(final BlancoSfdcJdbcConnection conn) {
 		super(conn);
@@ -80,9 +82,8 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 					break;
 				}
 
-				if (rsmd == null) {
-					rsmd = getResultSetMetaData((BlancoSfdcJdbcConnection) conn, sObjs[0]);
-				}
+				final BlancoJdbcSimpleResultSetMetaData rsmd = getResultSetMetaData((BlancoSfdcJdbcConnection) conn,
+						sObjs[0]);
 
 				for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
 					final BlancoJdbcSimpleResultSetRow row = getRowObj(sObjs[indexRow], rsmd);
@@ -211,28 +212,31 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 
 		final String sObjectName = obj.getValue().toString();
 
-		{
-			final ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, sObjectName, null);
-			for (; rsmdRs.next();) {
-				final BlancoJdbcSimpleResultSetMetaDataColumn column = new BlancoJdbcSimpleResultSetMetaDataColumn();
-				column.setColumnName(rsmdRs.getString("COLUMN_NAME"));
-				column.setDataType(rsmdRs.getInt("DATA_TYPE"));
-				column.setTypeName(rsmdRs.getString("TYPE_NAME"));
-				column.setTableName(rsmdRs.getString("TABLE_NAME"));
-				column.setColumnSize(Integer.parseInt(rsmdRs.getString("COLUMN_SIZE")));
-				column.setRemarks(rsmdRs.getString("REMARKS"));
-				// column.settableCat(rsmdRs.getString("TABLE_CAT"));
-				// rsmdRs.getString("TABLE_SCHEM"));
-				column.setNullable("true".equals(rsmdRs.getString("NULLABLE")));
-				// rsmdRs.getString("IS_NULLABLE");// discard
-				// rsmdRs.getString("ORDINAL_POSITION");// discard
-				// rsmdRs.getString("SCOPE_TABLE"); // discard
-
-				rsmd.getColumnList().add(column);
-			}
-			rsmdRs.close();
+		if (rsmdMap.get(sObjectName) != null) {
+			return rsmdMap.get(sObjectName);
 		}
 
+		final ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, sObjectName, null);
+		for (; rsmdRs.next();) {
+			final BlancoJdbcSimpleResultSetMetaDataColumn column = new BlancoJdbcSimpleResultSetMetaDataColumn();
+			column.setColumnName(rsmdRs.getString("COLUMN_NAME"));
+			column.setDataType(rsmdRs.getInt("DATA_TYPE"));
+			column.setTypeName(rsmdRs.getString("TYPE_NAME"));
+			column.setTableName(rsmdRs.getString("TABLE_NAME"));
+			column.setColumnSize(Integer.parseInt(rsmdRs.getString("COLUMN_SIZE")));
+			column.setRemarks(rsmdRs.getString("REMARKS"));
+			// column.settableCat(rsmdRs.getString("TABLE_CAT"));
+			// rsmdRs.getString("TABLE_SCHEM"));
+			column.setNullable("true".equals(rsmdRs.getString("NULLABLE")));
+			// rsmdRs.getString("IS_NULLABLE");// discard
+			// rsmdRs.getString("ORDINAL_POSITION");// discard
+			// rsmdRs.getString("SCOPE_TABLE"); // discard
+
+			rsmd.getColumnList().add(column);
+		}
+		rsmdRs.close();
+
+		rsmdMap.put(sObjectName, rsmd);
 		return rsmd;
 	}
 }

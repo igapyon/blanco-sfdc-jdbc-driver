@@ -68,11 +68,6 @@ public class BlancoSfdcJdbcPreparedStatement extends BlancoJdbcSimpleStatement i
 
 	protected BlancoJdbcSimpleResultSet rs = null;
 
-	/**
-	 * NOTE: static field!!!
-	 */
-	protected static BlancoJdbcSimpleResultSetMetaData rsmd = null;
-
 	public BlancoSfdcJdbcPreparedStatement(final BlancoSfdcJdbcConnection conn, final String sql) {
 		super(conn);
 		this.sql = sql;
@@ -92,9 +87,8 @@ public class BlancoSfdcJdbcPreparedStatement extends BlancoJdbcSimpleStatement i
 					break;
 				}
 
-				if (rsmd == null) {
-					rsmd = BlancoSfdcJdbcStatement.getResultSetMetaData((BlancoSfdcJdbcConnection) conn, sObjs[0]);
-				}
+				final BlancoJdbcSimpleResultSetMetaData rsmd = BlancoSfdcJdbcStatement
+						.getResultSetMetaData((BlancoSfdcJdbcConnection) conn, sObjs[0]);
 
 				for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
 					final BlancoJdbcSimpleResultSetRow row = BlancoSfdcJdbcStatement.getRowObj(sObjs[indexRow], rsmd);
