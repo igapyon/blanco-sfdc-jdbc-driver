@@ -105,10 +105,11 @@ public class BlancoSfdcJdbcDatabaseMetaDataColumnsStatement extends BlancoJdbcSi
 					{
 						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
 						metaDataColumn.setColumnName("DATA_TYPE");
+						metaDataColumn.setDataType(java.sql.Types.INTEGER);
 						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
 								metaDataColumn);
-						// java.sql.Types
 						column.setColumnValue(field.getType().toString());
+						column.setColumnValueByInteger(Integer.valueOf(metaDataColumn.getDataType()));
 						record.getColumnList().add(column);
 					}
 
@@ -125,15 +126,18 @@ public class BlancoSfdcJdbcDatabaseMetaDataColumnsStatement extends BlancoJdbcSi
 					{
 						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
 						metaDataColumn.setColumnName("COLUMN_SIZE");
+						metaDataColumn.setDataType(java.sql.Types.INTEGER);
 						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
 								metaDataColumn);
 						column.setColumnValue("" + field.getLength());
+						column.setColumnValueByInteger(Integer.valueOf(field.getLength()));
 						record.getColumnList().add(column);
 					}
 
 					{
 						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
 						metaDataColumn.setColumnName("DECIMAL_DIGITS");
+						metaDataColumn.setDataType(java.sql.Types.INTEGER);
 						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
 								metaDataColumn);
 						column.setColumnValue("" + field.getDigits());
@@ -143,9 +147,11 @@ public class BlancoSfdcJdbcDatabaseMetaDataColumnsStatement extends BlancoJdbcSi
 					{
 						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
 						metaDataColumn.setColumnName("NUM_PREC_RADIX");
+						metaDataColumn.setDataType(java.sql.Types.INTEGER);
 						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
 								metaDataColumn);
 						column.setColumnValue("10");
+						column.setColumnValueByInteger(Integer.valueOf(10));
 						record.getColumnList().add(column);
 					}
 
@@ -179,18 +185,22 @@ public class BlancoSfdcJdbcDatabaseMetaDataColumnsStatement extends BlancoJdbcSi
 					{
 						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
 						metaDataColumn.setColumnName("CHAR_OCTET_LENGTH");
+						metaDataColumn.setDataType(java.sql.Types.INTEGER);
 						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
 								metaDataColumn);
 						column.setColumnValue("" + field.getLength());
+						column.setColumnValueByInteger(field.getLength());
 						record.getColumnList().add(column);
 					}
 
 					{
 						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
 						metaDataColumn.setColumnName("ORDINAL_POSITION");
+						metaDataColumn.setDataType(java.sql.Types.INTEGER);
 						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
 								metaDataColumn);
 						column.setColumnValue("" + ordinalIndex);
+						column.setColumnValueByInteger(ordinalIndex);
 						record.getColumnList().add(column);
 					}
 

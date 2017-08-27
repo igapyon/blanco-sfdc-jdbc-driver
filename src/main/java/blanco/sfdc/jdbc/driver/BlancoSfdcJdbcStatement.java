@@ -35,9 +35,13 @@ package blanco.sfdc.jdbc.driver;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TimeZone;
 
 import com.sforce.soap.partner.QueryResult;
 import com.sforce.soap.partner.sobject.SObject;
@@ -60,6 +64,33 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 
 	public BlancoSfdcJdbcStatement(final BlancoSfdcJdbcConnection conn) {
 		super(conn);
+	}
+
+	public static java.util.Date soqlDateToDate(final String soqlDateString) {
+		if (soqlDateString == null || soqlDateString.length() == 0) {
+			return null;
+		}
+
+		String workDateString = soqlDateString.replace("T", " ");
+		workDateString = workDateString.replace("Z", "");
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+		// FIXME TODO DO NOT USE JST.
+		final TimeZone jst = TimeZone.getTimeZone("JST");
+
+		try {
+			java.util.Date result = sdf.parse(workDateString);
+
+			final Calendar calForGmt = Calendar.getInstance();
+			calForGmt.setTime(result);
+			calForGmt.add(Calendar.MILLISECOND, jst.getOffset(result.getTime()));
+			result = calForGmt.getTime();
+
+			return result;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e.getMessage(), e);
+		}
 	}
 
 	public static BlancoJdbcSimpleResultSetMetaData getResultSetMetaData(final BlancoSfdcJdbcConnection conn,
@@ -156,7 +187,16 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 							} else {
 								column.setColumnValue(obj.getValue().toString());
 
-								// TODO date変換
+								// Date変換
+								switch (column.getMetaDataColumn().getDataType()) {
+								case java.sql.Types.DATE:
+								case java.sql.Types.TIME:
+								case java.sql.Types.TIME_WITH_TIMEZONE:
+								case java.sql.Types.TIMESTAMP:
+								case java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
+									column.setColumnValueByDate(soqlDateToDate(column.getColumnValue()));
+									break;
+								}
 							}
 
 							// TODO tablename?

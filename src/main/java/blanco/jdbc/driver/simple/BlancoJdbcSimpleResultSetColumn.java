@@ -36,6 +36,10 @@ package blanco.jdbc.driver.simple;
 public class BlancoJdbcSimpleResultSetColumn {
 	protected String columnValue = null;
 
+	protected Integer columnValueByInteger = null;
+
+	protected java.util.Date columnValueByDate = null;
+
 	protected BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = null;
 
 	public BlancoJdbcSimpleResultSetColumn(final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn) {
@@ -62,5 +66,21 @@ public class BlancoJdbcSimpleResultSetColumn {
 
 	public void setColumnValue(String columnValue) {
 		this.columnValue = columnValue;
+	}
+
+	public java.util.Date getColumnValueByDate() {
+		return columnValueByDate;
+	}
+
+	public void setColumnValueByDate(java.util.Date columnValueByDate) {
+		this.columnValueByDate = columnValueByDate;
+	}
+
+	public Integer getColumnValueByInteger() {
+		return columnValueByInteger;
+	}
+
+	public void setColumnValueByInteger(Integer columnValueByInteger) {
+		this.columnValueByInteger = columnValueByInteger;
 	}
 }
