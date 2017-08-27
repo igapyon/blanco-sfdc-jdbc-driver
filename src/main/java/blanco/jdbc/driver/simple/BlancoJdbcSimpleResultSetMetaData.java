@@ -39,12 +39,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlancoJdbcSimpleResultSetMetaData implements ResultSetMetaData {
-	protected List<BlancoJdbcSimpleResultSetMetaDataItem> itemList = new ArrayList<BlancoJdbcSimpleResultSetMetaDataItem>();
+	protected List<BlancoJdbcSimpleResultSetMetaDataColumn> columnList = new ArrayList<BlancoJdbcSimpleResultSetMetaDataColumn>();
 
 	private String tableName = null;
 
-	public List<BlancoJdbcSimpleResultSetMetaDataItem> getItemList() {
-		return itemList;
+	public List<BlancoJdbcSimpleResultSetMetaDataColumn> getColumnList() {
+		return columnList;
 	}
 
 	public void setTableName(String tableName) {
@@ -60,7 +60,7 @@ public class BlancoJdbcSimpleResultSetMetaData implements ResultSetMetaData {
 	}
 
 	public int getColumnCount() throws SQLException {
-		return getItemList().size();
+		return getColumnList().size();
 	}
 
 	public boolean isAutoIncrement(int column) throws SQLException {
@@ -97,7 +97,7 @@ public class BlancoJdbcSimpleResultSetMetaData implements ResultSetMetaData {
 	}
 
 	public String getColumnName(int column) throws SQLException {
-		return getItemList().get(column).getColumnName();
+		return getColumnList().get(column).getColumnName();
 	}
 
 	public String getSchemaName(int column) throws SQLException {

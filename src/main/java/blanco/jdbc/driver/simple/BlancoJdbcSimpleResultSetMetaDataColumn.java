@@ -33,7 +33,7 @@
 
 package blanco.jdbc.driver.simple;
 
-public class BlancoJdbcSimpleResultSetMetaDataItem {
+public class BlancoJdbcSimpleResultSetMetaDataColumn {
 	protected String columnName = "N/A";
 
 	protected String columnLabel = "N/A";
