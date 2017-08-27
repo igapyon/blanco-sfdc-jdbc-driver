@@ -74,7 +74,6 @@ public class BlancoSfdcJdbcDriver implements Driver {
 	}
 
 	public boolean acceptsURL(final String url) throws SQLException {
-		System.out.println("trace: url:[" + url + "]");
 		if (url.startsWith(BlancoSfdcJdbcConstants.JDBC_DRIVER_URL_PREFIX)) {
 			return true;
 		}

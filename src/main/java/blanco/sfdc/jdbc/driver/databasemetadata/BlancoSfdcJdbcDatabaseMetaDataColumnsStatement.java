@@ -114,10 +114,8 @@ public class BlancoSfdcJdbcDatabaseMetaDataColumnsStatement extends BlancoJdbcSi
 						if ("int".equals(field.getType().toString())) {
 							column.setColumnValueByInteger(Integer.valueOf(java.sql.Types.INTEGER));
 						} else if ("date".equals(field.getType().toString())) {
-							System.err.println("TRACE: date");
 							column.setColumnValueByInteger(Integer.valueOf(java.sql.Types.DATE));
 						} else if ("datetime".equals(field.getType().toString())) {
-							System.err.println("TRACE: datetime");
 							column.setColumnValueByInteger(Integer.valueOf(java.sql.Types.TIMESTAMP));
 						}
 						column.setColumnValue("" + column.getColumnValueByInteger());

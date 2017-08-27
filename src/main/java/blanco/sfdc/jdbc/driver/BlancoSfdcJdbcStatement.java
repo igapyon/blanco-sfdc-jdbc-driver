@@ -85,7 +85,7 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 				}
 
 				for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
-					final BlancoJdbcSimpleResultSetRow row = getRowObj(sObjs[indexRow]);
+					final BlancoJdbcSimpleResultSetRow row = getRowObj(sObjs[indexRow], rsmd);
 					rs.getRowList().add(row);
 				}
 				if (qryResult.isDone()) {
@@ -95,9 +95,7 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 				qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
 						.queryMore(qryResult.getQueryLocator());
 			}
-		} catch (
-
-		ConnectionException ex) {
+		} catch (ConnectionException ex) {
 			throw new SQLException(ex);
 		}
 
@@ -112,7 +110,8 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 	///////////////////////////
 	// common func
 
-	public static BlancoJdbcSimpleResultSetRow getRowObj(final SObject sObj) {
+	public static BlancoJdbcSimpleResultSetRow getRowObj(final SObject sObj,
+			final BlancoJdbcSimpleResultSetMetaData argRsmd) {
 		final BlancoJdbcSimpleResultSetRow record = new BlancoJdbcSimpleResultSetRow();
 		// getRowList().add(record);
 
@@ -137,11 +136,14 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 				rowIdString = obj.getValue().toString();
 			} else {
 				// 1 origin for getString
-				final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = rsmd
+				final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = argRsmd
 						.getColumnByColumnName(obj.getName().getLocalPart());
-				System.err.println("TRACE: name:" + metaDataColumn.getColumnName());
-				System.err.println("  TRACE: type:" + metaDataColumn.getDataType());
-				System.err.println("  TRACE: type:" + metaDataColumn.getTypeName());
+				if (false)
+					System.err.println("TRACE: name:" + metaDataColumn.getColumnName());
+				if (false)
+					System.err.println("  TRACE: type:" + metaDataColumn.getDataType());
+				if (false)
+					System.err.println("  TRACE: type:" + metaDataColumn.getTypeName());
 
 				final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(metaDataColumn);
 				record.getColumnList().add(column);
@@ -158,7 +160,6 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 					case java.sql.Types.TIME_WITH_TIMEZONE:
 					case java.sql.Types.TIMESTAMP:
 					case java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
-						System.out.println("TRACE: Types.DATE se....");
 						column.setColumnValueByDate(soqlDateToDate(column.getColumnValue()));
 						break;
 					}

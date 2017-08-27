@@ -52,20 +52,26 @@ import java.sql.SQLException;
 import java.sql.SQLXML;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import com.sforce.soap.partner.QueryResult;
 import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSet;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetMetaData;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRow;
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleStatement;
 
 public class BlancoSfdcJdbcPreparedStatement extends BlancoJdbcSimpleStatement implements PreparedStatement {
 	protected String sql = null;
 
-	final List<SObject> resultSetValueList = new ArrayList<SObject>();
+	protected BlancoJdbcSimpleResultSet rs = null;
+
+	/**
+	 * NOTE: static field!!!
+	 */
+	protected static BlancoJdbcSimpleResultSetMetaData rsmd = null;
 
 	public BlancoSfdcJdbcPreparedStatement(final BlancoSfdcJdbcConnection conn, final String sql) {
 		super(conn);
@@ -74,14 +80,25 @@ public class BlancoSfdcJdbcPreparedStatement extends BlancoJdbcSimpleStatement i
 
 	@Override
 	public boolean execute(final String sql) throws SQLException {
+		rs = new BlancoJdbcSimpleResultSet(this);
+
 		try {
-			// TODO そもそもこの処理はResultSet側にあるべきのようだが、難易度が高いので一旦保留。
+			// TODO そもそもこの処理はResultSet側のフェッチ境界の考慮が必要だが、難易度が高いので一旦保留。
 			// TODO ただし、これを解決しないと、巨大な検索結果の際に全件を持ってきてしまうのでまずい実装だと思う。
 			QueryResult qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection().query(sql);
 			for (;;) {
 				final SObject[] sObjs = qryResult.getRecords();
-				for (int index = 0; index < sObjs.length; index++) {
-					resultSetValueList.add(sObjs[index]);
+				if (sObjs.length == 0) {
+					break;
+				}
+
+				if (rsmd == null) {
+					rsmd = BlancoSfdcJdbcStatement.getResultSetMetaData((BlancoSfdcJdbcConnection) conn, sObjs[0]);
+				}
+
+				for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
+					final BlancoJdbcSimpleResultSetRow row = BlancoSfdcJdbcStatement.getRowObj(sObjs[indexRow], rsmd);
+					rs.getRowList().add(row);
 				}
 				if (qryResult.isDone()) {
 					break;
@@ -90,16 +107,16 @@ public class BlancoSfdcJdbcPreparedStatement extends BlancoJdbcSimpleStatement i
 				qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
 						.queryMore(qryResult.getQueryLocator());
 			}
-
-			return true;
 		} catch (ConnectionException ex) {
 			throw new SQLException(ex);
 		}
+
+		return true;
 	}
 
 	@Override
 	public ResultSet getResultSet() throws SQLException {
-		return new BlancoSfdcJdbcResultSet(this, resultSetValueList);
+		return rs;
 	}
 
 	public ResultSet executeQuery() throws SQLException {
