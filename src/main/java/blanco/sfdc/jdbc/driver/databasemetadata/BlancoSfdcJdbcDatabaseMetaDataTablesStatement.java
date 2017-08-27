@@ -16,6 +16,7 @@ import blanco.jdbc.driver.simple.BlancoJdbcSimpleStatement;
 import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
 
 public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoJdbcSimpleStatement {
+	protected BlancoJdbcSimpleResultSet rs = null;
 	protected final List<String> nameList = new ArrayList<String>();
 
 	public BlancoSfdcJdbcDatabaseMetaDataTablesStatement(final BlancoSfdcJdbcConnection conn, String catalog,
@@ -25,14 +26,53 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoJdbcSim
 
 	@Override
 	public boolean execute(final String sql) throws SQLException {
+		rs = new BlancoJdbcSimpleResultSet(this);
+
 		// NOTE ignored sql
 
 		try {
 			final DescribeGlobalResult descResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
 					.describeGlobal();
 			for (DescribeGlobalSObjectResult sobjectResult : descResult.getSobjects()) {
-				System.out.println(sobjectResult.getName());
-				nameList.add(sobjectResult.getName());
+
+				BlancoJdbcSimpleResultSetRow record = new BlancoJdbcSimpleResultSetRow();
+				{
+					final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
+					item.setColumnName("TABLE_CAT");
+					item.setColumnValue("tableのCAT");
+					record.getColumnList().add(item);
+				}
+
+				{
+					final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
+					item.setColumnName("TABLE_SCHEM");
+					item.setColumnValue("");
+					record.getColumnList().add(item);
+				}
+
+				{
+					final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
+					item.setColumnName("TABLE_NAME");
+					item.setColumnValue(sobjectResult.getName());
+					record.getColumnList().add(item);
+				}
+
+				{
+					final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
+					item.setColumnName("TABLE_TYPE");
+					// TODO 型は正しいか確認
+					item.setColumnValue("TABLE");
+					record.getColumnList().add(item);
+				}
+
+				{
+					final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
+					item.setColumnName("REMARKS");
+					item.setColumnValue("");
+					record.getColumnList().add(item);
+				}
+
+				rs.getRowList().add(record);
 			}
 		} catch (ConnectionException ex) {
 			throw new SQLException(ex);
@@ -43,48 +83,6 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoJdbcSim
 
 	@Override
 	public ResultSet getResultSet() throws SQLException {
-		final BlancoJdbcSimpleResultSet rs = new BlancoJdbcSimpleResultSet(this);
-
-		for (String name : nameList) {
-			BlancoJdbcSimpleResultSetRow record = new BlancoJdbcSimpleResultSetRow();
-			{
-				final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
-				item.setColumnName("TABLE_CAT");
-				item.setColumnValue("tableのCAT");
-				record.getColumnList().add(item);
-			}
-
-			{
-				final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
-				item.setColumnName("TABLE_SCHEM");
-				item.setColumnValue("");
-				record.getColumnList().add(item);
-			}
-
-			{
-				final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
-				item.setColumnName("TABLE_NAME");
-				item.setColumnValue(name);
-				record.getColumnList().add(item);
-			}
-
-			{
-				final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
-				item.setColumnName("TABLE_TYPE");
-				item.setColumnValue("tab type");
-				record.getColumnList().add(item);
-			}
-
-			{
-				final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
-				item.setColumnName("REMARKS");
-				item.setColumnValue("tab remarks");
-				record.getColumnList().add(item);
-			}
-
-			rs.getRowList().add(record);
-		}
-
 		return rs;
 	}
 

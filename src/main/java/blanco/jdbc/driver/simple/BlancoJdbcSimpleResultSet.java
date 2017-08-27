@@ -940,12 +940,12 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 		return true;
 	}
 
-	public String getString(int columnIndex) throws SQLException {
+	public String getString(final int columnIndex) throws SQLException {
 		final BlancoJdbcSimpleResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
 		return column.getColumnValue();
 	}
 
-	public String getString(String columnLabel) throws SQLException {
+	public String getString(final String columnLabel) throws SQLException {
 		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
 			final BlancoJdbcSimpleResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
 			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {

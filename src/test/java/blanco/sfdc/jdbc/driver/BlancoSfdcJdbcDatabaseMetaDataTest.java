@@ -27,8 +27,8 @@ public class BlancoSfdcJdbcDatabaseMetaDataTest extends TestCase {
 
 			final Connection conn = DriverManager.getConnection("blanco:sfdc:jdbc:" + url, user, pass);
 			final ResultSet rs = conn.getMetaData().getTables(null, null, null, null);
-			for (int index=0; rs.next();index++) {
-				rs.getString(index);
+			for (; rs.next();) {
+				System.err.println(rs.getString("TABLE_NAME"));
 			}
 
 			conn.close();
