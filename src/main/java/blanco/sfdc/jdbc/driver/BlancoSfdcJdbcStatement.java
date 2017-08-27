@@ -139,6 +139,9 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 				// 1 origin for getString
 				final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = rsmd
 						.getColumnByColumnName(obj.getName().getLocalPart());
+				System.err.println("TRACE: name:" + metaDataColumn.getColumnName());
+				System.err.println("  TRACE: type:" + metaDataColumn.getDataType());
+				System.err.println("  TRACE: type:" + metaDataColumn.getTypeName());
 
 				final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(metaDataColumn);
 				record.getColumnList().add(column);

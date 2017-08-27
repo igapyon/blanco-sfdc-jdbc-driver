@@ -108,7 +108,6 @@ public class BlancoSfdcJdbcDatabaseMetaDataColumnsStatement extends BlancoJdbcSi
 						metaDataColumn.setDataType(java.sql.Types.INTEGER);
 						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
 								metaDataColumn);
-						column.setColumnValue(field.getType().toString());
 
 						// default is VARCHAR
 						column.setColumnValueByInteger(Integer.valueOf(java.sql.Types.VARCHAR));
@@ -121,6 +120,7 @@ public class BlancoSfdcJdbcDatabaseMetaDataColumnsStatement extends BlancoJdbcSi
 							System.err.println("TRACE: datetime");
 							column.setColumnValueByInteger(Integer.valueOf(java.sql.Types.TIMESTAMP));
 						}
+						column.setColumnValue("" + column.getColumnValueByInteger());
 
 						record.getColumnList().add(column);
 					}
