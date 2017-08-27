@@ -37,39 +37,39 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoJdbcSim
 
 				BlancoJdbcSimpleResultSetRow record = new BlancoJdbcSimpleResultSetRow();
 				{
-					final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
-					item.setColumnName("TABLE_CAT");
-					item.setColumnValue("tableのCAT");
-					record.getColumnList().add(item);
+					final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
+					column.setColumnName("TABLE_CAT");
+					column.setColumnValue(null);
+					record.getColumnList().add(column);
 				}
 
 				{
-					final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
-					item.setColumnName("TABLE_SCHEM");
-					item.setColumnValue("");
-					record.getColumnList().add(item);
+					final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
+					column.setColumnName("TABLE_SCHEM");
+					column.setColumnValue(null);
+					record.getColumnList().add(column);
 				}
 
 				{
-					final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
-					item.setColumnName("TABLE_NAME");
-					item.setColumnValue(sobjectResult.getName());
-					record.getColumnList().add(item);
+					final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
+					column.setColumnName("TABLE_NAME");
+					column.setColumnValue(sobjectResult.getName());
+					record.getColumnList().add(column);
 				}
 
 				{
-					final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
-					item.setColumnName("TABLE_TYPE");
+					final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
+					column.setColumnName("TABLE_TYPE");
 					// TODO 型は正しいか確認
-					item.setColumnValue("TABLE");
-					record.getColumnList().add(item);
+					column.setColumnValue("TABLE");
+					record.getColumnList().add(column);
 				}
 
 				{
-					final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
-					item.setColumnName("REMARKS");
-					item.setColumnValue("");
-					record.getColumnList().add(item);
+					final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
+					column.setColumnName("REMARKS");
+					column.setColumnValue("");
+					record.getColumnList().add(column);
 				}
 
 				rs.getRowList().add(record);

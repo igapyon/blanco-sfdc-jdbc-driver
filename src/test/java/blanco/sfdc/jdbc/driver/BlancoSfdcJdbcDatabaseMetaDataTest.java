@@ -29,6 +29,9 @@ public class BlancoSfdcJdbcDatabaseMetaDataTest extends TestCase {
 			final ResultSet rs = conn.getMetaData().getTables(null, null, null, null);
 			for (; rs.next();) {
 				System.err.println(rs.getString("TABLE_NAME"));
+				System.err.println("  " + rs.getString("TABLE_TYPE"));
+				System.err.println("  " + rs.getString("TABLE_CAT"));
+				System.err.println("  " + rs.getString("TABLE_SCHEM"));
 			}
 
 			conn.close();
