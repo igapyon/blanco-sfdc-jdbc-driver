@@ -47,6 +47,16 @@ public class BlancoJdbcSimpleResultSetMetaData implements ResultSetMetaData {
 		return columnList;
 	}
 
+	public BlancoJdbcSimpleResultSetMetaDataColumn getColumnByColumnName(final String columnName) {
+		for (BlancoJdbcSimpleResultSetMetaDataColumn column : columnList) {
+			if (column.getColumnName().compareToIgnoreCase(columnName) == 0) {
+				return column;
+			}
+		}
+
+		return null;
+	}
+
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
