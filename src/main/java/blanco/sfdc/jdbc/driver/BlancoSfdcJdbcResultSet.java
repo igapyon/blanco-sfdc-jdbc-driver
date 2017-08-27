@@ -45,15 +45,24 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
+import com.sforce.soap.partner.DescribeSObjectResult;
+import com.sforce.soap.partner.Field;
 import com.sforce.soap.partner.sobject.SObject;
+import com.sforce.ws.ConnectionException;
 import com.sforce.ws.bind.XmlObject;
 
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSet;
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetColumn;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetMetaData;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetMetaDataColumn;
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRow;
 
 public class BlancoSfdcJdbcResultSet extends BlancoJdbcSimpleResultSet {
 	protected boolean isClosed = false;
+
+	protected BlancoJdbcSimpleResultSetMetaData rsmd = null;
+
+	protected String sObjectName = null;
 
 	public BlancoSfdcJdbcResultSet(final Statement stmt, final List<SObject> resultSetValueList) {
 		super(stmt);
@@ -66,7 +75,6 @@ public class BlancoSfdcJdbcResultSet extends BlancoJdbcSimpleResultSet {
 
 			final XmlObject xmlSObject = (XmlObject) resultSetValueList.get(indexRow);
 
-			String sobjName = "N/A";
 			String rowIdString = "";
 
 			final Iterator<XmlObject> ite = xmlSObject.getChildren();
@@ -81,7 +89,7 @@ public class BlancoSfdcJdbcResultSet extends BlancoJdbcSimpleResultSet {
 				// children=[]}
 
 				if (index == 0) {
-					sobjName = obj.getValue().toString();
+					sObjectName = obj.getValue().toString();
 				} else if (index == 1) {
 					rowIdString = obj.getValue().toString();
 				} else {
@@ -202,7 +210,64 @@ public class BlancoSfdcJdbcResultSet extends BlancoJdbcSimpleResultSet {
 	}
 
 	public ResultSetMetaData getMetaData() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		if (rsmd != null) {
+			return rsmd;
+		}
+		rsmd = new BlancoJdbcSimpleResultSetMetaData();
+
+		final BlancoSfdcJdbcConnection pconn = ((BlancoSfdcJdbcConnection) ((BlancoSfdcJdbcStatement) getStatement())
+				.getConnection());
+		try {
+			final DescribeSObjectResult descSObjResult = pconn.getPartnerConnection().describeSObject(sObjectName);
+			final Field[] fields = descSObjResult.getFields();
+
+			for (Field field : fields) {
+				final BlancoJdbcSimpleResultSetMetaDataColumn column = new BlancoJdbcSimpleResultSetMetaDataColumn();
+				column.setColumnName(field.getName());
+				// field.getAutoNumber()
+				// field.getByteLength()
+				// field.getCompoundFieldName()
+				// field.getControllerName()
+				// field.getCustom()
+				// field.getDigits()
+				// field.getPicklistValues()
+
+				System.out.println(field.getType().toString());
+				// FIXME
+				column.setDataType(java.sql.Types.VARCHAR);
+				column.setTypeName(field.getType().toString());
+
+				column.setNullable(field.getNillable());
+
+				column.setColumnLabel(field.getLabel());
+
+				// ORDINAL_POSITION int => テーブル中の列のインデックス (1 から始まる)
+				// protected int ordinalPosition = -1;
+
+				// NUM_PREC_RADIX int 10;
+				// SCOPE_CATLOG null
+				// SCOPE_SCHEMA null
+				// TABLE_CAT null
+				// TABLE_SCHEM null
+				// COLUMN_DEF null
+				// SCOPE_TABLE String null
+				// IS_AUTOINCREMENT String ""
+
+				column.setColumnSize(field.getLength());
+				// TODO : CHAR_OCTET_LENGTH int
+
+				column.setTableName(sObjectName);
+				column.setColumnLabel(field.getLabel());
+				column.setPrecision(field.getPrecision());
+				column.setScale(field.getScale());
+				column.setRemarks(field.getLabel());
+
+				rsmd.getColumnList().add(column);
+			}
+		} catch (ConnectionException ex) {
+			throw new SQLException(ex);
+		}
+
+		return rsmd;
 	}
 }
