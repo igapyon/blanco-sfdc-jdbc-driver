@@ -78,6 +78,58 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 		return rowList;
 	}
 
+	public String getString(final int columnIndex) throws SQLException {
+		final BlancoJdbcSimpleResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
+		return column.getColumnValue();
+	}
+
+	public String getString(final String columnLabel) throws SQLException {
+		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
+			final BlancoJdbcSimpleResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
+			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
+				return item.getColumnValue();
+			}
+		}
+
+		throw new SQLException("No such column [" + columnLabel + "]");
+	}
+
+	public Date getDate(int columnIndex) throws SQLException {
+		final BlancoJdbcSimpleResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
+		return new java.sql.Date(column.getColumnValueByDate().getTime());
+	}
+
+	public Date getDate(String columnLabel) throws SQLException {
+		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
+			final BlancoJdbcSimpleResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
+			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
+				return new java.sql.Date(item.getColumnValueByDate().getTime());
+			}
+		}
+
+		throw new SQLException("No such column [" + columnLabel + "]");
+	}
+
+	public int getInt(int columnIndex) throws SQLException {
+		final BlancoJdbcSimpleResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
+		return column.getColumnValueByInteger();
+	}
+
+	public int getInt(String columnLabel) throws SQLException {
+		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
+			final BlancoJdbcSimpleResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
+			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
+				return item.getColumnValueByInteger();
+			}
+		}
+
+		throw new SQLException("No such column [" + columnLabel + "]");
+	}
+
+	public ResultSetMetaData getMetaData() throws SQLException {
+		throw new SQLException("Not Implemented.");
+	}
+
 	public <T> T unwrap(Class<T> iface) throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
@@ -99,10 +151,6 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 	}
 
 	public short getShort(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public int getInt(int columnIndex) throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
 
@@ -155,10 +203,6 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 	}
 
 	public short getShort(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public int getInt(String columnLabel) throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
 
@@ -216,11 +260,13 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 	}
 
 	public Object getObject(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// for ease
+		return getString(columnIndex);
 	}
 
 	public Object getObject(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// for ease
+		return getString(columnLabel);
 	}
 
 	public int findColumn(String columnLabel) throws SQLException {
@@ -938,33 +984,5 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 		rowIndex += rows;
 
 		return true;
-	}
-
-	public String getString(final int columnIndex) throws SQLException {
-		final BlancoJdbcSimpleResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
-		return column.getColumnValue();
-	}
-
-	public String getString(final String columnLabel) throws SQLException {
-		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
-			final BlancoJdbcSimpleResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
-			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
-				return item.getColumnValue();
-			}
-		}
-
-		throw new SQLException("No such column [" + columnLabel + "]");
-	}
-
-	public Date getDate(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public Date getDate(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public ResultSetMetaData getMetaData() throws SQLException {
-		throw new SQLException("Not Implemented.");
 	}
 }
