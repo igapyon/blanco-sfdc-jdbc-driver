@@ -96,14 +96,22 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 
 	public Date getDate(int columnIndex) throws SQLException {
 		final BlancoJdbcSimpleResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
-		return new java.sql.Date(column.getColumnValueByDate().getTime());
+		if (column.getColumnValueByDate() == null) {
+			return null;
+		} else {
+			return new java.sql.Date(column.getColumnValueByDate().getTime());
+		}
 	}
 
 	public Date getDate(String columnLabel) throws SQLException {
 		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
 			final BlancoJdbcSimpleResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
 			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
-				return new java.sql.Date(item.getColumnValueByDate().getTime());
+				if (item.getColumnValueByDate() == null) {
+					return null;
+				} else {
+					return new java.sql.Date(item.getColumnValueByDate().getTime());
+				}
 			}
 		}
 

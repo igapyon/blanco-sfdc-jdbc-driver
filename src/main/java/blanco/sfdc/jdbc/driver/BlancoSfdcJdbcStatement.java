@@ -37,10 +37,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
-import java.util.List;
 import java.util.TimeZone;
 
 import com.sforce.soap.partner.QueryResult;
@@ -48,6 +46,7 @@ import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 import com.sforce.ws.bind.XmlObject;
 
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSet;
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetColumn;
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetMetaData;
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetMetaDataColumn;
@@ -55,7 +54,8 @@ import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRow;
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleStatement;
 
 public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
-	protected final List<SObject> resultSetValueList = new ArrayList<SObject>();
+
+	protected BlancoJdbcSimpleResultSet rs = null;
 
 	/**
 	 * NOTE: static field!!!
@@ -64,6 +64,107 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 
 	public BlancoSfdcJdbcStatement(final BlancoSfdcJdbcConnection conn) {
 		super(conn);
+	}
+
+	@Override
+	public boolean execute(String sql) throws SQLException {
+		rs = new BlancoJdbcSimpleResultSet(this);
+
+		try {
+			// TODO そもそもこの処理はResultSet側のフェッチ境界の考慮が必要だが、難易度が高いので一旦保留。
+			// TODO ただし、これを解決しないと、巨大な検索結果の際に全件を持ってきてしまうのでまずい実装だと思う。
+			QueryResult qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection().query(sql);
+			for (;;) {
+				final SObject[] sObjs = qryResult.getRecords();
+				if (sObjs.length == 0) {
+					break;
+				}
+
+				if (rsmd == null) {
+					rsmd = getResultSetMetaData((BlancoSfdcJdbcConnection) conn, sObjs[0]);
+				}
+
+				for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
+					final BlancoJdbcSimpleResultSetRow row = getRowObj(sObjs[indexRow]);
+					rs.getRowList().add(row);
+				}
+				if (qryResult.isDone()) {
+					break;
+				}
+				// TODO This should be more better.
+				qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
+						.queryMore(qryResult.getQueryLocator());
+			}
+		} catch (
+
+		ConnectionException ex) {
+			throw new SQLException(ex);
+		}
+
+		return true;
+	}
+
+	@Override
+	public ResultSet getResultSet() throws SQLException {
+		return rs;
+	}
+
+	///////////////////////////
+	// common func
+
+	public static BlancoJdbcSimpleResultSetRow getRowObj(final SObject sObj) {
+		final BlancoJdbcSimpleResultSetRow record = new BlancoJdbcSimpleResultSetRow();
+		// getRowList().add(record);
+
+		final XmlObject xmlSObject = (XmlObject) sObj;
+
+		final Iterator<XmlObject> ite = xmlSObject.getChildren();
+		int indexColumn = 0;
+		for (; ite.hasNext(); indexColumn++) {
+			final XmlObject obj = (XmlObject) ite.next();
+
+			// First one should be : type, value=Account,
+			// children=[]}
+			// Second one should be : Id, value=0012800000lbaM2AAI,
+			// children=[]}
+
+			String sObjectName = null;
+			String rowIdString = null;
+
+			if (indexColumn == 0) {
+				sObjectName = obj.getValue().toString();
+			} else if (indexColumn == 1) {
+				rowIdString = obj.getValue().toString();
+			} else {
+				// 1 origin for getString
+				final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = rsmd
+						.getColumnByColumnName(obj.getName().getLocalPart());
+
+				final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(metaDataColumn);
+				record.getColumnList().add(column);
+
+				if (obj.getValue() == null) {
+					column.setColumnValue("");
+				} else {
+					column.setColumnValue(obj.getValue().toString());
+
+					// Date変換
+					switch (column.getMetaDataColumn().getDataType()) {
+					case java.sql.Types.DATE:
+					case java.sql.Types.TIME:
+					case java.sql.Types.TIME_WITH_TIMEZONE:
+					case java.sql.Types.TIMESTAMP:
+					case java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
+						column.setColumnValueByDate(soqlDateToDate(column.getColumnValue()));
+						break;
+					}
+				}
+
+				// TODO tablename?
+				// TODO set Object ID?
+			}
+		}
+		return record;
 	}
 
 	public static java.util.Date soqlDateToDate(final String soqlDateString) {
@@ -130,102 +231,5 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 		}
 
 		return rsmd;
-	}
-
-	@Override
-	public boolean execute(String sql) throws SQLException {
-		try {
-			// TODO そもそもこの処理はResultSet側のフェッチ境界の考慮が必要だが、難易度が高いので一旦保留。
-			// TODO ただし、これを解決しないと、巨大な検索結果の際に全件を持ってきてしまうのでまずい実装だと思う。
-			QueryResult qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection().query(sql);
-			for (;;) {
-				final SObject[] sObjs = qryResult.getRecords();
-				if (sObjs.length == 0) {
-					break;
-				}
-
-				if (rsmd == null) {
-					rsmd = getResultSetMetaData((BlancoSfdcJdbcConnection) conn, sObjs[0]);
-				}
-
-				for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
-					final BlancoJdbcSimpleResultSetRow record = new BlancoJdbcSimpleResultSetRow();
-					// getRowList().add(record);
-
-					final XmlObject xmlSObject = (XmlObject) sObjs[indexRow];
-
-					// rsmd.getColumnByColumnName(columnName)
-
-					final Iterator<XmlObject> ite = xmlSObject.getChildren();
-					int indexColumn = 0;
-					for (; ite.hasNext(); indexColumn++) {
-						final XmlObject obj = (XmlObject) ite.next();
-
-						// First one should be : type, value=Account,
-						// children=[]}
-						// Second one should be : Id, value=0012800000lbaM2AAI,
-						// children=[]}
-
-						String sObjectName = null;
-						String rowIdString = null;
-
-						if (indexColumn == 0) {
-							sObjectName = obj.getValue().toString();
-						} else if (indexColumn == 1) {
-							rowIdString = obj.getValue().toString();
-						} else {
-							// 1 origin for getString
-							final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = rsmd
-									.getColumnByColumnName(obj.getName().getLocalPart());
-
-							final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
-									metaDataColumn);
-							record.getColumnList().add(column);
-
-							if (obj.getValue() == null) {
-								column.setColumnValue("");
-							} else {
-								column.setColumnValue(obj.getValue().toString());
-
-								// Date変換
-								switch (column.getMetaDataColumn().getDataType()) {
-								case java.sql.Types.DATE:
-								case java.sql.Types.TIME:
-								case java.sql.Types.TIME_WITH_TIMEZONE:
-								case java.sql.Types.TIMESTAMP:
-								case java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
-									column.setColumnValueByDate(soqlDateToDate(column.getColumnValue()));
-									break;
-								}
-							}
-
-							// TODO tablename?
-							// TODO set Object ID?
-						}
-					}
-
-					resultSetValueList.add(sObjs[indexColumn]);
-				}
-				if (qryResult.isDone()) {
-					break;
-				}
-				// TODO This should be more better.
-				qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
-						.queryMore(qryResult.getQueryLocator());
-			}
-
-		} catch (
-
-		ConnectionException ex) {
-			throw new SQLException(ex);
-		}
-
-		return true;
-	}
-
-	@Override
-	public ResultSet getResultSet() throws SQLException {
-		// 標準共通の方のしょりで動くように変更したい。
-		return new BlancoSfdcJdbcResultSet(this, resultSetValueList);
 	}
 }
