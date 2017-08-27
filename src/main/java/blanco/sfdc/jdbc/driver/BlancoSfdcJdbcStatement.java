@@ -45,12 +45,14 @@ import com.sforce.ws.ConnectionException;
 import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleStatement;
 
 public class BlancoSfdcJdbcStatement extends BlancoSfdcJdbcSimpleStatement {
+	final List<SObject> resultSetValueList = new ArrayList<SObject>();
+
 	public BlancoSfdcJdbcStatement(final BlancoSfdcJdbcConnection conn) {
 		super(conn);
 	}
 
-	public ResultSet executeQuery(final String sql) throws SQLException {
-		final List<SObject> resultSetValueList = new ArrayList<SObject>();
+	@Override
+	public boolean execute(String sql) throws SQLException {
 		try {
 			// TODO そもそもこの処理はResultSet側にあるべきのようだが、難易度が高いので一旦保留。
 			// TODO ただし、これを解決しないと、巨大な検索結果の際に全件を持ってきてしまうのでまずい実装だと思う。
@@ -67,9 +69,15 @@ public class BlancoSfdcJdbcStatement extends BlancoSfdcJdbcSimpleStatement {
 				qryResult = conn.getPartnerConnection().queryMore(qryResult.getQueryLocator());
 			}
 
-			return new BlancoSfdcJdbcResultSet(this, resultSetValueList);
 		} catch (ConnectionException ex) {
 			throw new SQLException(ex);
 		}
+
+		return true;
+	}
+
+	@Override
+	public ResultSet getResultSet() throws SQLException {
+		return new BlancoSfdcJdbcResultSet(this, resultSetValueList);
 	}
 }

@@ -65,13 +65,15 @@ import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleStatement;
 public class BlancoSfdcJdbcPreparedStatement extends BlancoSfdcJdbcSimpleStatement implements PreparedStatement {
 	protected String sql = null;
 
+	final List<SObject> resultSetValueList = new ArrayList<SObject>();
+
 	public BlancoSfdcJdbcPreparedStatement(final BlancoSfdcJdbcConnection conn, final String sql) {
 		super(conn);
 		this.sql = sql;
 	}
 
-	public ResultSet executeQuery(final String sql) throws SQLException {
-		final List<SObject> resultSetValueList = new ArrayList<SObject>();
+	@Override
+	public boolean execute(final String sql) throws SQLException {
 		try {
 			// TODO そもそもこの処理はResultSet側にあるべきのようだが、難易度が高いので一旦保留。
 			// TODO ただし、これを解決しないと、巨大な検索結果の際に全件を持ってきてしまうのでまずい実装だと思う。
@@ -88,10 +90,15 @@ public class BlancoSfdcJdbcPreparedStatement extends BlancoSfdcJdbcSimpleStateme
 				qryResult = conn.getPartnerConnection().queryMore(qryResult.getQueryLocator());
 			}
 
-			return new BlancoSfdcJdbcResultSet(this, resultSetValueList);
+			return true;
 		} catch (ConnectionException ex) {
 			throw new SQLException(ex);
 		}
+	}
+
+	@Override
+	public ResultSet getResultSet() throws SQLException {
+		return new BlancoSfdcJdbcResultSet(this, resultSetValueList);
 	}
 
 	public ResultSet executeQuery() throws SQLException {
