@@ -68,7 +68,7 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoJdbcSim
 				{
 					final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
 					column.setColumnName("REMARKS");
-					column.setColumnValue("");
+					column.setColumnValue(sobjectResult.getLabel());
 					record.getColumnList().add(column);
 				}
 
