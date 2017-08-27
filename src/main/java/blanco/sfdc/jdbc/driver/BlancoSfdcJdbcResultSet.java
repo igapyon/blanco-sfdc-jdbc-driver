@@ -94,9 +94,14 @@ public class BlancoSfdcJdbcResultSet extends BlancoJdbcSimpleResultSet {
 					rowIdString = obj.getValue().toString();
 				} else {
 					// 1 origin for getString
-					final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
+
+					final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+					metaDataColumn.setColumnName(obj.getName().getLocalPart());
+					// FIXME
+					// TODO
+
+					final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(metaDataColumn);
 					record.getColumnList().add(column);
-					column.setColumnName(obj.getName().getLocalPart());
 
 					// TODO 型情報が必要。がxmlからは得られない。object名称から逆引きか？？
 

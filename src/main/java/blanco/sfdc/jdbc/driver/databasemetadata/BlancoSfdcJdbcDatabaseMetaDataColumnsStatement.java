@@ -11,6 +11,7 @@ import com.sforce.ws.ConnectionException;
 
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSet;
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetColumn;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetMetaDataColumn;
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRow;
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleStatement;
 import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
@@ -66,150 +67,192 @@ public class BlancoSfdcJdbcDatabaseMetaDataColumnsStatement extends BlancoJdbcSi
 					BlancoJdbcSimpleResultSetRow record = new BlancoJdbcSimpleResultSetRow();
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("TABLE_CAT");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("TABLE_CAT");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue(null);
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("TABLE_SCHEM");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("TABLE_SCHEM");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue(null);
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("TABLE_NAME");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("TABLE_NAME");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue(tableName);
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("COLUMN_NAME");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("COLUMN_NAME");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue(field.getName());
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("DATA_TYPE");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("DATA_TYPE");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						// java.sql.Types
 						column.setColumnValue(field.getType().toString());
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("TYPE_NAME");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("TYPE_NAME");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						// java.sql.Types
 						column.setColumnValue(field.getType().toString());
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("COLUMN_SIZE");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("COLUMN_SIZE");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue("" + field.getLength());
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("DECIMAL_DIGITS");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("DECIMAL_DIGITS");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue("" + field.getDigits());
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("NUM_PREC_RADIX");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("NUM_PREC_RADIX");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue("10");
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("NULLABLE");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("NULLABLE");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue("" + field.getNillable());
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("REMARKS");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("REMARKS");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue(field.getLabel());
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("COLUMN_DEF");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("COLUMN_DEF");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue(null);
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("CHAR_OCTET_LENGTH");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("CHAR_OCTET_LENGTH");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue("" + field.getLength());
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("ORDINAL_POSITION");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("ORDINAL_POSITION");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue("" + ordinalIndex);
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("IS_NULLABLE");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("IS_NULLABLE");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue("");
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("SCOPE_CATALOG");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("SCOPE_CATALOG");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue(null);
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("SCOPE_SCHEMA");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("SCOPE_SCHEMA");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue(null);
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("SCOPE_TABLE");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("SCOPE_TABLE");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue(null);
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("SOURCE_DATA_TYPE");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("SOURCE_DATA_TYPE");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue(null);
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("IS_AUTOINCREMENT");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("IS_AUTOINCREMENT");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue("");
 						record.getColumnList().add(column);
 					}
 
 					{
-						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
-						column.setColumnName("IS_GENERATEDCOLUMN");
+						final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+						metaDataColumn.setColumnName("IS_GENERATEDCOLUMN");
+						final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(
+								metaDataColumn);
 						column.setColumnValue("");
 						record.getColumnList().add(column);
 					}

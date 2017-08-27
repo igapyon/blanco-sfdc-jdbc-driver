@@ -34,18 +34,26 @@
 package blanco.jdbc.driver.simple;
 
 public class BlancoJdbcSimpleResultSetColumn {
-	protected String columnName = null;
-
 	protected String columnValue = null;
+
+	protected BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = null;
+
+	public BlancoJdbcSimpleResultSetColumn(final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn) {
+		this.metaDataColumn = metaDataColumn;
+	}
 
 	// columnType ???
 
-	public String getColumnName() {
-		return columnName;
+	public BlancoJdbcSimpleResultSetMetaDataColumn getMetaDataColumn() {
+		return metaDataColumn;
 	}
 
-	public void setColumnName(String columnName) {
-		this.columnName = columnName;
+	public void setMetaDataColumn(BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn) {
+		this.metaDataColumn = metaDataColumn;
+	}
+
+	public String getColumnName() {
+		return metaDataColumn.getColumnName();
 	}
 
 	public String getColumnValue() {
