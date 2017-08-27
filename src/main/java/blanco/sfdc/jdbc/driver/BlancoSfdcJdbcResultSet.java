@@ -49,8 +49,8 @@ import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.bind.XmlObject;
 
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSet;
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRow;
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetColumn;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRow;
 
 public class BlancoSfdcJdbcResultSet extends BlancoJdbcSimpleResultSet {
 	protected boolean isClosed = false;
@@ -64,6 +64,8 @@ public class BlancoSfdcJdbcResultSet extends BlancoJdbcSimpleResultSet {
 
 			final XmlObject xmlObj = (XmlObject) resultSetValueList.get(indexRow);
 
+			System.out.println(xmlObj);
+
 			String tableName = "N/A";
 			String rowIdString = "";
 
@@ -71,6 +73,8 @@ public class BlancoSfdcJdbcResultSet extends BlancoJdbcSimpleResultSet {
 			int index = 0;
 			for (; ite.hasNext(); index++) {
 				final XmlObject obj = (XmlObject) ite.next();
+
+				// System.out.println(obj);
 
 				// First one should be : type, value=Account, children=[]}
 				// Second one should be : Id, value=0012800000lbaM2AAI,
@@ -87,12 +91,12 @@ public class BlancoSfdcJdbcResultSet extends BlancoJdbcSimpleResultSet {
 					item.setColumnName(obj.getName().getLocalPart());
 
 					// TODO 型情報が必要。
-					
+
 					if (obj.getValue() == null) {
 						item.setColumnValue("");
 					} else {
 						item.setColumnValue(obj.getValue().toString());
-						
+
 						// TODO date変換
 					}
 
@@ -113,8 +117,7 @@ public class BlancoSfdcJdbcResultSet extends BlancoJdbcSimpleResultSet {
 
 	public String getString(final String columnLabel) throws SQLException {
 		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
-			final BlancoJdbcSimpleResultSetColumn item = getRowList().get(rowIndex).getColumnList()
-					.get(index);
+			final BlancoJdbcSimpleResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
 			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
 				return item.getColumnValue();
 			}
