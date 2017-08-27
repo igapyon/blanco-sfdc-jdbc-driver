@@ -44,6 +44,7 @@ import java.sql.Date;
 import java.sql.NClob;
 import java.sql.Ref;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.RowId;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
@@ -56,7 +57,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
+public class BlancoJdbcSimpleResultSet implements ResultSet {
 	private Statement stmt = null;
 
 	private boolean isClosed = false;
@@ -937,5 +938,33 @@ public abstract class BlancoJdbcSimpleResultSet implements ResultSet {
 		rowIndex += rows;
 
 		return true;
+	}
+
+	public String getString(int columnIndex) throws SQLException {
+		final BlancoJdbcSimpleResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
+		return column.getColumnValue();
+	}
+
+	public String getString(String columnLabel) throws SQLException {
+		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
+			final BlancoJdbcSimpleResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
+			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
+				return item.getColumnValue();
+			}
+		}
+
+		throw new SQLException("No such column [" + columnLabel + "]");
+	}
+
+	public Date getDate(int columnIndex) throws SQLException {
+		throw new SQLException("Not Implemented.");
+	}
+
+	public Date getDate(String columnLabel) throws SQLException {
+		throw new SQLException("Not Implemented.");
+	}
+
+	public ResultSetMetaData getMetaData() throws SQLException {
+		throw new SQLException("Not Implemented.");
 	}
 }

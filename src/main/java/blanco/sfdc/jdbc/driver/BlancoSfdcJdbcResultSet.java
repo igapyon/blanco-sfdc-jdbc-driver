@@ -86,10 +86,14 @@ public class BlancoSfdcJdbcResultSet extends BlancoJdbcSimpleResultSet {
 					record.getColumnList().add(item);
 					item.setColumnName(obj.getName().getLocalPart());
 
+					// TODO 型情報が必要。
+					
 					if (obj.getValue() == null) {
 						item.setColumnValue("");
 					} else {
 						item.setColumnValue(obj.getValue().toString());
+						
+						// TODO date変換
 					}
 
 					// TODO tablename?
@@ -108,7 +112,6 @@ public class BlancoSfdcJdbcResultSet extends BlancoJdbcSimpleResultSet {
 	}
 
 	public String getString(final String columnLabel) throws SQLException {
-
 		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
 			final BlancoJdbcSimpleResultSetColumn item = getRowList().get(rowIndex).getColumnList()
 					.get(index);

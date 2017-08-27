@@ -9,8 +9,9 @@ import com.sforce.soap.partner.DescribeGlobalResult;
 import com.sforce.soap.partner.DescribeGlobalSObjectResult;
 import com.sforce.ws.ConnectionException;
 
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRow;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSet;
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetColumn;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRow;
 import blanco.jdbc.driver.simple.BlancoJdbcSimpleStatement;
 import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
 
@@ -42,7 +43,7 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoJdbcSim
 
 	@Override
 	public ResultSet getResultSet() throws SQLException {
-		BlancoSfdcJdbcDatabaseMetaDataTablesResultSet rs = new BlancoSfdcJdbcDatabaseMetaDataTablesResultSet(this);
+		final BlancoJdbcSimpleResultSet rs = new BlancoJdbcSimpleResultSet(this);
 
 		for (String name : nameList) {
 			BlancoJdbcSimpleResultSetRow record = new BlancoJdbcSimpleResultSetRow();
