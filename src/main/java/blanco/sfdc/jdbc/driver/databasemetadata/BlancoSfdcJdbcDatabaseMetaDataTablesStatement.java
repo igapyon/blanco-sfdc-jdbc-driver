@@ -9,12 +9,12 @@ import com.sforce.soap.partner.DescribeGlobalResult;
 import com.sforce.soap.partner.DescribeGlobalSObjectResult;
 import com.sforce.ws.ConnectionException;
 
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRecord;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRecordItem;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleStatement;
 import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
-import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleResultSetRecord;
-import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleResultSetRecordItem;
-import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleStatement;
 
-public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoSfdcJdbcSimpleStatement {
+public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoJdbcSimpleStatement {
 	protected final List<String> nameList = new ArrayList<String>();
 
 	public BlancoSfdcJdbcDatabaseMetaDataTablesStatement(final BlancoSfdcJdbcConnection conn, String catalog,
@@ -27,7 +27,8 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoSfdcJdb
 		// NOTE ignored sql
 
 		try {
-			final DescribeGlobalResult descResult = conn.getPartnerConnection().describeGlobal();
+			final DescribeGlobalResult descResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
+					.describeGlobal();
 			for (DescribeGlobalSObjectResult sobjectResult : descResult.getSobjects()) {
 				System.out.println(sobjectResult.getName());
 				nameList.add(sobjectResult.getName());
@@ -44,37 +45,37 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoSfdcJdb
 		BlancoSfdcJdbcDatabaseMetaDataTablesResultSet rs = new BlancoSfdcJdbcDatabaseMetaDataTablesResultSet(this);
 
 		for (String name : nameList) {
-			BlancoSfdcJdbcSimpleResultSetRecord record = new BlancoSfdcJdbcSimpleResultSetRecord();
+			BlancoJdbcSimpleResultSetRecord record = new BlancoJdbcSimpleResultSetRecord();
 			{
-				final BlancoSfdcJdbcSimpleResultSetRecordItem item = new BlancoSfdcJdbcSimpleResultSetRecordItem();
+				final BlancoJdbcSimpleResultSetRecordItem item = new BlancoJdbcSimpleResultSetRecordItem();
 				item.setColumnName("TABLE_CAT");
 				item.setColumnValue("tableのCAT");
 				record.getItemList().add(item);
 			}
 
 			{
-				final BlancoSfdcJdbcSimpleResultSetRecordItem item = new BlancoSfdcJdbcSimpleResultSetRecordItem();
+				final BlancoJdbcSimpleResultSetRecordItem item = new BlancoJdbcSimpleResultSetRecordItem();
 				item.setColumnName("TABLE_SCHEM");
 				item.setColumnValue("");
 				record.getItemList().add(item);
 			}
 
 			{
-				final BlancoSfdcJdbcSimpleResultSetRecordItem item = new BlancoSfdcJdbcSimpleResultSetRecordItem();
+				final BlancoJdbcSimpleResultSetRecordItem item = new BlancoJdbcSimpleResultSetRecordItem();
 				item.setColumnName("TABLE_NAME");
 				item.setColumnValue(name);
 				record.getItemList().add(item);
 			}
 
 			{
-				final BlancoSfdcJdbcSimpleResultSetRecordItem item = new BlancoSfdcJdbcSimpleResultSetRecordItem();
+				final BlancoJdbcSimpleResultSetRecordItem item = new BlancoJdbcSimpleResultSetRecordItem();
 				item.setColumnName("TABLE_TYPE");
 				item.setColumnValue("tab type");
 				record.getItemList().add(item);
 			}
 
 			{
-				final BlancoSfdcJdbcSimpleResultSetRecordItem item = new BlancoSfdcJdbcSimpleResultSetRecordItem();
+				final BlancoJdbcSimpleResultSetRecordItem item = new BlancoJdbcSimpleResultSetRecordItem();
 				item.setColumnName("REMARKS");
 				item.setColumnValue("tab remarks");
 				record.getItemList().add(item);

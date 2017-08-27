@@ -48,18 +48,18 @@ import java.util.TimeZone;
 import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.bind.XmlObject;
 
-import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleResultSet;
-import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleResultSetRecord;
-import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleResultSetRecordItem;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSet;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRecord;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRecordItem;
 
-public class BlancoSfdcJdbcResultSet extends BlancoSfdcJdbcSimpleResultSet {
+public class BlancoSfdcJdbcResultSet extends BlancoJdbcSimpleResultSet {
 	protected boolean isClosed = false;
 
 	public BlancoSfdcJdbcResultSet(final Statement stmt, final List<SObject> resultSetValueList) {
 		super(stmt);
 
 		for (int indexRow = 0; indexRow < resultSetValueList.size(); indexRow++) {
-			final BlancoSfdcJdbcSimpleResultSetRecord record = new BlancoSfdcJdbcSimpleResultSetRecord();
+			final BlancoJdbcSimpleResultSetRecord record = new BlancoJdbcSimpleResultSetRecord();
 			getRecordList().add(record);
 
 			final XmlObject xmlObj = (XmlObject) resultSetValueList.get(indexRow);
@@ -82,7 +82,7 @@ public class BlancoSfdcJdbcResultSet extends BlancoSfdcJdbcSimpleResultSet {
 					rowIdString = obj.getValue().toString();
 				} else {
 					// 1 origin for getString
-					final BlancoSfdcJdbcSimpleResultSetRecordItem item = new BlancoSfdcJdbcSimpleResultSetRecordItem();
+					final BlancoJdbcSimpleResultSetRecordItem item = new BlancoJdbcSimpleResultSetRecordItem();
 					record.getItemList().add(item);
 					item.setColumnName(obj.getName().getLocalPart());
 
@@ -110,7 +110,7 @@ public class BlancoSfdcJdbcResultSet extends BlancoSfdcJdbcSimpleResultSet {
 	public String getString(final String columnLabel) throws SQLException {
 
 		for (int index = 0; index < getRecordList().get(resultSetIndex).getItemList().size(); index++) {
-			final BlancoSfdcJdbcSimpleResultSetRecordItem item = getRecordList().get(resultSetIndex).getItemList()
+			final BlancoJdbcSimpleResultSetRecordItem item = getRecordList().get(resultSetIndex).getItemList()
 					.get(index);
 			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
 				return item.getColumnValue();

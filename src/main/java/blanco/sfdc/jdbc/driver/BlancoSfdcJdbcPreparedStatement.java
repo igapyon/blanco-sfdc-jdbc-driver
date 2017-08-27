@@ -60,9 +60,9 @@ import com.sforce.soap.partner.QueryResult;
 import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 
-import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleStatement;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleStatement;
 
-public class BlancoSfdcJdbcPreparedStatement extends BlancoSfdcJdbcSimpleStatement implements PreparedStatement {
+public class BlancoSfdcJdbcPreparedStatement extends BlancoJdbcSimpleStatement implements PreparedStatement {
 	protected String sql = null;
 
 	final List<SObject> resultSetValueList = new ArrayList<SObject>();
@@ -77,7 +77,7 @@ public class BlancoSfdcJdbcPreparedStatement extends BlancoSfdcJdbcSimpleStateme
 		try {
 			// TODO そもそもこの処理はResultSet側にあるべきのようだが、難易度が高いので一旦保留。
 			// TODO ただし、これを解決しないと、巨大な検索結果の際に全件を持ってきてしまうのでまずい実装だと思う。
-			QueryResult qryResult = conn.getPartnerConnection().query(sql);
+			QueryResult qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection().query(sql);
 			for (;;) {
 				final SObject[] sObjs = qryResult.getRecords();
 				for (int index = 0; index < sObjs.length; index++) {
@@ -87,7 +87,8 @@ public class BlancoSfdcJdbcPreparedStatement extends BlancoSfdcJdbcSimpleStateme
 					break;
 				}
 				// TODO This should be more better.
-				qryResult = conn.getPartnerConnection().queryMore(qryResult.getQueryLocator());
+				qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
+						.queryMore(qryResult.getQueryLocator());
 			}
 
 			return true;

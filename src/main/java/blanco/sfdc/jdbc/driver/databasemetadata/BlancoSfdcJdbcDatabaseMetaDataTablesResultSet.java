@@ -5,9 +5,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import blanco.sfdc.jdbc.driver.simple.BlancoSfdcJdbcSimpleResultSet;
+import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSet;
 
-public class BlancoSfdcJdbcDatabaseMetaDataTablesResultSet extends BlancoSfdcJdbcSimpleResultSet {
+public class BlancoSfdcJdbcDatabaseMetaDataTablesResultSet extends BlancoJdbcSimpleResultSet {
 	public BlancoSfdcJdbcDatabaseMetaDataTablesResultSet(final Statement stmt) {
 		super(stmt);
 	}
