@@ -62,14 +62,14 @@ public class BlancoSfdcJdbcResultSet extends BlancoJdbcSimpleResultSet {
 			final BlancoJdbcSimpleResultSetRow record = new BlancoJdbcSimpleResultSetRow();
 			getRowList().add(record);
 
-			final XmlObject xmlObj = (XmlObject) resultSetValueList.get(indexRow);
+			// 初回に ResultSetMetaDataをセットする必要あり。
 
-			System.out.println(xmlObj);
+			final XmlObject xmlSObject = (XmlObject) resultSetValueList.get(indexRow);
 
-			String tableName = "N/A";
+			String sobjName = "N/A";
 			String rowIdString = "";
 
-			final Iterator<XmlObject> ite = xmlObj.getChildren();
+			final Iterator<XmlObject> ite = xmlSObject.getChildren();
 			int index = 0;
 			for (; ite.hasNext(); index++) {
 				final XmlObject obj = (XmlObject) ite.next();
@@ -81,27 +81,27 @@ public class BlancoSfdcJdbcResultSet extends BlancoJdbcSimpleResultSet {
 				// children=[]}
 
 				if (index == 0) {
-					tableName = obj.getValue().toString();
+					sobjName = obj.getValue().toString();
 				} else if (index == 1) {
 					rowIdString = obj.getValue().toString();
 				} else {
 					// 1 origin for getString
-					final BlancoJdbcSimpleResultSetColumn item = new BlancoJdbcSimpleResultSetColumn();
-					record.getColumnList().add(item);
-					item.setColumnName(obj.getName().getLocalPart());
+					final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
+					record.getColumnList().add(column);
+					column.setColumnName(obj.getName().getLocalPart());
 
-					// TODO 型情報が必要。
+					// TODO 型情報が必要。がxmlからは得られない。object名称から逆引きか？？
 
 					if (obj.getValue() == null) {
-						item.setColumnValue("");
+						column.setColumnValue("");
 					} else {
-						item.setColumnValue(obj.getValue().toString());
+						column.setColumnValue(obj.getValue().toString());
 
 						// TODO date変換
 					}
 
 					// TODO tablename?
-					// TODO set ID?
+					// TODO set Object ID?
 				}
 			}
 		}
