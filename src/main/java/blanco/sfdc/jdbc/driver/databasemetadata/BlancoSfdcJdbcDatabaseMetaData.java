@@ -553,9 +553,17 @@ public class BlancoSfdcJdbcDatabaseMetaData implements DatabaseMetaData {
 		throw new SQLException("Not Implemented.");
 	}
 
+	/**
+	 * COLUMNS
+	 */
 	public ResultSet getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern)
 			throws SQLException {
-		throw new SQLException("Not Implemented.");
+
+		@SuppressWarnings("resource")
+		final BlancoSfdcJdbcDatabaseMetaDataColumnsStatement stmt = new BlancoSfdcJdbcDatabaseMetaDataColumnsStatement(
+				conn, catalog, schemaPattern, tableNamePattern, columnNamePattern);
+		stmt.execute("dummy");
+		return stmt.getResultSet();
 	}
 
 	public ResultSet getColumnPrivileges(String catalog, String schema, String table, String columnNamePattern)

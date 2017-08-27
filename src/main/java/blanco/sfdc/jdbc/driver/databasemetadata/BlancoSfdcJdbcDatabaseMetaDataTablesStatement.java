@@ -19,9 +19,12 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoJdbcSim
 	protected BlancoJdbcSimpleResultSet rs = null;
 	protected final List<String> nameList = new ArrayList<String>();
 
+	protected String tableNamePattern = null;
+
 	public BlancoSfdcJdbcDatabaseMetaDataTablesStatement(final BlancoSfdcJdbcConnection conn, String catalog,
-			String schemaPattern, String tableNamePattern, String[] types) throws SQLException {
+			String schemaPattern, final String tableNamePattern, String[] types) throws SQLException {
 		super(conn);
+		this.tableNamePattern = tableNamePattern;
 	}
 
 	@Override
@@ -34,8 +37,13 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoJdbcSim
 			final DescribeGlobalResult descResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
 					.describeGlobal();
 			for (DescribeGlobalSObjectResult sobjectResult : descResult.getSobjects()) {
+				if (tableNamePattern != null) {
+					if (tableNamePattern.compareToIgnoreCase(tableNamePattern) != 0) {
+						continue;
+					}
+				}
 
-				BlancoJdbcSimpleResultSetRow record = new BlancoJdbcSimpleResultSetRow();
+				final BlancoJdbcSimpleResultSetRow record = new BlancoJdbcSimpleResultSetRow();
 				{
 					final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn();
 					column.setColumnName("TABLE_CAT");
