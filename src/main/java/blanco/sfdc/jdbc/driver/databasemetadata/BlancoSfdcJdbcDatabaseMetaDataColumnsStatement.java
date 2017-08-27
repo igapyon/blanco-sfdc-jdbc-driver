@@ -18,7 +18,6 @@ import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
 
 public class BlancoSfdcJdbcDatabaseMetaDataColumnsStatement extends BlancoJdbcSimpleStatement {
 	protected BlancoJdbcSimpleResultSet rs = null;
-	protected final List<String> nameList = new ArrayList<String>();
 
 	protected String tableNamePattern = null;
 
