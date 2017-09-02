@@ -37,7 +37,7 @@ public class BlancoSfdcJdbcDatabaseMetaDataTest extends TestCase {
 			}
 
 			if (true) {
-				final ResultSet rs = conn.getMetaData().getColumns(null, null, "ACC%", "P%");
+				final ResultSet rs = conn.getMetaData().getColumns(null, null, "ACC%", "p%");
 				for (; rs.next();) {
 					System.err.println(rs.getString("COLUMN_NAME"));
 					System.err.println("  " + rs.getString("DATA_TYPE"));
