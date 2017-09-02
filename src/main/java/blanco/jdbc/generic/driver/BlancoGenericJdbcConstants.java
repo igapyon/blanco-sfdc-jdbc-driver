@@ -36,7 +36,7 @@ package blanco.jdbc.generic.driver;
 public class BlancoGenericJdbcConstants {
 	public static final String MESSAGE_DATABASE_CLOSED = "This JDBC Connection is closed.";
 
-	public static final String MESSAGE_FORWARD_ONLY_SUPPORT = "This JDBC Driver support ResultSet.TYPE_FORWARD_ONLY only.";
+	public static final String MESSAGE_FORWARD_ONLY_SUPPORTED = "This JDBC Driver support ResultSet.TYPE_FORWARD_ONLY only.";
 
 	public static final String MESSAGE_NO_UPDATE_SUPPORTED = "This JDBC Driver only support query.";
 

@@ -504,47 +504,47 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	// No Cursor related JDBC API supported.
 
 	public boolean previous() throws SQLException {
-		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
 	}
 
 	public boolean isBeforeFirst() throws SQLException {
-		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
 	}
 
 	public boolean isAfterLast() throws SQLException {
-		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
 	}
 
 	public boolean isFirst() throws SQLException {
-		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
 	}
 
 	public boolean isLast() throws SQLException {
-		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
 	}
 
 	public void beforeFirst() throws SQLException {
-		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
 	}
 
 	public void afterLast() throws SQLException {
-		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
 	}
 
 	public boolean first() throws SQLException {
-		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
 	}
 
 	public boolean last() throws SQLException {
-		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
 	}
 
 	public boolean absolute(int row) throws SQLException {
-		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
 	}
 
 	public boolean relative(int rows) throws SQLException {
-		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
 	}
 
 	// No Cursor related JDBC API supported.
