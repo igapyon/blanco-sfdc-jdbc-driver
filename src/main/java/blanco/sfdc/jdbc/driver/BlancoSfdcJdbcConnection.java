@@ -83,45 +83,20 @@ public class BlancoSfdcJdbcConnection extends AbstractBlancoGenericJdbcConnectio
 		return new BlancoSfdcJdbcPreparedStatement(this, sql);
 	}
 
-	public void setAutoCommit(boolean autoCommit) throws SQLException {
-		// NOTE do nothing.
-	}
-
-	public boolean getAutoCommit() throws SQLException {
-		// NOTE do nothing.
-		return false;
-	}
-
-	public void commit() throws SQLException {
-		// NOTE do nothing.
-	}
-
-	public void rollback() throws SQLException {
-		// NOTE do nothing.
-	}
-
+	@Override
 	public void close() throws SQLException {
 		isClosed = true;
+		// TODO ステートメントや結果セットを閉じる仕組みが必要。
 	}
 
+	@Override
 	public boolean isClosed() throws SQLException {
 		return isClosed;
+		// TODO ステートメントや結果セットを閉じる仕組みが必要。
 	}
 
+	@Override
 	public DatabaseMetaData getMetaData() throws SQLException {
 		return new BlancoSfdcJdbcDatabaseMetaData(this);
-	}
-
-	public void setReadOnly(boolean readOnly) throws SQLException {
-		if (readOnly) {
-			// OK
-		} else {
-			throw new SQLException("Not Supported.");
-		}
-	}
-
-	public boolean isReadOnly() throws SQLException {
-		// Read Only !
-		return true;
 	}
 }
