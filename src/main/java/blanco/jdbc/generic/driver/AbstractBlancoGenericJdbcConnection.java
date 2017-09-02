@@ -61,7 +61,7 @@ import java.util.concurrent.Executor;
 public abstract class AbstractBlancoGenericJdbcConnection implements Connection {
 	protected boolean isClosed = false;
 
-	protected Connection connH2 = null;
+	private Connection connH2 = null;
 
 	public AbstractBlancoGenericJdbcConnection() throws SQLException {
 		try {
@@ -74,6 +74,10 @@ public abstract class AbstractBlancoGenericJdbcConnection implements Connection 
 		} catch (Exception ex) {
 			throw new SQLException(ex);
 		}
+	}
+
+	public Connection getInternalH2Connection() {
+		return connH2;
 	}
 
 	public <T> T unwrap(Class<T> iface) throws SQLException {
