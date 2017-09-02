@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,14 +58,31 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 			}
 		}
 
-		if (tableNamePattern == null) {
-			final Statement stmt = conn.getInternalH2Connection().createStatement();
-			stmt.executeQuery("SELECT * FROM GMETA_TABLES");
-			return stmt.getResultSet();
-		} else {
-			final PreparedStatement pstmt = conn.getInternalH2Connection().prepareStatement(
-					"SELECT * FROM GMETA_TABLES WHERE TABLE_NAME LIKE ?  ORDER BY TABLE_TYPE, TABLE_CAT, TABLE_SCHEM, TABLE_NAME");
-			pstmt.setString(1, tableNamePattern);
+		{
+			int indexCol = 1;
+			String sql = "SELECT * FROM GMETA_TABLES WHERE";
+			if (catalog != null && catalog.trim().length() != 0) {
+				sql += " TABLE_CAT LIKE ? AND";
+			}
+			if (schemaPattern != null && schemaPattern.trim().length() != 0) {
+				sql += " TABLE_SCHEM LIKE ? AND";
+			}
+			sql += " TABLE_NAME LIKE ?"; //
+			sql += " ORDER BY TABLE_TYPE, TABLE_CAT, TABLE_SCHEM, TABLE_NAME";
+
+			final PreparedStatement pstmt = conn.getInternalH2Connection().prepareStatement(sql);
+
+			if (catalog != null && catalog.trim().length() != 0) {
+				pstmt.setString(indexCol++, catalog);
+			}
+			if (schemaPattern != null && schemaPattern.trim().length() != 0) {
+				pstmt.setString(indexCol++, schemaPattern);
+			}
+			if (tableNamePattern == null || tableNamePattern.trim().length() == 0) {
+				tableNamePattern = "%";
+			}
+			pstmt.setString(indexCol++, tableNamePattern);
+
 			pstmt.executeQuery();
 			return pstmt.getResultSet();
 		}
