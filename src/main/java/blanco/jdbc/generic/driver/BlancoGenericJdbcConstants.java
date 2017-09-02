@@ -1,5 +1,5 @@
 /*
- *  blanco-sfdc-jdbc-driver
+ *  blanco-jdbc-driver-simple
  *  Copyright (C) 2017  Toshiki Iga
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -31,10 +31,10 @@
  *  limitations under the License.
  */
 
-package blanco.sfdc.jdbc.driver;
+package blanco.jdbc.generic.driver;
 
-public class BlancoSfdcJdbcConstants {
-	public static final String JDBC_DRIVER_URL_PREFIX = "blanco:sfdc:jdbc:";
+public class BlancoGenericJdbcConstants {
 
-	public static final String MESSAGE_NOT_SUPPORTED = "Not Supported.";
+	public static final String MESSAGE_FORWARD_ONLY_SUPPORT = "This JDBC Driver support ResultSet.TYPE_FORWARD_ONLY only.";
+
 }
