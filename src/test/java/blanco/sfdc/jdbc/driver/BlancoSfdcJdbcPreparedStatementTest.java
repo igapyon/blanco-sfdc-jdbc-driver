@@ -30,6 +30,10 @@ public class BlancoSfdcJdbcPreparedStatementTest extends TestCase {
 
 			final String sql = "SELECT Id, Name, LastModifiedDate FROM Account";
 			final PreparedStatement stmt = conn.prepareStatement(sql);
+
+			stmt.setFetchSize(200);
+			stmt.getFetchSize();
+
 			final ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				final String id = rs.getString("id");
@@ -43,6 +47,7 @@ public class BlancoSfdcJdbcPreparedStatementTest extends TestCase {
 			conn.close();
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+			fail();
 		}
 	}
 

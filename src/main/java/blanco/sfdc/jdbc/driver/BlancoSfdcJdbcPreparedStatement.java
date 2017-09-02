@@ -56,6 +56,18 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 	}
 
 	@Override
+	public void setFetchSize(int rows) throws SQLException {
+		final BlancoSfdcJdbcConnection pconn = ((BlancoSfdcJdbcConnection) conn);
+		pconn.getPartnerConnection().setQueryOptions(rows);
+	}
+
+	@Override
+	public int getFetchSize() throws SQLException {
+		final BlancoSfdcJdbcConnection pconn = ((BlancoSfdcJdbcConnection) conn);
+		return pconn.getPartnerConnection().getQueryOptions().getBatchSize();
+	}
+
+	@Override
 	public boolean execute(final String sql) throws SQLException {
 		rs = new BlancoGenericJdbcResultSet(this);
 
