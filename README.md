@@ -19,6 +19,8 @@ Blanco SFDC JDBC Driver is a JDBC Driver to access SFDC using SOQL.
 
 # LICENSE
 
+This software is licensed under the Apache License or the GNU Lesser General Public License or both.
+
 ```
 /*
  *  blanco-jdbc-driver-simple
@@ -37,6 +39,9 @@ Blanco SFDC JDBC Driver is a JDBC Driver to access SFDC using SOQL.
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+```
+
+```
 /*
  *  Copyright 2017 Toshiki Iga
  *
