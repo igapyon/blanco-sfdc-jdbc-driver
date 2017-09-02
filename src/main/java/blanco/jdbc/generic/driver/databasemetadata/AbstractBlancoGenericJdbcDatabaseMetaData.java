@@ -38,8 +38,18 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.RowIdLifetime;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
 
 public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements DatabaseMetaData {
+	protected BlancoSfdcJdbcConnection conn = null;
+
+	public AbstractBlancoGenericJdbcDatabaseMetaData(final BlancoSfdcJdbcConnection conn) {
+		this.conn = conn;
+	}
+
 	public <T> T unwrap(Class<T> iface) throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
@@ -555,9 +565,6 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 		throw new SQLException("Not Implemented.");
 	}
 
-	public abstract ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types)
-			throws SQLException;
-
 	public ResultSet getSchemas() throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
@@ -569,9 +576,6 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	public ResultSet getTableTypes() throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
-
-	public abstract ResultSet getColumns(String catalog, String schemaPattern, String tableNamePattern,
-			String columnNamePattern) throws SQLException;
 
 	public ResultSet getColumnPrivileges(String catalog, String schema, String table, String columnNamePattern)
 			throws SQLException {
@@ -783,4 +787,52 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	public boolean generatedKeyAlwaysReturned() throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
+
+	/**
+	 * TABLES
+	 */
+	public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types)
+			throws SQLException {
+
+		if (BlancoGenericJdbcDatabaseMetaDataCacheUtil.isGmetaTablesCached(conn.getCacheConnection()) == false) {
+			buildCacheOfGetTables(catalog, schemaPattern, tableNamePattern, types);
+		}
+
+		return BlancoGenericJdbcDatabaseMetaDataCacheUtil.getTablesFromCache(conn.getCacheConnection(), catalog,
+				schemaPattern, tableNamePattern, types);
+	}
+
+	protected abstract void buildCacheOfGetTables(String catalog, String schemaPattern, String tableNamePattern,
+			String[] types) throws SQLException;
+
+	/**
+	 * COLUMNS
+	 */
+	public ResultSet getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern)
+			throws SQLException {
+
+		// Build table name list to process.
+		final List<String> tableNameList = new ArrayList<String>();
+		{
+			final ResultSet rs = conn.getMetaData().getTables(catalog, schemaPattern, tableNamePattern, null);
+			for (; rs.next();) {
+				tableNameList.add(rs.getString("TABLE_NAME"));
+			}
+			rs.close();
+		}
+
+		// process every table.
+		for (String tableName : tableNameList) {
+			if (BlancoGenericJdbcDatabaseMetaDataCacheUtil.isGmetaColumnsCached(conn.getCacheConnection(), catalog,
+					schemaPattern, tableName) == false) {
+				buildCacheOfGetColumns(catalog, schemaPattern, tableName, columnNamePattern);
+			}
+		}
+
+		return BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(conn.getCacheConnection(), catalog,
+				schemaPattern, tableNamePattern, columnNamePattern);
+	}
+
+	public abstract void buildCacheOfGetColumns(String catalog, String schema, String tableName,
+			String columnNamePattern) throws SQLException;
 }
