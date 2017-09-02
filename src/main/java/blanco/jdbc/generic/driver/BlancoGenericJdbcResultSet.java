@@ -861,152 +861,57 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 		}
 	}
 
-	public boolean previous() throws SQLException {
-		if (isClosed()) {
-			return false;
-		}
-
-		if (getCurrentRecordCount() <= 0) {
-			return false;
-		}
-
-		rowIndex--;
-
-		if (rowIndex >= 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean isBeforeFirst() throws SQLException {
-		if (isClosed()) {
-			return false;
-		}
-
-		if (rowIndex < 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean isAfterLast() throws SQLException {
-		if (isClosed()) {
-			return false;
-		}
-
-		if (rowIndex >= getCurrentRecordCount()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean isFirst() throws SQLException {
-		if (isClosed()) {
-			return false;
-		}
-
-		if (rowIndex == 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean isLast() throws SQLException {
-		if (isClosed()) {
-			return false;
-		}
-
-		if ((rowIndex + 1) == getCurrentRecordCount()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public void beforeFirst() throws SQLException {
-		rowIndex = (-1);
-	}
-
-	public void afterLast() throws SQLException {
-
-		rowIndex = getCurrentRecordCount();
-	}
-
-	public boolean first() throws SQLException {
-		if (isClosed()) {
-			return false;
-		}
-
-		if (getCurrentRecordCount() <= 0) {
-			return false;
-		}
-
-		rowIndex = 0;
-		return true;
-	}
-
-	public boolean last() throws SQLException {
-		if (isClosed()) {
-			return false;
-		}
-
-		if (getCurrentRecordCount() <= 0) {
-			return false;
-		}
-
-		rowIndex = getCurrentRecordCount() - 1;
-		return true;
-	}
-
 	public int getRow() throws SQLException {
 		return rowIndex;
 	}
 
+	/////////////////////////////////////////////////////////
+	// No Cursor related JDBC API supported.
+
+	public boolean previous() throws SQLException {
+		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+	}
+
+	public boolean isBeforeFirst() throws SQLException {
+		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+	}
+
+	public boolean isAfterLast() throws SQLException {
+		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+	}
+
+	public boolean isFirst() throws SQLException {
+		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+	}
+
+	public boolean isLast() throws SQLException {
+		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+	}
+
+	public void beforeFirst() throws SQLException {
+		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+	}
+
+	public void afterLast() throws SQLException {
+		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+	}
+
+	public boolean first() throws SQLException {
+		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+	}
+
+	public boolean last() throws SQLException {
+		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
+	}
+
 	public boolean absolute(int row) throws SQLException {
-		if (isClosed()) {
-			return false;
-		}
-
-		if (getCurrentRecordCount() <= 0) {
-			return false;
-		}
-
-		if (row < 0) {
-			return false;
-		}
-
-		if (row >= getCurrentRecordCount()) {
-			return false;
-		}
-
-		rowIndex = row;
-
-		return true;
+		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
 	}
 
 	public boolean relative(int rows) throws SQLException {
-		if (isClosed()) {
-			return false;
-		}
-
-		if (getCurrentRecordCount() <= 0) {
-			return false;
-		}
-
-		if ((rowIndex + rows) < 0) {
-			return false;
-		}
-
-		if ((rowIndex + rows) >= getCurrentRecordCount()) {
-			return false;
-		}
-
-		rowIndex += rows;
-
-		return true;
+		throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORT);
 	}
+
+	// No Cursor related JDBC API supported.
+	/////////////////////////////////////////////////////////
 }
