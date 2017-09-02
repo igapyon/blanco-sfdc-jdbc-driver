@@ -314,11 +314,13 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	}
 
 	public void setFetchDirection(int direction) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// Direct map to Statement.
+		stmt.setFetchDirection(direction);
 	}
 
 	public int getFetchDirection() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// Direct map to Statement.
+		return stmt.getFetchDirection();
 	}
 
 	public void setFetchSize(int rows) throws SQLException {
@@ -340,14 +342,17 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	}
 
 	public boolean rowUpdated() throws SQLException {
+		// Always false
 		return false;
 	}
 
 	public boolean rowInserted() throws SQLException {
+		// Always false
 		return false;
 	}
 
 	public boolean rowDeleted() throws SQLException {
+		// Always false
 		return false;
 	}
 
