@@ -168,4 +168,67 @@ public class BlancoGenericJdbcDatabaseMetaDataUtil {
 		pstmt.executeQuery();
 		return pstmt.getResultSet();
 	}
+
+	public static ResultSet getColumnsFromCache(final Connection connCache, String catalog, String schemaPattern,
+			String tableNamePattern, String columnNamePattern) throws SQLException {
+		String sql = "SELECT * FROM GMETA_COLUMNS";//
+		boolean isFirstCondition = true;
+		if (catalog != null && catalog.trim().length() != 0) {
+			if (isFirstCondition) {
+				isFirstCondition = false;
+				sql += " WHERE";
+			} else {
+				sql += " AND";
+			}
+			sql += " TABLE_CAT = ?";
+		}
+		if (schemaPattern != null && schemaPattern.trim().length() != 0) {
+			if (isFirstCondition) {
+				isFirstCondition = false;
+				sql += " WHERE";
+			} else {
+				sql += " AND";
+			}
+			sql += " TABLE_SCHEM LIKE ?";
+		}
+		if (tableNamePattern != null && tableNamePattern.trim().length() != 0) {
+			if (isFirstCondition) {
+				isFirstCondition = false;
+				sql += " WHERE";
+			} else {
+				sql += " AND";
+			}
+			sql += " TABLE_NAME LIKE ?";
+		}
+		if (columnNamePattern != null && columnNamePattern.trim().length() != 0) {
+			if (isFirstCondition) {
+				isFirstCondition = false;
+				sql += " WHERE";
+			} else {
+				sql += " AND";
+			}
+			sql += " COLUMN_NAME LIKE ?";
+		}
+
+		sql += " ORDER BY TABLE_CAT, TABLE_SCHEM, TABLE_NAME, ORDINAL_POSITION";
+
+		final PreparedStatement pstmt = connCache.prepareStatement(sql);
+
+		int indexCol = 1;
+		if (catalog != null && catalog.trim().length() != 0) {
+			pstmt.setString(indexCol++, catalog);
+		}
+		if (schemaPattern != null && schemaPattern.trim().length() != 0) {
+			pstmt.setString(indexCol++, schemaPattern);
+		}
+		if (tableNamePattern != null && tableNamePattern.trim().length() != 0) {
+			pstmt.setString(indexCol++, tableNamePattern);
+		}
+		if (columnNamePattern != null && columnNamePattern.trim().length() != 0) {
+			pstmt.setString(indexCol++, columnNamePattern);
+		}
+
+		pstmt.executeQuery();
+		return pstmt.getResultSet();
+	}
 }

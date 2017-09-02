@@ -72,7 +72,6 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 		final List<String> tableNameList = new ArrayList<String>();
 		{
 			final ResultSet rs = conn.getMetaData().getTables(catalog, schemaPattern, tableNamePattern, null);
-
 			for (; rs.next();) {
 				tableNameList.add(rs.getString("TABLE_NAME"));
 			}
@@ -128,67 +127,8 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 			}
 		}
 
-		{
-			String sql = "SELECT * FROM GMETA_COLUMNS";//
-			boolean isFirstCondition = true;
-			if (catalog != null && catalog.trim().length() != 0) {
-				if (isFirstCondition) {
-					isFirstCondition = false;
-					sql += " WHERE";
-				} else {
-					sql += " AND";
-				}
-				sql += " TABLE_CAT = ?";
-			}
-			if (schemaPattern != null && schemaPattern.trim().length() != 0) {
-				if (isFirstCondition) {
-					isFirstCondition = false;
-					sql += " WHERE";
-				} else {
-					sql += " AND";
-				}
-				sql += " TABLE_SCHEM LIKE ?";
-			}
-			if (tableNamePattern != null && tableNamePattern.trim().length() != 0) {
-				if (isFirstCondition) {
-					isFirstCondition = false;
-					sql += " WHERE";
-				} else {
-					sql += " AND";
-				}
-				sql += " TABLE_NAME LIKE ?";
-			}
-			if (columnNamePattern != null && columnNamePattern.trim().length() != 0) {
-				if (isFirstCondition) {
-					isFirstCondition = false;
-					sql += " WHERE";
-				} else {
-					sql += " AND";
-				}
-				sql += " COLUMN_NAME LIKE ?";
-			}
-
-			sql += " ORDER BY TABLE_CAT, TABLE_SCHEM, TABLE_NAME, ORDINAL_POSITION";
-
-			final PreparedStatement pstmt = conn.getInternalH2Connection().prepareStatement(sql);
-
-			int indexCol = 1;
-			if (catalog != null && catalog.trim().length() != 0) {
-				pstmt.setString(indexCol++, catalog);
-			}
-			if (schemaPattern != null && schemaPattern.trim().length() != 0) {
-				pstmt.setString(indexCol++, schemaPattern);
-			}
-			if (tableNamePattern != null && tableNamePattern.trim().length() != 0) {
-				pstmt.setString(indexCol++, tableNamePattern);
-			}
-			if (columnNamePattern != null && columnNamePattern.trim().length() != 0) {
-				pstmt.setString(indexCol++, columnNamePattern);
-			}
-
-			pstmt.executeQuery();
-			return pstmt.getResultSet();
-		}
+		return BlancoGenericJdbcDatabaseMetaDataUtil.getColumnsFromCache(conn.getInternalH2Connection(), catalog,
+				schemaPattern, tableNamePattern, columnNamePattern);
 	}
 
 	@Override
