@@ -95,19 +95,6 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 	public ResultSet getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern)
 			throws SQLException {
 
-		if (catalog == null || catalog.trim().length() == 0) {
-			catalog = "%";
-		}
-		if (schemaPattern == null || schemaPattern.trim().length() == 0) {
-			schemaPattern = "%";
-		}
-		if (tableNamePattern == null || tableNamePattern.trim().length() == 0) {
-			tableNamePattern = "%";
-		}
-		if (columnNamePattern == null || columnNamePattern.trim().length() == 0) {
-			columnNamePattern = "%";
-		}
-
 		// Check cached
 
 		final List<String> tableNameList = new ArrayList<String>();
@@ -167,11 +154,59 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 		}
 
 		{
-			final PreparedStatement pstmt = conn.getInternalH2Connection()
-					.prepareStatement("SELECT * FROM GMETA_COLUMNS WHERE TABLE_NAME LIKE ? AND COLUMN_NAME LIKE ?" //
-							+ " ORDER BY TABLE_CAT, TABLE_SCHEM, TABLE_NAME, ORDINAL_POSITION");
-			pstmt.setString(1, tableNamePattern);
-			pstmt.setString(2, columnNamePattern);
+			int indexCol = 1;
+			String sql = "SELECT * FROM GMETA_COLUMNS WHERE";//
+			boolean isFirstCondition = true;
+			if (catalog != null && catalog.trim().length() != 0) {
+				if (isFirstCondition) {
+					isFirstCondition = false;
+				} else {
+					sql += " AND";
+				}
+				sql += " TABLE_CAT LIKE ?";
+			}
+			if (schemaPattern != null && schemaPattern.trim().length() != 0) {
+				if (isFirstCondition) {
+					isFirstCondition = false;
+				} else {
+					sql += " AND";
+				}
+				sql += " TABLE_SCHEM LIKE ?";
+			}
+			if (tableNamePattern != null && tableNamePattern.trim().length() != 0) {
+				if (isFirstCondition) {
+					isFirstCondition = false;
+				} else {
+					sql += " AND";
+				}
+				sql += " TABLE_NAME LIKE ?";
+			}
+			if (columnNamePattern != null && columnNamePattern.trim().length() != 0) {
+				if (isFirstCondition) {
+					isFirstCondition = false;
+				} else {
+					sql += " AND";
+				}
+				sql += " COLUMN_NAME LIKE ?";
+			}
+
+			sql += " ORDER BY TABLE_CAT, TABLE_SCHEM, TABLE_NAME, ORDINAL_POSITION";
+
+			final PreparedStatement pstmt = conn.getInternalH2Connection().prepareStatement(sql);
+
+			if (catalog != null && catalog.trim().length() != 0) {
+				pstmt.setString(indexCol++, catalog);
+			}
+			if (schemaPattern != null && schemaPattern.trim().length() != 0) {
+				pstmt.setString(indexCol++, schemaPattern);
+			}
+			if (tableNamePattern != null && tableNamePattern.trim().length() != 0) {
+				pstmt.setString(indexCol++, tableNamePattern);
+			}
+			if (columnNamePattern != null && columnNamePattern.trim().length() != 0) {
+				pstmt.setString(indexCol++, columnNamePattern);
+			}
+
 			pstmt.executeQuery();
 			return pstmt.getResultSet();
 		}
