@@ -27,7 +27,7 @@ public class BlancoSfdcJdbcDatabaseMetaDataTest extends TestCase {
 
 			final Connection conn = DriverManager.getConnection("blanco:sfdc:jdbc:" + url, user, pass);
 			{
-				final ResultSet rs = conn.getMetaData().getTables(null, null, "Acc%", null);
+				final ResultSet rs = conn.getMetaData().getTables(null, null, "ACC%", null);
 				for (; rs.next();) {
 					System.err.println(rs.getString("TABLE_NAME"));
 					System.err.println("  " + rs.getString("REMARKS"));
@@ -37,7 +37,7 @@ public class BlancoSfdcJdbcDatabaseMetaDataTest extends TestCase {
 			}
 
 			if (true) {
-				final ResultSet rs = conn.getMetaData().getColumns(null, null, "Acc%", "P%");
+				final ResultSet rs = conn.getMetaData().getColumns(null, null, "ACC%", "P%");
 				for (; rs.next();) {
 					System.err.println(rs.getString("COLUMN_NAME"));
 					System.err.println("  " + rs.getString("DATA_TYPE"));
