@@ -31,28 +31,28 @@
  *  limitations under the License.
  */
 
-package blanco.jdbc.driver.simple;
+package blanco.jdbc.generic.driver;
 
-public class BlancoJdbcSimpleResultSetColumn {
+public class BlancoGenericJdbcResultSetColumn {
 	protected String columnValue = null;
 
 	protected Integer columnValueByInteger = null;
 
 	protected java.util.Date columnValueByDate = null;
 
-	protected BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = null;
+	protected BlancoGenericJdbcResultSetMetaDataColumn metaDataColumn = null;
 
-	public BlancoJdbcSimpleResultSetColumn(final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn) {
+	public BlancoGenericJdbcResultSetColumn(final BlancoGenericJdbcResultSetMetaDataColumn metaDataColumn) {
 		this.metaDataColumn = metaDataColumn;
 	}
 
 	// columnType ???
 
-	public BlancoJdbcSimpleResultSetMetaDataColumn getMetaDataColumn() {
+	public BlancoGenericJdbcResultSetMetaDataColumn getMetaDataColumn() {
 		return metaDataColumn;
 	}
 
-	public void setMetaDataColumn(BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn) {
+	public void setMetaDataColumn(BlancoGenericJdbcResultSetMetaDataColumn metaDataColumn) {
 		this.metaDataColumn = metaDataColumn;
 	}
 

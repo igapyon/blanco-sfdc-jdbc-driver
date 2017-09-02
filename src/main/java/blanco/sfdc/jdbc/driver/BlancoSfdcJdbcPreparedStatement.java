@@ -58,15 +58,15 @@ import com.sforce.soap.partner.QueryResult;
 import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSet;
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetMetaData;
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRow;
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleStatement;
+import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSet;
+import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetMetaData;
+import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetRow;
+import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 
-public class BlancoSfdcJdbcPreparedStatement extends BlancoJdbcSimpleStatement implements PreparedStatement {
+public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcStatement implements PreparedStatement {
 	protected String sql = null;
 
-	protected BlancoJdbcSimpleResultSet rs = null;
+	protected BlancoGenericJdbcResultSet rs = null;
 
 	public BlancoSfdcJdbcPreparedStatement(final BlancoSfdcJdbcConnection conn, final String sql) {
 		super(conn);
@@ -75,7 +75,7 @@ public class BlancoSfdcJdbcPreparedStatement extends BlancoJdbcSimpleStatement i
 
 	@Override
 	public boolean execute(final String sql) throws SQLException {
-		rs = new BlancoJdbcSimpleResultSet(this);
+		rs = new BlancoGenericJdbcResultSet(this);
 
 		try {
 			// TODO そもそもこの処理はResultSet側のフェッチ境界の考慮が必要だが、難易度が高いので一旦保留。
@@ -87,11 +87,11 @@ public class BlancoSfdcJdbcPreparedStatement extends BlancoJdbcSimpleStatement i
 					break;
 				}
 
-				final BlancoJdbcSimpleResultSetMetaData rsmd = BlancoSfdcJdbcStatement
+				final BlancoGenericJdbcResultSetMetaData rsmd = BlancoSfdcJdbcStatement
 						.getResultSetMetaData((BlancoSfdcJdbcConnection) conn, sObjs[0]);
 
 				for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
-					final BlancoJdbcSimpleResultSetRow row = BlancoSfdcJdbcStatement.getRowObj(sObjs[indexRow], rsmd);
+					final BlancoGenericJdbcResultSetRow row = BlancoSfdcJdbcStatement.getRowObj(sObjs[indexRow], rsmd);
 					rs.getRowList().add(row);
 				}
 				if (qryResult.isDone()) {

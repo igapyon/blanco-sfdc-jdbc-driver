@@ -31,7 +31,7 @@
  *  limitations under the License.
  */
 
-package blanco.jdbc.driver.simple;
+package blanco.jdbc.generic.driver;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -39,12 +39,12 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
 
-public abstract class BlancoJdbcSimpleStatement implements Statement {
+public abstract class AbstractBlancoGenericJdbcStatement implements Statement {
 	protected Connection conn = null;
 
 	protected boolean isClosed = false;
 
-	public BlancoJdbcSimpleStatement(final Connection conn) {
+	public AbstractBlancoGenericJdbcStatement(final Connection conn) {
 		this.conn = conn;
 	}
 

@@ -31,7 +31,7 @@
  *  limitations under the License.
  */
 
-package blanco.jdbc.driver.simple;
+package blanco.jdbc.generic.driver;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -57,15 +57,15 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-public class BlancoJdbcSimpleResultSet implements ResultSet {
+public class BlancoGenericJdbcResultSet implements ResultSet {
 	private Statement stmt = null;
 
 	private boolean isClosed = false;
 
-	protected List<BlancoJdbcSimpleResultSetRow> rowList = new ArrayList<BlancoJdbcSimpleResultSetRow>();
+	protected List<BlancoGenericJdbcResultSetRow> rowList = new ArrayList<BlancoGenericJdbcResultSetRow>();
 	protected int rowIndex = -1;
 
-	public BlancoJdbcSimpleResultSet(final Statement stmt) {
+	public BlancoGenericJdbcResultSet(final Statement stmt) {
 		this.stmt = stmt;
 	}
 
@@ -74,18 +74,18 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 		rowIndex = -1;
 	}
 
-	public List<BlancoJdbcSimpleResultSetRow> getRowList() {
+	public List<BlancoGenericJdbcResultSetRow> getRowList() {
 		return rowList;
 	}
 
 	public String getString(final int columnIndex) throws SQLException {
-		final BlancoJdbcSimpleResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
+		final BlancoGenericJdbcResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
 		return column.getColumnValue();
 	}
 
 	public String getString(final String columnLabel) throws SQLException {
 		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
-			final BlancoJdbcSimpleResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
+			final BlancoGenericJdbcResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
 			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
 				return item.getColumnValue();
 			}
@@ -95,7 +95,7 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 	}
 
 	public Date getDate(int columnIndex) throws SQLException {
-		final BlancoJdbcSimpleResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
+		final BlancoGenericJdbcResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
 		if (column.getColumnValueByDate() == null) {
 			return null;
 		} else {
@@ -105,7 +105,7 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 
 	public Date getDate(String columnLabel) throws SQLException {
 		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
-			final BlancoJdbcSimpleResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
+			final BlancoGenericJdbcResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
 			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
 				if (item.getColumnValueByDate() == null) {
 					return null;
@@ -119,7 +119,7 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 	}
 
 	public Timestamp getTimestamp(int columnIndex) throws SQLException {
-		final BlancoJdbcSimpleResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
+		final BlancoGenericJdbcResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
 		if (column.getColumnValueByDate() == null) {
 			return null;
 		} else {
@@ -129,7 +129,7 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 
 	public Timestamp getTimestamp(String columnLabel) throws SQLException {
 		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
-			final BlancoJdbcSimpleResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
+			final BlancoGenericJdbcResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
 			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
 				if (item.getColumnValueByDate() == null) {
 					return null;
@@ -143,13 +143,13 @@ public class BlancoJdbcSimpleResultSet implements ResultSet {
 	}
 
 	public int getInt(int columnIndex) throws SQLException {
-		final BlancoJdbcSimpleResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
+		final BlancoGenericJdbcResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
 		return column.getColumnValueByInteger();
 	}
 
 	public int getInt(String columnLabel) throws SQLException {
 		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
-			final BlancoJdbcSimpleResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
+			final BlancoGenericJdbcResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
 			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
 				return item.getColumnValueByInteger();
 			}

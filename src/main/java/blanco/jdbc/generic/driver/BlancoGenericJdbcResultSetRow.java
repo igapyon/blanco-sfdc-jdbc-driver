@@ -31,15 +31,15 @@
  *  limitations under the License.
  */
 
-package blanco.jdbc.driver.simple;
+package blanco.jdbc.generic.driver;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlancoJdbcSimpleResultSetRow {
-	private List<BlancoJdbcSimpleResultSetColumn> columnList = new ArrayList<BlancoJdbcSimpleResultSetColumn>();
+public class BlancoGenericJdbcResultSetRow {
+	private List<BlancoGenericJdbcResultSetColumn> columnList = new ArrayList<BlancoGenericJdbcResultSetColumn>();
 
-	public List<BlancoJdbcSimpleResultSetColumn> getColumnList() {
+	public List<BlancoGenericJdbcResultSetColumn> getColumnList() {
 		return columnList;
 	}
 }

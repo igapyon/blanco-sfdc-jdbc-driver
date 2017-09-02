@@ -48,21 +48,21 @@ import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 import com.sforce.ws.bind.XmlObject;
 
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSet;
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetColumn;
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetMetaData;
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetMetaDataColumn;
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRow;
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleStatement;
+import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSet;
+import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetColumn;
+import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetMetaData;
+import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetMetaDataColumn;
+import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetRow;
+import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 
-public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
+public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement {
 
-	protected BlancoJdbcSimpleResultSet rs = null;
+	protected BlancoGenericJdbcResultSet rs = null;
 
 	/**
 	 * NOTE: static field!!!
 	 */
-	protected static Map<String, BlancoJdbcSimpleResultSetMetaData> rsmdMap = new HashMap<String, BlancoJdbcSimpleResultSetMetaData>();
+	protected static Map<String, BlancoGenericJdbcResultSetMetaData> rsmdMap = new HashMap<String, BlancoGenericJdbcResultSetMetaData>();
 
 	public BlancoSfdcJdbcStatement(final BlancoSfdcJdbcConnection conn) {
 		super(conn);
@@ -70,7 +70,7 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 
 	@Override
 	public boolean execute(String sql) throws SQLException {
-		rs = new BlancoJdbcSimpleResultSet(this);
+		rs = new BlancoGenericJdbcResultSet(this);
 
 		try {
 			// TODO そもそもこの処理はResultSet側のフェッチ境界の考慮が必要だが、難易度が高いので一旦保留。
@@ -82,11 +82,11 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 					break;
 				}
 
-				final BlancoJdbcSimpleResultSetMetaData rsmd = getResultSetMetaData((BlancoSfdcJdbcConnection) conn,
+				final BlancoGenericJdbcResultSetMetaData rsmd = getResultSetMetaData((BlancoSfdcJdbcConnection) conn,
 						sObjs[0]);
 
 				for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
-					final BlancoJdbcSimpleResultSetRow row = getRowObj(sObjs[indexRow], rsmd);
+					final BlancoGenericJdbcResultSetRow row = getRowObj(sObjs[indexRow], rsmd);
 					rs.getRowList().add(row);
 				}
 				if (qryResult.isDone()) {
@@ -111,9 +111,9 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 	///////////////////////////
 	// common func
 
-	public static BlancoJdbcSimpleResultSetRow getRowObj(final SObject sObj,
-			final BlancoJdbcSimpleResultSetMetaData argRsmd) {
-		final BlancoJdbcSimpleResultSetRow record = new BlancoJdbcSimpleResultSetRow();
+	public static BlancoGenericJdbcResultSetRow getRowObj(final SObject sObj,
+			final BlancoGenericJdbcResultSetMetaData argRsmd) {
+		final BlancoGenericJdbcResultSetRow record = new BlancoGenericJdbcResultSetRow();
 		// getRowList().add(record);
 
 		final XmlObject xmlSObject = (XmlObject) sObj;
@@ -137,7 +137,7 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 				rowIdString = obj.getValue().toString();
 			} else {
 				// 1 origin for getString
-				final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = argRsmd
+				final BlancoGenericJdbcResultSetMetaDataColumn metaDataColumn = argRsmd
 						.getColumnByColumnName(obj.getName().getLocalPart());
 				if (false)
 					System.err.println("TRACE: name:" + metaDataColumn.getColumnName());
@@ -146,7 +146,7 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 				if (false)
 					System.err.println("  TRACE: type:" + metaDataColumn.getTypeName());
 
-				final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(metaDataColumn);
+				final BlancoGenericJdbcResultSetColumn column = new BlancoGenericJdbcResultSetColumn(metaDataColumn);
 				record.getColumnList().add(column);
 
 				if (obj.getValue() == null) {
@@ -200,9 +200,9 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 		}
 	}
 
-	public static BlancoJdbcSimpleResultSetMetaData getResultSetMetaData(final BlancoSfdcJdbcConnection conn,
+	public static BlancoGenericJdbcResultSetMetaData getResultSetMetaData(final BlancoSfdcJdbcConnection conn,
 			final SObject resultSetValue) throws SQLException {
-		final BlancoJdbcSimpleResultSetMetaData rsmd = new BlancoJdbcSimpleResultSetMetaData();
+		final BlancoGenericJdbcResultSetMetaData rsmd = new BlancoGenericJdbcResultSetMetaData();
 
 		final XmlObject xmlSObject = (XmlObject) resultSetValue;
 		final Iterator<XmlObject> ite = xmlSObject.getChildren();
@@ -218,7 +218,7 @@ public class BlancoSfdcJdbcStatement extends BlancoJdbcSimpleStatement {
 
 		final ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, sObjectName, null);
 		for (; rsmdRs.next();) {
-			final BlancoJdbcSimpleResultSetMetaDataColumn column = new BlancoJdbcSimpleResultSetMetaDataColumn();
+			final BlancoGenericJdbcResultSetMetaDataColumn column = new BlancoGenericJdbcResultSetMetaDataColumn();
 			column.setColumnName(rsmdRs.getString("COLUMN_NAME"));
 			column.setDataType(rsmdRs.getInt("DATA_TYPE"));
 			column.setTypeName(rsmdRs.getString("TYPE_NAME"));

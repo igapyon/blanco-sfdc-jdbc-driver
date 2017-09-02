@@ -31,9 +31,9 @@
  *  limitations under the License.
  */
 
-package blanco.jdbc.driver.simple;
+package blanco.jdbc.generic.driver;
 
-public class BlancoJdbcSimpleResultSetMetaDataColumn {
+public class BlancoGenericJdbcResultSetMetaDataColumn {
 	// COLUMN_NAME
 	protected String columnName = "N/A";
 

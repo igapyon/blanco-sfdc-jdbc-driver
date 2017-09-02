@@ -9,15 +9,15 @@ import com.sforce.soap.partner.DescribeGlobalResult;
 import com.sforce.soap.partner.DescribeGlobalSObjectResult;
 import com.sforce.ws.ConnectionException;
 
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSet;
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetColumn;
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetMetaDataColumn;
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleResultSetRow;
-import blanco.jdbc.driver.simple.BlancoJdbcSimpleStatement;
+import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSet;
+import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetColumn;
+import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetMetaDataColumn;
+import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetRow;
+import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
 
-public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoJdbcSimpleStatement {
-	protected BlancoJdbcSimpleResultSet rs = null;
+public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends AbstractBlancoGenericJdbcStatement {
+	protected BlancoGenericJdbcResultSet rs = null;
 	protected final List<String> nameList = new ArrayList<String>();
 
 	protected String tableNamePattern = null;
@@ -30,7 +30,7 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoJdbcSim
 
 	@Override
 	public boolean execute(final String sql) throws SQLException {
-		rs = new BlancoJdbcSimpleResultSet(this);
+		rs = new BlancoGenericJdbcResultSet(this);
 
 		// NOTE ignored sql
 
@@ -49,44 +49,44 @@ public class BlancoSfdcJdbcDatabaseMetaDataTablesStatement extends BlancoJdbcSim
 					continue;
 				}
 
-				final BlancoJdbcSimpleResultSetRow record = new BlancoJdbcSimpleResultSetRow();
+				final BlancoGenericJdbcResultSetRow record = new BlancoGenericJdbcResultSetRow();
 				{
-					final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+					final BlancoGenericJdbcResultSetMetaDataColumn metaDataColumn = new BlancoGenericJdbcResultSetMetaDataColumn();
 					metaDataColumn.setColumnName("TABLE_CAT");
-					final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(metaDataColumn);
+					final BlancoGenericJdbcResultSetColumn column = new BlancoGenericJdbcResultSetColumn(metaDataColumn);
 					column.setColumnValue(null);
 					record.getColumnList().add(column);
 				}
 
 				{
-					final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+					final BlancoGenericJdbcResultSetMetaDataColumn metaDataColumn = new BlancoGenericJdbcResultSetMetaDataColumn();
 					metaDataColumn.setColumnName("TABLE_SCHEM");
-					final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(metaDataColumn);
+					final BlancoGenericJdbcResultSetColumn column = new BlancoGenericJdbcResultSetColumn(metaDataColumn);
 					column.setColumnValue(null);
 					record.getColumnList().add(column);
 				}
 
 				{
-					final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+					final BlancoGenericJdbcResultSetMetaDataColumn metaDataColumn = new BlancoGenericJdbcResultSetMetaDataColumn();
 					metaDataColumn.setColumnName("TABLE_NAME");
-					final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(metaDataColumn);
+					final BlancoGenericJdbcResultSetColumn column = new BlancoGenericJdbcResultSetColumn(metaDataColumn);
 					column.setColumnValue(sobjectResult.getName());
 					record.getColumnList().add(column);
 				}
 
 				{
-					final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+					final BlancoGenericJdbcResultSetMetaDataColumn metaDataColumn = new BlancoGenericJdbcResultSetMetaDataColumn();
 					metaDataColumn.setColumnName("TABLE_TYPE");
-					final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(metaDataColumn);
+					final BlancoGenericJdbcResultSetColumn column = new BlancoGenericJdbcResultSetColumn(metaDataColumn);
 					// TODO 型は正しいか確認
 					column.setColumnValue("TABLE");
 					record.getColumnList().add(column);
 				}
 
 				{
-					final BlancoJdbcSimpleResultSetMetaDataColumn metaDataColumn = new BlancoJdbcSimpleResultSetMetaDataColumn();
+					final BlancoGenericJdbcResultSetMetaDataColumn metaDataColumn = new BlancoGenericJdbcResultSetMetaDataColumn();
 					metaDataColumn.setColumnName("REMARKS");
-					final BlancoJdbcSimpleResultSetColumn column = new BlancoJdbcSimpleResultSetColumn(metaDataColumn);
+					final BlancoGenericJdbcResultSetColumn column = new BlancoGenericJdbcResultSetColumn(metaDataColumn);
 					column.setColumnValue(sobjectResult.getLabel());
 					record.getColumnList().add(column);
 				}

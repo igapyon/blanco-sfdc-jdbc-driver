@@ -31,24 +31,24 @@
  *  limitations under the License.
  */
 
-package blanco.jdbc.driver.simple;
+package blanco.jdbc.generic.driver;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlancoJdbcSimpleResultSetMetaData implements ResultSetMetaData {
-	protected List<BlancoJdbcSimpleResultSetMetaDataColumn> columnList = new ArrayList<BlancoJdbcSimpleResultSetMetaDataColumn>();
+public class BlancoGenericJdbcResultSetMetaData implements ResultSetMetaData {
+	protected List<BlancoGenericJdbcResultSetMetaDataColumn> columnList = new ArrayList<BlancoGenericJdbcResultSetMetaDataColumn>();
 
 	private String tableName = null;
 
-	public List<BlancoJdbcSimpleResultSetMetaDataColumn> getColumnList() {
+	public List<BlancoGenericJdbcResultSetMetaDataColumn> getColumnList() {
 		return columnList;
 	}
 
-	public BlancoJdbcSimpleResultSetMetaDataColumn getColumnByColumnName(final String columnName) {
-		for (BlancoJdbcSimpleResultSetMetaDataColumn column : columnList) {
+	public BlancoGenericJdbcResultSetMetaDataColumn getColumnByColumnName(final String columnName) {
+		for (BlancoGenericJdbcResultSetMetaDataColumn column : columnList) {
 			if (column.getColumnName().compareToIgnoreCase(columnName) == 0) {
 				return column;
 			}
