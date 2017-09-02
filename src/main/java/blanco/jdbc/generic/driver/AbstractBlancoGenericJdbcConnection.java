@@ -53,6 +53,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaDataUtil;
+
 /**
  * Generic Read Only JDBC Connection.
  * 
@@ -70,7 +72,7 @@ public abstract class AbstractBlancoGenericJdbcConnection implements Connection 
 
 			// Create system tables for SFDC JDBC Driver.
 			// databasemetadata.getTables();
-			connH2.createStatement().execute(BlancoGenericJdbcConstants.DATABASEMETADATA_TABLES_DDL_H2);
+			BlancoGenericJdbcDatabaseMetaDataUtil.initGmetaTables(connH2);
 		} catch (Exception ex) {
 			throw new SQLException(ex);
 		}

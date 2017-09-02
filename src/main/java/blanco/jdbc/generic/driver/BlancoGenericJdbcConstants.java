@@ -45,12 +45,4 @@ public class BlancoGenericJdbcConstants {
 	 */
 	public static final String MESSAGE_NOT_SUPPORTED = "Not Supported.";
 
-	///////////////////////////////////////////////
-	// DATABASEMETADATA
-
-	public static final String DATABASEMETADATA_TABLES_DDL_H2 = "CREATE TABLE SF_TABLES (" //
-			+ "TABLE_CAT VARCHAR, TABLE_SCHEM VARCHAR, TABLE_NAME VARCHAR, TABLE_TYPE VARCHAR DEFAULT 'TABLE'" //
-			+ ", REMARKS VARCHAR, TYPE_CAT VARCHAR, TYPE_SCHEM VARCHAR, TYPE_NAME VARCHAR" //
-			+ ", SELF_REFERENCING_COL_NAME VARCHAR, REF_GENERATION VARCHAR DEFAULT 'USER')";
-
 }

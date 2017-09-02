@@ -1,7 +1,6 @@
 package blanco.sfdc.jdbc.driver.databasemetadata;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -9,6 +8,7 @@ import com.sforce.soap.partner.DescribeGlobalResult;
 import com.sforce.ws.ConnectionException;
 
 import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaData;
+import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaDataUtil;
 import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
 
 public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMetaData {
@@ -29,16 +29,8 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 			final DescribeGlobalResult descResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
 					.describeGlobal();
 
-			{
-				final PreparedStatement pstmt = conn.getInternalH2Connection()
-						.prepareStatement("SELECT COUNT(*) FROM SF_TABLES");
-				pstmt.executeQuery();
-				ResultSet rs = pstmt.getResultSet();
-				rs.next();
-				int count = rs.getInt(1);
-				System.out.println("SF_TABLES:" + count);
-				rs.close();
-				pstmt.close();
+			if (BlancoGenericJdbcDatabaseMetaDataUtil.isGmetaTablesCached(conn.getInternalH2Connection()) == false) {
+				System.out.println("NEED TO READ CACHE");
 			}
 		} catch (ConnectionException ex) {
 			throw new SQLException(ex);
