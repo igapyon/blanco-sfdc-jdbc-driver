@@ -33,37 +33,19 @@
 
 package blanco.sfdc.jdbc.driver;
 
-import java.io.InputStream;
-import java.io.Reader;
-import java.math.BigDecimal;
-import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
-import java.sql.NClob;
-import java.sql.ParameterMetaData;
-import java.sql.PreparedStatement;
-import java.sql.Ref;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.RowId;
 import java.sql.SQLException;
-import java.sql.SQLXML;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.Calendar;
 
 import com.sforce.soap.partner.QueryResult;
 import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 
+import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcPreparedStatement;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSet;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetMetaData;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetRow;
-import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 
-public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcStatement implements PreparedStatement {
+public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPreparedStatement {
 	protected String sql = null;
 
 	protected BlancoGenericJdbcResultSet rs = null;
@@ -113,223 +95,8 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcSt
 		return rs;
 	}
 
+	@Override
 	public ResultSet executeQuery() throws SQLException {
 		return executeQuery(sql);
-	}
-
-	public int executeUpdate() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setNull(int parameterIndex, int sqlType) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setBoolean(int parameterIndex, boolean x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setByte(int parameterIndex, byte x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setShort(int parameterIndex, short x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setInt(int parameterIndex, int x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setLong(int parameterIndex, long x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setFloat(int parameterIndex, float x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setDouble(int parameterIndex, double x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setBigDecimal(int parameterIndex, BigDecimal x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setString(int parameterIndex, String x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setBytes(int parameterIndex, byte[] x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setDate(int parameterIndex, Date x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setTime(int parameterIndex, Time x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setTimestamp(int parameterIndex, Timestamp x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setAsciiStream(int parameterIndex, InputStream x, int length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setBinaryStream(int parameterIndex, InputStream x, int length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void clearParameters() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setObject(int parameterIndex, Object x, int targetSqlType) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setObject(int parameterIndex, Object x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public boolean execute() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void addBatch() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setCharacterStream(int parameterIndex, Reader reader, int length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setRef(int parameterIndex, Ref x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setBlob(int parameterIndex, Blob x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setClob(int parameterIndex, Clob x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setArray(int parameterIndex, Array x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public ResultSetMetaData getMetaData() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setDate(int parameterIndex, Date x, Calendar cal) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setTime(int parameterIndex, Time x, Calendar cal) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setNull(int parameterIndex, int sqlType, String typeName) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setURL(int parameterIndex, URL x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public ParameterMetaData getParameterMetaData() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setRowId(int parameterIndex, RowId x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setNString(int parameterIndex, String value) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setNCharacterStream(int parameterIndex, Reader value, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setNClob(int parameterIndex, NClob value) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setClob(int parameterIndex, Reader reader, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setBlob(int parameterIndex, InputStream inputStream, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setNClob(int parameterIndex, Reader reader, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setAsciiStream(int parameterIndex, InputStream x, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setBinaryStream(int parameterIndex, InputStream x, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setCharacterStream(int parameterIndex, Reader reader, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setAsciiStream(int parameterIndex, InputStream x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setBinaryStream(int parameterIndex, InputStream x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setCharacterStream(int parameterIndex, Reader reader) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setNCharacterStream(int parameterIndex, Reader value) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setClob(int parameterIndex, Reader reader) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setBlob(int parameterIndex, InputStream inputStream) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void setNClob(int parameterIndex, Reader reader) throws SQLException {
-		throw new SQLException("Not Implemented.");
 	}
 }
