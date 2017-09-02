@@ -146,11 +146,20 @@ public abstract class AbstractBlancoGenericJdbcStatement implements Statement {
 	}
 
 	public void setFetchDirection(int direction) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		if (conn.isClosed()) {
+			throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_DATABASE_CLOSED);
+		}
+
+		// Ignore what value was provided.
 	}
 
 	public int getFetchDirection() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		if (conn.isClosed()) {
+			throw new SQLException(BlancoGenericJdbcConstants.MESSAGE_DATABASE_CLOSED);
+		}
+
+		// Always FETCH FORWARD.
+		return ResultSet.FETCH_FORWARD;
 	}
 
 	public void setFetchSize(int rows) throws SQLException {
