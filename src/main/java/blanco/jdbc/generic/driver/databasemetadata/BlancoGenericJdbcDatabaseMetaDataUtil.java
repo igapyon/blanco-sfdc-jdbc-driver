@@ -26,6 +26,7 @@ public class BlancoGenericJdbcDatabaseMetaDataUtil {
 			+ ")";
 
 	public static void initGmetaTables(final Connection conn) throws SQLException {
+		// getTables
 		PreparedStatement pstmt = conn.prepareStatement(DATABASEMETADATA_TABLES_DDL_H2);
 		try {
 			pstmt.execute();
@@ -33,6 +34,7 @@ public class BlancoGenericJdbcDatabaseMetaDataUtil {
 			pstmt.close();
 		}
 
+		// getColumns
 		pstmt = conn.prepareStatement(DATABASEMETADATA_COLUMNS_DDL_H2);
 		try {
 			pstmt.execute();
@@ -45,6 +47,65 @@ public class BlancoGenericJdbcDatabaseMetaDataUtil {
 		boolean isCached = false;
 		final PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM GMETA_TABLES");
 		try {
+			pstmt.executeQuery();
+			ResultSet rs = pstmt.getResultSet();
+			rs.next();
+			if (rs.getInt(1) > 0) {
+				isCached = true;
+			}
+			rs.close();
+			return isCached;
+		} finally {
+			pstmt.close();
+		}
+	}
+
+	public static boolean isGmetaColumnsCached(final Connection conn, String catalog, String schemaPattern,
+			String tableName) throws SQLException {
+		boolean isCached = false;
+
+		String sql = "SELECT COUNT(*) FROM GMETA_COLUMNS";
+
+		boolean isFirstCondition = true;
+		if (catalog != null && catalog.trim().length() != 0) {
+			if (isFirstCondition) {
+				isFirstCondition = false;
+				sql += " WHERE";
+			} else {
+				sql += " AND";
+			}
+			sql += " TABLE_CAT = ?";
+		}
+		if (schemaPattern != null && schemaPattern.trim().length() != 0) {
+			if (isFirstCondition) {
+				isFirstCondition = false;
+				sql += " WHERE";
+			} else {
+				sql += " AND";
+			}
+			sql += " TABLE_SCHEM LIKE ?";
+		}
+		{
+			if (isFirstCondition) {
+				isFirstCondition = false;
+				sql += " WHERE";
+			} else {
+				sql += " AND";
+			}
+			sql += " TABLE_NAME = ?";
+		}
+
+		final PreparedStatement pstmt = conn.prepareStatement(sql);
+		try {
+			int indexCol = 1;
+			if (catalog != null && catalog.trim().length() != 0) {
+				pstmt.setString(indexCol++, catalog);
+			}
+			if (schemaPattern != null && schemaPattern.trim().length() != 0) {
+				pstmt.setString(indexCol++, schemaPattern);
+			}
+			pstmt.setString(indexCol++, tableName);
+
 			pstmt.executeQuery();
 			ResultSet rs = pstmt.getResultSet();
 			rs.next();

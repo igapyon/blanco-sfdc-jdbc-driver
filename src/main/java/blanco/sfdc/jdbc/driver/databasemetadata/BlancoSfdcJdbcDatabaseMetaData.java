@@ -115,8 +115,6 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 	public ResultSet getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern)
 			throws SQLException {
 
-		// Check cached
-
 		final List<String> tableNameList = new ArrayList<String>();
 		{
 			final ResultSet rs = conn.getMetaData().getTables(catalog, schemaPattern, tableNamePattern, null);
@@ -128,53 +126,55 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 		}
 
 		for (String tableName : tableNameList) {
-			try {
-				final DescribeSObjectResult sobjResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
-						.describeSObject(tableName);
+			if (BlancoGenericJdbcDatabaseMetaDataUtil.isGmetaColumnsCached(conn.getInternalH2Connection(), catalog,
+					schemaPattern, tableName) == false) {
+				try {
+					final DescribeSObjectResult sobjResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
+							.describeSObject(tableName);
 
-				int ordinalIndex = 0;
-				for (Field field : sobjResult.getFields()) {
-					ordinalIndex++;
+					int ordinalIndex = 0;
+					for (Field field : sobjResult.getFields()) {
+						ordinalIndex++;
 
-					int dataType = (Integer.valueOf(java.sql.Types.VARCHAR));
-					if ("int".equals(field.getType().toString())) {
-						dataType = (Integer.valueOf(java.sql.Types.INTEGER));
-					} else if ("date".equals(field.getType().toString())) {
-						dataType = (Integer.valueOf(java.sql.Types.DATE));
-					} else if ("datetime".equals(field.getType().toString())) {
-						dataType = (Integer.valueOf(java.sql.Types.TIMESTAMP));
+						int dataType = (Integer.valueOf(java.sql.Types.VARCHAR));
+						if ("int".equals(field.getType().toString())) {
+							dataType = (Integer.valueOf(java.sql.Types.INTEGER));
+						} else if ("date".equals(field.getType().toString())) {
+							dataType = (Integer.valueOf(java.sql.Types.DATE));
+						} else if ("datetime".equals(field.getType().toString())) {
+							dataType = (Integer.valueOf(java.sql.Types.TIMESTAMP));
+						}
+
+						final PreparedStatement pstmt = conn.getInternalH2Connection().prepareStatement(
+								"INSERT INTO GMETA_COLUMNS SET TABLE_NAME = ?, COLUMN_NAME = ?, DATA_TYPE = ?, TYPE_NAME = ?, COLUMN_SIZE = ?, DECIMAL_DIGITS = ?, NULLABLE = ?, REMARKS = ?, CHAR_OCTET_LENGTH = ?, ORDINAL_POSITION = ?");
+						try {
+							pstmt.setString(1, tableName);
+							pstmt.setString(2, field.getName());
+							pstmt.setInt(3, dataType);
+							pstmt.setString(4, field.getType().toString());
+							pstmt.setInt(5, field.getLength());
+							pstmt.setInt(6, field.getDigits());
+							pstmt.setInt(7, (field.getNillable() ? ResultSetMetaData.columnNullable
+									: ResultSetMetaData.columnNoNulls));
+							pstmt.setString(8, field.getLabel());
+							pstmt.setInt(9, field.getLength());
+							pstmt.setInt(10, ordinalIndex);
+							pstmt.execute();
+						} finally {
+							pstmt.close();
+						}
+
+						// metaDataColumn.setColumnName("IS_NULLABLE");
+
 					}
-
-					final PreparedStatement pstmt = conn.getInternalH2Connection().prepareStatement(
-							"INSERT INTO GMETA_COLUMNS SET TABLE_NAME = ?, COLUMN_NAME = ?, DATA_TYPE = ?, TYPE_NAME = ?, COLUMN_SIZE = ?, DECIMAL_DIGITS = ?, NULLABLE = ?, REMARKS = ?, CHAR_OCTET_LENGTH = ?, ORDINAL_POSITION = ?");
-					try {
-						pstmt.setString(1, tableName);
-						pstmt.setString(2, field.getName());
-						pstmt.setInt(3, dataType);
-						pstmt.setString(4, field.getType().toString());
-						pstmt.setInt(5, field.getLength());
-						pstmt.setInt(6, field.getDigits());
-						pstmt.setInt(7, (field.getNillable() ? ResultSetMetaData.columnNullable
-								: ResultSetMetaData.columnNoNulls));
-						pstmt.setString(8, field.getLabel());
-						pstmt.setInt(9, field.getLength());
-						pstmt.setInt(10, ordinalIndex);
-						pstmt.execute();
-					} finally {
-						pstmt.close();
-					}
-
-					// metaDataColumn.setColumnName("IS_NULLABLE");
-
+					conn.commit();
+				} catch (ConnectionException ex) {
+					throw new SQLException(ex);
 				}
-				conn.commit();
-			} catch (ConnectionException ex) {
-				throw new SQLException(ex);
 			}
 		}
 
 		{
-			int indexCol = 1;
 			String sql = "SELECT * FROM GMETA_COLUMNS";//
 			boolean isFirstCondition = true;
 			if (catalog != null && catalog.trim().length() != 0) {
@@ -184,7 +184,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 				} else {
 					sql += " AND";
 				}
-				sql += " TABLE_CAT LIKE ?";
+				sql += " TABLE_CAT = ?";
 			}
 			if (schemaPattern != null && schemaPattern.trim().length() != 0) {
 				if (isFirstCondition) {
@@ -218,6 +218,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 
 			final PreparedStatement pstmt = conn.getInternalH2Connection().prepareStatement(sql);
 
+			int indexCol = 1;
 			if (catalog != null && catalog.trim().length() != 0) {
 				pstmt.setString(indexCol++, catalog);
 			}
