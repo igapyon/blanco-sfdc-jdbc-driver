@@ -25,9 +25,9 @@ public class BlancoGenericJdbcDatabaseMetaDataUtil {
 			+ ", IS_GENERATEDCOLUMN VARCHAR_IGNORECASE DEFAULT ''" //
 			+ ")";
 
-	public static void initGmetaTables(final Connection conn) throws SQLException {
+	public static void initGmetaTables(final Connection connCache) throws SQLException {
 		// getTables
-		PreparedStatement pstmt = conn.prepareStatement(DATABASEMETADATA_TABLES_DDL_H2);
+		PreparedStatement pstmt = connCache.prepareStatement(DATABASEMETADATA_TABLES_DDL_H2);
 		try {
 			pstmt.execute();
 		} finally {
@@ -35,7 +35,7 @@ public class BlancoGenericJdbcDatabaseMetaDataUtil {
 		}
 
 		// getColumns
-		pstmt = conn.prepareStatement(DATABASEMETADATA_COLUMNS_DDL_H2);
+		pstmt = connCache.prepareStatement(DATABASEMETADATA_COLUMNS_DDL_H2);
 		try {
 			pstmt.execute();
 		} finally {
@@ -43,9 +43,9 @@ public class BlancoGenericJdbcDatabaseMetaDataUtil {
 		}
 	}
 
-	public static boolean isGmetaTablesCached(final Connection conn) throws SQLException {
+	public static boolean isGmetaTablesCached(final Connection connCache) throws SQLException {
 		boolean isCached = false;
-		final PreparedStatement pstmt = conn.prepareStatement("SELECT COUNT(*) FROM GMETA_TABLES");
+		final PreparedStatement pstmt = connCache.prepareStatement("SELECT COUNT(*) FROM GMETA_TABLES");
 		try {
 			pstmt.executeQuery();
 			ResultSet rs = pstmt.getResultSet();
@@ -60,7 +60,7 @@ public class BlancoGenericJdbcDatabaseMetaDataUtil {
 		}
 	}
 
-	public static boolean isGmetaColumnsCached(final Connection conn, String catalog, String schemaPattern,
+	public static boolean isGmetaColumnsCached(final Connection connCache, String catalog, String schemaPattern,
 			String tableName) throws SQLException {
 		boolean isCached = false;
 
@@ -95,7 +95,7 @@ public class BlancoGenericJdbcDatabaseMetaDataUtil {
 			sql += " TABLE_NAME = ?";
 		}
 
-		final PreparedStatement pstmt = conn.prepareStatement(sql);
+		final PreparedStatement pstmt = connCache.prepareStatement(sql);
 		try {
 			int indexCol = 1;
 			if (catalog != null && catalog.trim().length() != 0) {
@@ -117,5 +117,55 @@ public class BlancoGenericJdbcDatabaseMetaDataUtil {
 		} finally {
 			pstmt.close();
 		}
+	}
+
+	public static ResultSet getTablesFromCache(final Connection connCache, String catalog, String schemaPattern,
+			String tableNamePattern, String[] types) throws SQLException {
+		int indexCol = 1;
+		String sql = "SELECT * FROM GMETA_TABLES";
+		boolean isFirstCondition = true;
+		if (catalog != null && catalog.trim().length() != 0) {
+			if (isFirstCondition) {
+				isFirstCondition = false;
+				sql += " WHERE";
+			} else {
+				sql += " AND";
+			}
+			sql += " TABLE_CAT LIKE ?";
+		}
+		if (schemaPattern != null && schemaPattern.trim().length() != 0) {
+			if (isFirstCondition) {
+				isFirstCondition = false;
+				sql += " WHERE";
+			} else {
+				sql += " AND";
+			}
+			sql += " TABLE_SCHEM LIKE ?";
+		}
+		if (tableNamePattern != null && tableNamePattern.trim().length() != 0) {
+			if (isFirstCondition) {
+				isFirstCondition = false;
+				sql += " WHERE";
+			} else {
+				sql += " AND";
+			}
+			sql += " TABLE_NAME LIKE ?";
+		}
+		sql += " ORDER BY TABLE_TYPE, TABLE_CAT, TABLE_SCHEM, TABLE_NAME";
+
+		final PreparedStatement pstmt = connCache.prepareStatement(sql);
+
+		if (catalog != null && catalog.trim().length() != 0) {
+			pstmt.setString(indexCol++, catalog);
+		}
+		if (schemaPattern != null && schemaPattern.trim().length() != 0) {
+			pstmt.setString(indexCol++, schemaPattern);
+		}
+		if (tableNamePattern != null && tableNamePattern.trim().length() != 0) {
+			pstmt.setString(indexCol++, tableNamePattern);
+		}
+
+		pstmt.executeQuery();
+		return pstmt.getResultSet();
 	}
 }
