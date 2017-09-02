@@ -215,27 +215,31 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 			final XmlObject objChild = (XmlObject) ite.next();
 			final ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, sObjectName,
 					objChild.getName().getLocalPart());
-			System.out.println("child, Name:" + objChild.getName().getLocalPart());
-			System.out.println("child, Value:" + objChild.getValue());
-			rsmdRs.next();
+			try {
+				System.out.println("child, Name:" + objChild.getName().getLocalPart());
+				System.out.println("child, Value:" + objChild.getValue());
+				rsmdRs.next();
 
-			final BlancoGenericJdbcResultSetMetaDataColumn column = new BlancoGenericJdbcResultSetMetaDataColumn();
-			column.setColumnName(rsmdRs.getString("COLUMN_NAME"));
-			column.setDataType(rsmdRs.getInt("DATA_TYPE"));
-			column.setTypeName(rsmdRs.getString("TYPE_NAME"));
-			column.setTableName(rsmdRs.getString("TABLE_NAME"));
-			column.setColumnSize(Integer.parseInt(rsmdRs.getString("COLUMN_SIZE")));
-			column.setRemarks(rsmdRs.getString("REMARKS"));
-			// column.settableCat(rsmdRs.getString("TABLE_CAT"));
-			// rsmdRs.getString("TABLE_SCHEM"));
-			column.setNullable("true".equals(rsmdRs.getString("NULLABLE")));
-			// rsmdRs.getString("IS_NULLABLE");// discard
-			// rsmdRs.getString("ORDINAL_POSITION");// discard
-			// rsmdRs.getString("SCOPE_TABLE"); // discard
+				final BlancoGenericJdbcResultSetMetaDataColumn column = new BlancoGenericJdbcResultSetMetaDataColumn();
 
-			rsmd.getColumnList().add(column);
-			System.out.println(sObjectName + ":" + rsmdRs.getString("COLUMN_NAME"));
-			rsmdRs.close();
+				column.setColumnLabel(rsmdRs.getString("REMARKS")); // ???
+				column.setSchemaName(rsmdRs.getString("TABLE_SCHEM"));
+
+				column.setTableName(rsmdRs.getString("TABLE_NAME"));
+				column.setPrecision(rsmdRs.getInt("DECIMAL_DIGITS")); // ???
+				column.setScale(rsmdRs.getInt("COLUMN_SIZE"));// ???
+				column.setColumnName(rsmdRs.getString("COLUMN_NAME"));
+				column.setNullable("true".equals(rsmdRs.getString("NULLABLE")));
+				column.setDataType(rsmdRs.getInt("DATA_TYPE"));
+				column.setTypeName(rsmdRs.getString("TYPE_NAME"));
+				column.setColumnSize(rsmdRs.getInt("COLUMN_SIZE"));
+				column.setRemarks(rsmdRs.getString("REMARKS"));
+				column.setOrdinalPosition(rsmdRs.getInt("ORDINAL_POSITION"));
+
+				rsmd.getColumnList().add(column);
+			} finally {
+				rsmdRs.close();
+			}
 		}
 
 		return rsmd;
