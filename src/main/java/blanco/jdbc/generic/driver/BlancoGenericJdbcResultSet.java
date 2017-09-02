@@ -47,6 +47,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.RowId;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.sql.SQLWarning;
 import java.sql.SQLXML;
 import java.sql.Statement;
@@ -338,202 +339,7 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 
 	public int getConcurrency() throws SQLException {
 		// must be read-only
-		return CONCUR_READ_ONLY;
-	}
-
-	public boolean rowUpdated() throws SQLException {
-		// Always false
-		return false;
-	}
-
-	public boolean rowInserted() throws SQLException {
-		// Always false
-		return false;
-	}
-
-	public boolean rowDeleted() throws SQLException {
-		// Always false
-		return false;
-	}
-
-	public void updateNull(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBoolean(int columnIndex, boolean x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateByte(int columnIndex, byte x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateShort(int columnIndex, short x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateInt(int columnIndex, int x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateLong(int columnIndex, long x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateFloat(int columnIndex, float x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateDouble(int columnIndex, double x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBigDecimal(int columnIndex, BigDecimal x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateString(int columnIndex, String x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBytes(int columnIndex, byte[] x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateDate(int columnIndex, Date x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateTime(int columnIndex, Time x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateTimestamp(int columnIndex, Timestamp x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateAsciiStream(int columnIndex, InputStream x, int length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBinaryStream(int columnIndex, InputStream x, int length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateCharacterStream(int columnIndex, Reader x, int length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateObject(int columnIndex, Object x, int scaleOrLength) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateObject(int columnIndex, Object x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateNull(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBoolean(String columnLabel, boolean x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateByte(String columnLabel, byte x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateShort(String columnLabel, short x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateInt(String columnLabel, int x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateLong(String columnLabel, long x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateFloat(String columnLabel, float x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateDouble(String columnLabel, double x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBigDecimal(String columnLabel, BigDecimal x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateString(String columnLabel, String x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBytes(String columnLabel, byte[] x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateDate(String columnLabel, Date x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateTime(String columnLabel, Time x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateTimestamp(String columnLabel, Timestamp x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateAsciiStream(String columnLabel, InputStream x, int length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBinaryStream(String columnLabel, InputStream x, int length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateCharacterStream(String columnLabel, Reader reader, int length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateObject(String columnLabel, Object x, int scaleOrLength) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateObject(String columnLabel, Object x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void insertRow() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateRow() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void deleteRow() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void refreshRow() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void cancelRowUpdates() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void moveToInsertRow() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void moveToCurrentRow() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return ResultSet.CONCUR_READ_ONLY;
 	}
 
 	public Statement getStatement() throws SQLException {
@@ -612,51 +418,11 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 		throw new SQLException("Not Implemented.");
 	}
 
-	public void updateRef(int columnIndex, Ref x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateRef(String columnLabel, Ref x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBlob(int columnIndex, Blob x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBlob(String columnLabel, Blob x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateClob(int columnIndex, Clob x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateClob(String columnLabel, Clob x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateArray(int columnIndex, Array x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateArray(String columnLabel, Array x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
 	public RowId getRowId(int columnIndex) throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
 
 	public RowId getRowId(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateRowId(int columnIndex, RowId x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateRowId(String columnLabel, RowId x) throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
 
@@ -666,22 +432,6 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 
 	public boolean isClosed() throws SQLException {
 		return isClosed;
-	}
-
-	public void updateNString(int columnIndex, String nString) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateNString(String columnLabel, String nString) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateNClob(int columnIndex, NClob nClob) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateNClob(String columnLabel, NClob nClob) throws SQLException {
-		throw new SQLException("Not Implemented.");
 	}
 
 	public NClob getNClob(int columnIndex) throws SQLException {
@@ -700,14 +450,6 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 		throw new SQLException("Not Implemented.");
 	}
 
-	public void updateSQLXML(int columnIndex, SQLXML xmlObject) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateSQLXML(String columnLabel, SQLXML xmlObject) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
 	public String getNString(int columnIndex) throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
@@ -721,118 +463,6 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	}
 
 	public Reader getNCharacterStream(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateNCharacterStream(int columnIndex, Reader x, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateNCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateAsciiStream(int columnIndex, InputStream x, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBinaryStream(int columnIndex, InputStream x, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateCharacterStream(int columnIndex, Reader x, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateAsciiStream(String columnLabel, InputStream x, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBinaryStream(String columnLabel, InputStream x, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBlob(int columnIndex, InputStream inputStream, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBlob(String columnLabel, InputStream inputStream, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateClob(int columnIndex, Reader reader, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateClob(String columnLabel, Reader reader, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateNClob(int columnIndex, Reader reader, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateNClob(String columnLabel, Reader reader, long length) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateNCharacterStream(int columnIndex, Reader x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateNCharacterStream(String columnLabel, Reader reader) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateAsciiStream(int columnIndex, InputStream x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBinaryStream(int columnIndex, InputStream x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateCharacterStream(int columnIndex, Reader x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateAsciiStream(String columnLabel, InputStream x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBinaryStream(String columnLabel, InputStream x) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateCharacterStream(String columnLabel, Reader reader) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBlob(int columnIndex, InputStream inputStream) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateBlob(String columnLabel, InputStream inputStream) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateClob(int columnIndex, Reader reader) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateClob(String columnLabel, Reader reader) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateNClob(int columnIndex, Reader reader) throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
-
-	public void updateNClob(String columnLabel, Reader reader) throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
 
@@ -919,4 +549,388 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 
 	// No Cursor related JDBC API supported.
 	/////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////
+	// No update supported
+
+	public boolean rowUpdated() throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public boolean rowInserted() throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public boolean rowDeleted() throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateNull(int columnIndex) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBoolean(int columnIndex, boolean x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateByte(int columnIndex, byte x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateShort(int columnIndex, short x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateInt(int columnIndex, int x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateLong(int columnIndex, long x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateFloat(int columnIndex, float x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateDouble(int columnIndex, double x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBigDecimal(int columnIndex, BigDecimal x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateString(int columnIndex, String x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBytes(int columnIndex, byte[] x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateDate(int columnIndex, Date x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateTime(int columnIndex, Time x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateTimestamp(int columnIndex, Timestamp x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateAsciiStream(int columnIndex, InputStream x, int length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBinaryStream(int columnIndex, InputStream x, int length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateCharacterStream(int columnIndex, Reader x, int length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateObject(int columnIndex, Object x, int scaleOrLength) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateObject(int columnIndex, Object x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateNull(String columnLabel) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBoolean(String columnLabel, boolean x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateByte(String columnLabel, byte x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateShort(String columnLabel, short x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateInt(String columnLabel, int x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateLong(String columnLabel, long x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateFloat(String columnLabel, float x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateDouble(String columnLabel, double x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBigDecimal(String columnLabel, BigDecimal x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateString(String columnLabel, String x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBytes(String columnLabel, byte[] x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateDate(String columnLabel, Date x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateTime(String columnLabel, Time x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateTimestamp(String columnLabel, Timestamp x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateAsciiStream(String columnLabel, InputStream x, int length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBinaryStream(String columnLabel, InputStream x, int length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateCharacterStream(String columnLabel, Reader reader, int length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateObject(String columnLabel, Object x, int scaleOrLength) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateObject(String columnLabel, Object x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void insertRow() throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateRow() throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void deleteRow() throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void refreshRow() throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void cancelRowUpdates() throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void moveToInsertRow() throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void moveToCurrentRow() throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	/////////
+
+	public void updateRef(int columnIndex, Ref x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateRef(String columnLabel, Ref x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBlob(int columnIndex, Blob x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBlob(String columnLabel, Blob x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateClob(int columnIndex, Clob x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateClob(String columnLabel, Clob x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateArray(int columnIndex, Array x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateArray(String columnLabel, Array x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	//////////
+
+	public void updateRowId(int columnIndex, RowId x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateRowId(String columnLabel, RowId x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	/////////////////////
+
+	public void updateNString(int columnIndex, String nString) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateNString(String columnLabel, String nString) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateNClob(int columnIndex, NClob nClob) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateNClob(String columnLabel, NClob nClob) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	///////////
+
+	public void updateSQLXML(int columnIndex, SQLXML xmlObject) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateSQLXML(String columnLabel, SQLXML xmlObject) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	/////////////////////
+
+	public void updateNCharacterStream(int columnIndex, Reader x, long length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateNCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateAsciiStream(int columnIndex, InputStream x, long length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBinaryStream(int columnIndex, InputStream x, long length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateCharacterStream(int columnIndex, Reader x, long length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateAsciiStream(String columnLabel, InputStream x, long length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBinaryStream(String columnLabel, InputStream x, long length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBlob(int columnIndex, InputStream inputStream, long length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBlob(String columnLabel, InputStream inputStream, long length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateClob(int columnIndex, Reader reader, long length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateClob(String columnLabel, Reader reader, long length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateNClob(int columnIndex, Reader reader, long length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateNClob(String columnLabel, Reader reader, long length) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateNCharacterStream(int columnIndex, Reader x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateNCharacterStream(String columnLabel, Reader reader) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateAsciiStream(int columnIndex, InputStream x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBinaryStream(int columnIndex, InputStream x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateCharacterStream(int columnIndex, Reader x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateAsciiStream(String columnLabel, InputStream x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBinaryStream(String columnLabel, InputStream x) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateCharacterStream(String columnLabel, Reader reader) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBlob(int columnIndex, InputStream inputStream) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateBlob(String columnLabel, InputStream inputStream) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateClob(int columnIndex, Reader reader) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateClob(String columnLabel, Reader reader) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateNClob(int columnIndex, Reader reader) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	public void updateNClob(String columnLabel, Reader reader) throws SQLException {
+		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+	}
+
+	// No update supported
+	////////////////////////////////////////////
 }
