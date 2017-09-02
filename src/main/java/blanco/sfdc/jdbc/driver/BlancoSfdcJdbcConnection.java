@@ -49,8 +49,6 @@ import blanco.sfdc.jdbc.driver.databasemetadata.BlancoSfdcJdbcDatabaseMetaData;
 public class BlancoSfdcJdbcConnection extends AbstractBlancoGenericJdbcConnection {
 	protected PartnerConnection partnerConn = null;
 
-	protected boolean isClosed = false;
-
 	public PartnerConnection getPartnerConnection() {
 		return partnerConn;
 	}
@@ -81,18 +79,6 @@ public class BlancoSfdcJdbcConnection extends AbstractBlancoGenericJdbcConnectio
 	@Override
 	public PreparedStatement prepareStatement(final String sql) throws SQLException {
 		return new BlancoSfdcJdbcPreparedStatement(this, sql);
-	}
-
-	@Override
-	public void close() throws SQLException {
-		isClosed = true;
-		// TODO ステートメントや結果セットを閉じる仕組みが必要。
-	}
-
-	@Override
-	public boolean isClosed() throws SQLException {
-		return isClosed;
-		// TODO ステートメントや結果セットを閉じる仕組みが必要。
 	}
 
 	@Override
