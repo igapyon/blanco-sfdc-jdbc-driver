@@ -199,14 +199,25 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 
 		final XmlObject xmlSObject = (XmlObject) resultSetValue;
 		final Iterator<XmlObject> ite = xmlSObject.getChildren();
-		final XmlObject obj = (XmlObject) ite.next();
+		final XmlObject objObjectName = (XmlObject) ite.next();
 
 		// First one should be : type, value=Account, children=[]}
 
-		final String sObjectName = obj.getValue().toString();
+		final String sObjectName = objObjectName.getValue().toString();
+		System.out.println("ObjectName:" + objObjectName.getName().getLocalPart());
+		System.out.println("ObjectName:" + sObjectName);
 
-		final ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, sObjectName, null);
-		for (; rsmdRs.next();) {
+		// TODO これを、行のユニークに利用できるはず。
+		final XmlObject objObjectId = (XmlObject) ite.next();
+
+		for (; ite.hasNext();) {
+			final XmlObject objChild = (XmlObject) ite.next();
+			final ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, sObjectName,
+					objChild.getName().getLocalPart());
+			System.out.println("child, Name:" + objChild.getName().getLocalPart());
+			System.out.println("child, Value:" + objChild.getValue());
+rsmdRs.next();
+			
 			final BlancoGenericJdbcResultSetMetaDataColumn column = new BlancoGenericJdbcResultSetMetaDataColumn();
 			column.setColumnName(rsmdRs.getString("COLUMN_NAME"));
 			column.setDataType(rsmdRs.getInt("DATA_TYPE"));
@@ -221,8 +232,32 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 			// rsmdRs.getString("ORDINAL_POSITION");// discard
 			// rsmdRs.getString("SCOPE_TABLE"); // discard
 
+			
 			rsmd.getColumnList().add(column);
+			System.out.println(sObjectName + ":" + rsmdRs.getString("COLUMN_NAME"));
+			rsmdRs.close();
 		}
+
+		final ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, sObjectName, null);
+		if (false)
+			for (; rsmdRs.next();) {
+				final BlancoGenericJdbcResultSetMetaDataColumn column = new BlancoGenericJdbcResultSetMetaDataColumn();
+				column.setColumnName(rsmdRs.getString("COLUMN_NAME"));
+				column.setDataType(rsmdRs.getInt("DATA_TYPE"));
+				column.setTypeName(rsmdRs.getString("TYPE_NAME"));
+				column.setTableName(rsmdRs.getString("TABLE_NAME"));
+				column.setColumnSize(Integer.parseInt(rsmdRs.getString("COLUMN_SIZE")));
+				column.setRemarks(rsmdRs.getString("REMARKS"));
+				// column.settableCat(rsmdRs.getString("TABLE_CAT"));
+				// rsmdRs.getString("TABLE_SCHEM"));
+				column.setNullable("true".equals(rsmdRs.getString("NULLABLE")));
+				// rsmdRs.getString("IS_NULLABLE");// discard
+				// rsmdRs.getString("ORDINAL_POSITION");// discard
+				// rsmdRs.getString("SCOPE_TABLE"); // discard
+
+				rsmd.getColumnList().add(column);
+				System.out.println(sObjectName + ":" + rsmdRs.getString("COLUMN_NAME"));
+			}
 		rsmdRs.close();
 
 		return rsmd;
