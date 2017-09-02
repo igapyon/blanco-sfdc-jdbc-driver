@@ -1,5 +1,5 @@
 /*
- *  blanco-jdbc-driver-simple
+ *  blanco-generic-jdbc-driver
  *  Copyright (C) 2017  Toshiki Iga
  *
  *  This program is free software: you can redistribute it and/or modify
