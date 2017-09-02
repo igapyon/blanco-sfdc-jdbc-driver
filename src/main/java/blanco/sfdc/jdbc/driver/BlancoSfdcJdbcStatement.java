@@ -203,9 +203,10 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 
 		// First one should be : type, value=Account, children=[]}
 
+		if (objObjectName.getName().getLocalPart().equals("type") == false) {
+			System.err.println("FATAL: if(objObjectName.getName().getLocalPart().equals(type)==false){");
+		}
 		final String sObjectName = objObjectName.getValue().toString();
-		System.out.println("ObjectName:" + objObjectName.getName().getLocalPart());
-		System.out.println("ObjectName:" + sObjectName);
 
 		// TODO これを、行のユニークに利用できるはず。
 		final XmlObject objObjectId = (XmlObject) ite.next();
@@ -216,8 +217,8 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 					objChild.getName().getLocalPart());
 			System.out.println("child, Name:" + objChild.getName().getLocalPart());
 			System.out.println("child, Value:" + objChild.getValue());
-rsmdRs.next();
-			
+			rsmdRs.next();
+
 			final BlancoGenericJdbcResultSetMetaDataColumn column = new BlancoGenericJdbcResultSetMetaDataColumn();
 			column.setColumnName(rsmdRs.getString("COLUMN_NAME"));
 			column.setDataType(rsmdRs.getInt("DATA_TYPE"));
@@ -232,33 +233,10 @@ rsmdRs.next();
 			// rsmdRs.getString("ORDINAL_POSITION");// discard
 			// rsmdRs.getString("SCOPE_TABLE"); // discard
 
-			
 			rsmd.getColumnList().add(column);
 			System.out.println(sObjectName + ":" + rsmdRs.getString("COLUMN_NAME"));
 			rsmdRs.close();
 		}
-
-		final ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, sObjectName, null);
-		if (false)
-			for (; rsmdRs.next();) {
-				final BlancoGenericJdbcResultSetMetaDataColumn column = new BlancoGenericJdbcResultSetMetaDataColumn();
-				column.setColumnName(rsmdRs.getString("COLUMN_NAME"));
-				column.setDataType(rsmdRs.getInt("DATA_TYPE"));
-				column.setTypeName(rsmdRs.getString("TYPE_NAME"));
-				column.setTableName(rsmdRs.getString("TABLE_NAME"));
-				column.setColumnSize(Integer.parseInt(rsmdRs.getString("COLUMN_SIZE")));
-				column.setRemarks(rsmdRs.getString("REMARKS"));
-				// column.settableCat(rsmdRs.getString("TABLE_CAT"));
-				// rsmdRs.getString("TABLE_SCHEM"));
-				column.setNullable("true".equals(rsmdRs.getString("NULLABLE")));
-				// rsmdRs.getString("IS_NULLABLE");// discard
-				// rsmdRs.getString("ORDINAL_POSITION");// discard
-				// rsmdRs.getString("SCOPE_TABLE"); // discard
-
-				rsmd.getColumnList().add(column);
-				System.out.println(sObjectName + ":" + rsmdRs.getString("COLUMN_NAME"));
-			}
-		rsmdRs.close();
 
 		return rsmd;
 	}
