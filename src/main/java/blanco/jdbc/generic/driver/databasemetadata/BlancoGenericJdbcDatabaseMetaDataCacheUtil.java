@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-public class BlancoGenericJdbcDatabaseMetaDataUtil {
+public class BlancoGenericJdbcDatabaseMetaDataCacheUtil {
 	///////////////////////////////////////////////
 	// DATABASEMETADATA
 

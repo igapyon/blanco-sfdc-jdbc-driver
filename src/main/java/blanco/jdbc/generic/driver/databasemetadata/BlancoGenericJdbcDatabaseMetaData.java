@@ -53,7 +53,8 @@ public abstract class BlancoGenericJdbcDatabaseMetaData implements DatabaseMetaD
 	}
 
 	public boolean allTablesAreSelectable() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// non queryable are already filtered.
+		return true;
 	}
 
 	public String getURL() throws SQLException {

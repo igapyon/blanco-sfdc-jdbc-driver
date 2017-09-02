@@ -15,7 +15,7 @@ import com.sforce.soap.partner.Field;
 import com.sforce.ws.ConnectionException;
 
 import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaData;
-import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaDataUtil;
+import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaDataCacheUtil;
 import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
 
 public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMetaData {
@@ -32,7 +32,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 	public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types)
 			throws SQLException {
 
-		if (BlancoGenericJdbcDatabaseMetaDataUtil.isGmetaTablesCached(conn.getCacheConnection()) == false) {
+		if (BlancoGenericJdbcDatabaseMetaDataCacheUtil.isGmetaTablesCached(conn.getCacheConnection()) == false) {
 			try {
 				final DescribeGlobalResult descResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
 						.describeGlobal();
@@ -58,7 +58,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 			}
 		}
 
-		return BlancoGenericJdbcDatabaseMetaDataUtil.getTablesFromCache(conn.getCacheConnection(), catalog,
+		return BlancoGenericJdbcDatabaseMetaDataCacheUtil.getTablesFromCache(conn.getCacheConnection(), catalog,
 				schemaPattern, tableNamePattern, types);
 	}
 
@@ -79,7 +79,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 		}
 
 		for (String tableName : tableNameList) {
-			if (BlancoGenericJdbcDatabaseMetaDataUtil.isGmetaColumnsCached(conn.getCacheConnection(), catalog,
+			if (BlancoGenericJdbcDatabaseMetaDataCacheUtil.isGmetaColumnsCached(conn.getCacheConnection(), catalog,
 					schemaPattern, tableName) == false) {
 				try {
 					final DescribeSObjectResult sobjResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
@@ -127,7 +127,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 			}
 		}
 
-		return BlancoGenericJdbcDatabaseMetaDataUtil.getColumnsFromCache(conn.getCacheConnection(), catalog,
+		return BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(conn.getCacheConnection(), catalog,
 				schemaPattern, tableNamePattern, columnNamePattern);
 	}
 
