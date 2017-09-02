@@ -34,6 +34,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 
 		if (BlancoGenericJdbcDatabaseMetaDataCacheUtil.isGmetaTablesCached(conn.getCacheConnection()) == false) {
 			try {
+				// build cache of table info
 				final DescribeGlobalResult descResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
 						.describeGlobal();
 				for (DescribeGlobalSObjectResult sobjectResult : descResult.getSobjects()) {
@@ -82,6 +83,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 			if (BlancoGenericJdbcDatabaseMetaDataCacheUtil.isGmetaColumnsCached(conn.getCacheConnection(), catalog,
 					schemaPattern, tableName) == false) {
 				try {
+					// build cache of columns
 					final DescribeSObjectResult sobjResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
 							.describeSObject(tableName);
 
