@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import com.sforce.soap.partner.DescribeGlobalResult;
 import com.sforce.soap.partner.DescribeGlobalSObjectResult;
@@ -51,11 +52,17 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 			}
 		}
 
-		@SuppressWarnings("resource")
-		final BlancoSfdcJdbcDatabaseMetaDataTablesStatement stmt = new BlancoSfdcJdbcDatabaseMetaDataTablesStatement(
-				conn, catalog, schemaPattern, tableNamePattern, types);
-		stmt.execute("dummy");
-		return stmt.getResultSet();
+		if (tableNamePattern == null) {
+			final Statement stmt = conn.getInternalH2Connection().createStatement();
+			stmt.executeQuery("SELECT * FROM GMETA_TABLES");
+			return stmt.getResultSet();
+		} else {
+			final PreparedStatement pstmt = conn.getInternalH2Connection()
+					.prepareStatement("SELECT * FROM GMETA_TABLES WHERE TABLE_NAME LIKE ?");
+			pstmt.setString(1, tableNamePattern);
+			pstmt.executeQuery();
+			return pstmt.getResultSet();
+		}
 	}
 
 	/**
