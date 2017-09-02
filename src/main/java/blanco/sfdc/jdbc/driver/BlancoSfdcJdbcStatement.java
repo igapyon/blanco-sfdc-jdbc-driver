@@ -38,9 +38,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.TimeZone;
 
 import com.sforce.soap.partner.QueryResult;
@@ -48,21 +46,16 @@ import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 import com.sforce.ws.bind.XmlObject;
 
+import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSet;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetColumn;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetMetaData;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetMetaDataColumn;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetRow;
-import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 
 public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement {
 
 	protected BlancoGenericJdbcResultSet rs = null;
-
-	/**
-	 * NOTE: static field!!!
-	 */
-	protected static Map<String, BlancoGenericJdbcResultSetMetaData> rsmdMap = new HashMap<String, BlancoGenericJdbcResultSetMetaData>();
 
 	public BlancoSfdcJdbcStatement(final BlancoSfdcJdbcConnection conn) {
 		super(conn);
@@ -212,10 +205,6 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 
 		final String sObjectName = obj.getValue().toString();
 
-		if (rsmdMap.get(sObjectName) != null) {
-			return rsmdMap.get(sObjectName);
-		}
-
 		final ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, sObjectName, null);
 		for (; rsmdRs.next();) {
 			final BlancoGenericJdbcResultSetMetaDataColumn column = new BlancoGenericJdbcResultSetMetaDataColumn();
@@ -236,7 +225,6 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		}
 		rsmdRs.close();
 
-		rsmdMap.put(sObjectName, rsmd);
 		return rsmd;
 	}
 }
