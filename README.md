@@ -9,3 +9,9 @@ Blanco SFDC JDBC Driver is a JDBC Driver to access SFDC using SOQL.
 ## Status
 
 - Under construction.
+
+## Note
+
+- No insert/update/delete support.
+- No DWH support.
+- No support.
