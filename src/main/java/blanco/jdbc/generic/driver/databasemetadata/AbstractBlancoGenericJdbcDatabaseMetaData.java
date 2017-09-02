@@ -39,7 +39,7 @@ import java.sql.ResultSet;
 import java.sql.RowIdLifetime;
 import java.sql.SQLException;
 
-public abstract class BlancoGenericJdbcDatabaseMetaData implements DatabaseMetaData {
+public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements DatabaseMetaData {
 	public <T> T unwrap(Class<T> iface) throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}

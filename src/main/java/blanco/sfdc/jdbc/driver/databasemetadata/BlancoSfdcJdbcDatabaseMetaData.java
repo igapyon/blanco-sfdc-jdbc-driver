@@ -14,11 +14,11 @@ import com.sforce.soap.partner.DescribeSObjectResult;
 import com.sforce.soap.partner.Field;
 import com.sforce.ws.ConnectionException;
 
-import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaData;
+import blanco.jdbc.generic.driver.databasemetadata.AbstractBlancoGenericJdbcDatabaseMetaData;
 import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaDataCacheUtil;
 import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
 
-public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMetaData {
+public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDatabaseMetaData {
 	protected BlancoSfdcJdbcConnection conn = null;
 
 	public BlancoSfdcJdbcDatabaseMetaData(final BlancoSfdcJdbcConnection conn) {
