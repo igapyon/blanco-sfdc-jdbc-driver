@@ -1,5 +1,6 @@
 package blanco.sfdc.jdbc.driver.databasemetadata;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -9,11 +10,11 @@ import com.sforce.soap.partner.DescribeSObjectResult;
 import com.sforce.soap.partner.Field;
 import com.sforce.ws.ConnectionException;
 
+import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSet;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetColumn;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetMetaDataColumn;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetRow;
-import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
 
 public class BlancoSfdcJdbcDatabaseMetaDataColumnsStatement extends AbstractBlancoGenericJdbcStatement {
@@ -41,13 +42,12 @@ public class BlancoSfdcJdbcDatabaseMetaDataColumnsStatement extends AbstractBlan
 
 		final List<String> tableNameList = new ArrayList<String>();
 		{
-			// use tables
-			@SuppressWarnings("resource")
-			final BlancoSfdcJdbcDatabaseMetaDataTablesStatement stmt = new BlancoSfdcJdbcDatabaseMetaDataTablesStatement(
-					(BlancoSfdcJdbcConnection) conn, null, null, null, null);
-			final ResultSet rs = stmt.executeQuery("dummy sql");
+			final Connection connH2 = ((BlancoSfdcJdbcConnection) conn).getInternalH2Connection();
+			final ResultSet rs = connH2.getMetaData().getTables(null, null, null, null);
+
 			for (; rs.next();) {
 				tableNameList.add(rs.getString("TABLE_NAME"));
+				System.out.println("TabName: " + rs.getString("TABLE_NAME"));
 			}
 		}
 
