@@ -151,12 +151,11 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 		}
 
 		{
-			final PreparedStatement pstmt = conn.getInternalH2Connection().prepareStatement(
-					"SELECT * FROM GMETA_COLUMNS WHERE TABLE_NAME LIKE ? ORDER BY TABLE_CAT, TABLE_SCHEM, TABLE_NAME, ORDINAL_POSITION");
-			// .prepareStatement("SELECT * FROM GMETA_COLUMNS WHERE TABLE_NAME
-			// LIKE ? AND COLUMN_NAME LIKE ?");
+			final PreparedStatement pstmt = conn.getInternalH2Connection()
+					.prepareStatement("SELECT * FROM GMETA_COLUMNS WHERE TABLE_NAME LIKE ? AND COLUMN_NAME LIKE ?" //
+							+ " ORDER BY TABLE_CAT, TABLE_SCHEM, TABLE_NAME, ORDINAL_POSITION");
 			pstmt.setString(1, tableNamePattern);
-			// pstmt.setString(2, columnNamePattern);
+			pstmt.setString(2, columnNamePattern);
 			pstmt.executeQuery();
 			return pstmt.getResultSet();
 		}
