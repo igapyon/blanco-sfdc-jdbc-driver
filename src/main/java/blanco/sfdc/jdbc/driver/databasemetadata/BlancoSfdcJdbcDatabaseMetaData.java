@@ -60,14 +60,35 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 
 		{
 			int indexCol = 1;
-			String sql = "SELECT * FROM GMETA_TABLES WHERE";
+			String sql = "SELECT * FROM GMETA_TABLES";
+			boolean isFirstCondition = true;
 			if (catalog != null && catalog.trim().length() != 0) {
-				sql += " TABLE_CAT LIKE ? AND";
+				if (isFirstCondition) {
+					isFirstCondition = false;
+					sql += " WHERE";
+				} else {
+					sql += " AND";
+				}
+				sql += " TABLE_CAT LIKE ?";
 			}
 			if (schemaPattern != null && schemaPattern.trim().length() != 0) {
-				sql += " TABLE_SCHEM LIKE ? AND";
+				if (isFirstCondition) {
+					isFirstCondition = false;
+					sql += " WHERE";
+				} else {
+					sql += " AND";
+				}
+				sql += " TABLE_SCHEM LIKE ?";
 			}
-			sql += " TABLE_NAME LIKE ?"; //
+			if (tableNamePattern != null && tableNamePattern.trim().length() != 0) {
+				if (isFirstCondition) {
+					isFirstCondition = false;
+					sql += " WHERE";
+				} else {
+					sql += " AND";
+				}
+				sql += " TABLE_NAME LIKE ?";
+			}
 			sql += " ORDER BY TABLE_TYPE, TABLE_CAT, TABLE_SCHEM, TABLE_NAME";
 
 			final PreparedStatement pstmt = conn.getInternalH2Connection().prepareStatement(sql);
@@ -78,10 +99,9 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 			if (schemaPattern != null && schemaPattern.trim().length() != 0) {
 				pstmt.setString(indexCol++, schemaPattern);
 			}
-			if (tableNamePattern == null || tableNamePattern.trim().length() == 0) {
-				tableNamePattern = "%";
+			if (tableNamePattern != null && tableNamePattern.trim().length() != 0) {
+				pstmt.setString(indexCol++, tableNamePattern);
 			}
-			pstmt.setString(indexCol++, tableNamePattern);
 
 			pstmt.executeQuery();
 			return pstmt.getResultSet();
@@ -155,11 +175,12 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 
 		{
 			int indexCol = 1;
-			String sql = "SELECT * FROM GMETA_COLUMNS WHERE";//
+			String sql = "SELECT * FROM GMETA_COLUMNS";//
 			boolean isFirstCondition = true;
 			if (catalog != null && catalog.trim().length() != 0) {
 				if (isFirstCondition) {
 					isFirstCondition = false;
+					sql += " WHERE";
 				} else {
 					sql += " AND";
 				}
@@ -168,6 +189,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 			if (schemaPattern != null && schemaPattern.trim().length() != 0) {
 				if (isFirstCondition) {
 					isFirstCondition = false;
+					sql += " WHERE";
 				} else {
 					sql += " AND";
 				}
@@ -176,6 +198,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 			if (tableNamePattern != null && tableNamePattern.trim().length() != 0) {
 				if (isFirstCondition) {
 					isFirstCondition = false;
+					sql += " WHERE";
 				} else {
 					sql += " AND";
 				}
@@ -184,6 +207,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 			if (columnNamePattern != null && columnNamePattern.trim().length() != 0) {
 				if (isFirstCondition) {
 					isFirstCondition = false;
+					sql += " WHERE";
 				} else {
 					sql += " AND";
 				}
