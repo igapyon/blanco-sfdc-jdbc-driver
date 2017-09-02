@@ -29,17 +29,16 @@ public class BlancoSfdcJdbcDatabaseMetaDataTest extends TestCase {
 			{
 				final ResultSet rs = conn.getMetaData().getTables(null, null, null, null);
 				for (; rs.next();) {
-					if (false) {
-						System.err.println(rs.getString("TABLE_NAME"));
-						System.err.println("  " + rs.getString("TABLE_TYPE"));
-						System.err.println("  " + rs.getString("REMARKS"));
-						rs.getString("TABLE_CAT"); // discard
-						rs.getString("TABLE_SCHEM"); // discard
-					}
+					System.err.println(rs.getString("TABLE_NAME"));
+					System.err.println("  " + rs.getString("REMARKS"));
+					System.err.println("  " + rs.getString("TABLE_TYPE"));
+					// System.err.println(rs.getString("TABLE_CAT")); // discard
+					// System.err.println(rs.getString("TABLE_SCHEM")); //
+					// discard
 				}
 			}
 
-			{
+			if (false) {
 				final ResultSet rs = conn.getMetaData().getColumns(null, null, "Account", null);
 				for (; rs.next();) {
 					System.err.println(rs.getString("COLUMN_NAME"));

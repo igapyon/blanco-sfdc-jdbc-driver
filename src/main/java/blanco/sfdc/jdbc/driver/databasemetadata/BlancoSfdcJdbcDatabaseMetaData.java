@@ -43,10 +43,12 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 					try {
 						pstmt.setString(1, sobjectResult.getName());
 						pstmt.setString(2, sobjectResult.getLabel());
+						pstmt.execute();
 					} finally {
 						pstmt.close();
 					}
 				}
+				conn.commit();
 			} catch (ConnectionException ex) {
 				throw new SQLException(ex);
 			}
