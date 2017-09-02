@@ -28,7 +28,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 					.describeGlobal();
 			for (DescribeGlobalSObjectResult sobjectResult : descResult.getSobjects()) {
 				if (sobjectResult.isQueryable() == false) {
-					System.err.println("Skip [" + sobjectResult.getName() + "] it is not queryable.");
+					// skip because non queryable.");
 					continue;
 				}
 
