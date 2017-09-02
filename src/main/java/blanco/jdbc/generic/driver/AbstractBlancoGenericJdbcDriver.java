@@ -1,5 +1,5 @@
 /*
- *  blanco-sfdc-jdbc-driver
+ *  blanco-jdbc-driver-simple
  *  Copyright (C) 2017  Toshiki Iga
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -31,48 +31,50 @@
  *  limitations under the License.
  */
 
-package blanco.sfdc.jdbc.driver;
+package blanco.jdbc.generic.driver;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.Driver;
+import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
-import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcDriver;
+public abstract class AbstractBlancoGenericJdbcDriver implements Driver {
+	public int getMajorVersion() {
+		return 1;
+	}
 
-/**
- * mvn archetype:generate -DgroupId=blanco.sfdc.jdbc.driver
- * -DartifactId=blanco-sfdc-jdbc-driver
- * -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
- * 
- * @author Toshiki Iga
- */
-public class BlancoSfdcJdbcDriver extends AbstractBlancoGenericJdbcDriver {
-	/**
-	 * Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
-	 * 
-	 * DriverManager.getConnection("blanco:sfdc:jdbc:https://login.salesforce.com/services/Soap/u/40.0","user","pass");
-	 */
-	static {
-		final BlancoSfdcJdbcDriver driver = new BlancoSfdcJdbcDriver();
+	public int getMinorVersion() {
+		return 1;
+	}
 
-		try {
-			DriverManager.registerDriver(driver);
-		} catch (SQLException ex) {
-			ex.printStackTrace();
+	public boolean acceptsURL(final String url) throws SQLException {
+		if (url.startsWith(getDriverUrlPrefix())) {
+			return true;
 		}
+
+		return false;
 	}
 
-	@Override
-	public Connection connect(final String url, final Properties info) throws SQLException {
-		final String user = info.getProperty("user");
-		final String pass = info.getProperty("password");
+	protected abstract String getDriverUrlPrefix();
 
-		return new BlancoSfdcJdbcConnection(url, user, pass);
+	public abstract Connection connect(final String url, final Properties info) throws SQLException;
+
+	public DriverPropertyInfo[] getPropertyInfo(final String url, final Properties info) throws SQLException {
+		// TODO Auto-generated method stub
+		throw new SQLException("Not Implemented.");
+		// return null;
 	}
 
-	@Override
-	protected String getDriverUrlPrefix() {
-		return BlancoSfdcJdbcConstants.JDBC_DRIVER_URL_PREFIX;
+	public boolean jdbcCompliant() {
+		// Default as No.
+		return false;
 	}
+
+	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+		throw new SQLFeatureNotSupportedException("Not Implemented.");
+	}
+
 }
