@@ -795,6 +795,7 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 			throws SQLException {
 
 		if (BlancoGenericJdbcDatabaseMetaDataCacheUtil.isGmetaTablesCached(conn.getCacheConnection()) == false) {
+			// call abstract method
 			buildCacheOfGetTables(catalog, schemaPattern, tableNamePattern, types);
 		}
 
@@ -825,6 +826,7 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 		for (String tableName : tableNameList) {
 			if (BlancoGenericJdbcDatabaseMetaDataCacheUtil.isGmetaColumnsCached(conn.getCacheConnection(), catalog,
 					schemaPattern, tableName) == false) {
+				// call abstract method
 				buildCacheOfGetColumns(catalog, schemaPattern, tableName, columnNamePattern);
 			}
 		}
