@@ -1,10 +1,12 @@
 package blanco.sfdc.jdbc.driver.databasemetadata;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.sforce.soap.partner.DescribeGlobalResult;
+import com.sforce.soap.partner.DescribeGlobalSObjectResult;
 import com.sforce.ws.ConnectionException;
 
 import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaData;
@@ -25,15 +27,28 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 	public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types)
 			throws SQLException {
 
-		try {
-			final DescribeGlobalResult descResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
-					.describeGlobal();
+		if (BlancoGenericJdbcDatabaseMetaDataUtil.isGmetaTablesCached(conn.getInternalH2Connection()) == false) {
+			try {
+				final DescribeGlobalResult descResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
+						.describeGlobal();
+				for (DescribeGlobalSObjectResult sobjectResult : descResult.getSobjects()) {
+					if (sobjectResult.isQueryable() == false) {
+						System.err.println("Skip [" + sobjectResult.getName() + "] it is not queryable.");
+						continue;
+					}
 
-			if (BlancoGenericJdbcDatabaseMetaDataUtil.isGmetaTablesCached(conn.getInternalH2Connection()) == false) {
-				System.out.println("NEED TO READ CACHE");
+					final PreparedStatement pstmt = conn.getInternalH2Connection()
+							.prepareStatement("INSERT INTO GMETA_TABLES SET TABLE_NAME = ?, REMARKS = ?");
+					try {
+						pstmt.setString(1, sobjectResult.getName());
+						pstmt.setString(2, sobjectResult.getLabel());
+					} finally {
+						pstmt.close();
+					}
+				}
+			} catch (ConnectionException ex) {
+				throw new SQLException(ex);
 			}
-		} catch (ConnectionException ex) {
-			throw new SQLException(ex);
 		}
 
 		@SuppressWarnings("resource")
