@@ -34,6 +34,7 @@
 package blanco.sfdc.jdbc.driver;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -73,6 +74,12 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		return pconn.getPartnerConnection().getQueryOptions().getBatchSize();
 	}
 
+	protected static void createTableTrial(final ResultSetMetaData rsmd) throws SQLException {
+		for (int index = 0; index < rsmd.getColumnCount(); index++) {
+// TODO
+		}
+	}
+
 	@Override
 	public boolean execute(String sql) throws SQLException {
 		rs = new BlancoGenericJdbcResultSet(this);
@@ -89,6 +96,9 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 
 				final BlancoGenericJdbcResultSetMetaData rsmd = getResultSetMetaData((BlancoSfdcJdbcConnection) conn,
 						sObjs[0]);
+
+				// create table
+				createTableTrial(rsmd);
 
 				for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
 					final BlancoGenericJdbcResultSetRow row = getRowObj(sObjs[indexRow], rsmd);
