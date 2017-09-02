@@ -36,6 +36,12 @@ public class BlancoSfdcJdbcStatementTest extends TestCase {
 
 			// final String sql = "SELECT Id, Name, LastModifiedDate FROM
 			// Account";
+
+			// final String sql = "select ApiVersion, Body, BodyCrc,
+			// CreatedById, CreatedDate, Id, IsValid, LastModifiedById,
+			// LastModifiedDate, LengthWithoutComments, Name, NamespacePrefix,
+			// Status, SystemModstamp from ApexClass";
+
 			final String sql = "SELECT Id, Name, LastModifiedDate FROM Contact";
 			final ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
