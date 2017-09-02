@@ -39,6 +39,7 @@ import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
 import java.sql.NClob;
 import java.sql.PreparedStatement;
 import java.sql.SQLClientInfoException;
@@ -59,6 +60,21 @@ import java.util.concurrent.Executor;
  */
 public abstract class AbstractBlancoGenericJdbcConnection implements Connection {
 	protected boolean isClosed = false;
+
+	protected Connection connH2 = null;
+
+	public AbstractBlancoGenericJdbcConnection() throws SQLException {
+		try {
+			Class.forName("org.h2.Driver");
+			connH2 = DriverManager.getConnection("jdbc:h2:mem:sfdcjdbc");
+
+			// Create system tables for SFDC JDBC Driver.
+			// databasemetadata.getTables();
+			connH2.createStatement().execute(BlancoGenericJdbcConstants.DATABASEMETADATA_TABLES_DDL_H2);
+		} catch (Exception ex) {
+			throw new SQLException(ex);
+		}
+	}
 
 	public <T> T unwrap(Class<T> iface) throws SQLException {
 		throw new SQLException("Not Implemented.");
@@ -99,6 +115,7 @@ public abstract class AbstractBlancoGenericJdbcConnection implements Connection 
 
 	public void close() throws SQLException {
 		isClosed = true;
+		connH2.close();
 	}
 
 	public boolean isClosed() throws SQLException {
