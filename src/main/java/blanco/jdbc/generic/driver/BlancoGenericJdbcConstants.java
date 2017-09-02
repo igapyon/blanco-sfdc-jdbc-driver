@@ -37,4 +37,9 @@ public class BlancoGenericJdbcConstants {
 
 	public static final String MESSAGE_FORWARD_ONLY_SUPPORT = "This JDBC Driver support ResultSet.TYPE_FORWARD_ONLY only.";
 
+	/**
+	 * Generic Not Supported.
+	 */
+	public static final String MESSAGE_NOT_SUPPORTED = "Not Supported.";
+
 }
