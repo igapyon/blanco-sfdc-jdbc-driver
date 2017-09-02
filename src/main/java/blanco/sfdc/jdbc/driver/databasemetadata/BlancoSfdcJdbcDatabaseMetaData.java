@@ -32,7 +32,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 	public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types)
 			throws SQLException {
 
-		if (BlancoGenericJdbcDatabaseMetaDataUtil.isGmetaTablesCached(conn.getInternalH2Connection()) == false) {
+		if (BlancoGenericJdbcDatabaseMetaDataUtil.isGmetaTablesCached(conn.getCacheConnection()) == false) {
 			try {
 				final DescribeGlobalResult descResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
 						.describeGlobal();
@@ -42,7 +42,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 						continue;
 					}
 
-					final PreparedStatement pstmt = conn.getInternalH2Connection()
+					final PreparedStatement pstmt = conn.getCacheConnection()
 							.prepareStatement("INSERT INTO GMETA_TABLES SET TABLE_NAME = ?, REMARKS = ?");
 					try {
 						pstmt.setString(1, sobjectResult.getName());
@@ -58,7 +58,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 			}
 		}
 
-		return BlancoGenericJdbcDatabaseMetaDataUtil.getTablesFromCache(conn.getInternalH2Connection(), catalog,
+		return BlancoGenericJdbcDatabaseMetaDataUtil.getTablesFromCache(conn.getCacheConnection(), catalog,
 				schemaPattern, tableNamePattern, types);
 	}
 
@@ -79,7 +79,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 		}
 
 		for (String tableName : tableNameList) {
-			if (BlancoGenericJdbcDatabaseMetaDataUtil.isGmetaColumnsCached(conn.getInternalH2Connection(), catalog,
+			if (BlancoGenericJdbcDatabaseMetaDataUtil.isGmetaColumnsCached(conn.getCacheConnection(), catalog,
 					schemaPattern, tableName) == false) {
 				try {
 					final DescribeSObjectResult sobjResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
@@ -98,7 +98,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 							dataType = (Integer.valueOf(java.sql.Types.TIMESTAMP));
 						}
 
-						final PreparedStatement pstmt = conn.getInternalH2Connection().prepareStatement(
+						final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement(
 								"INSERT INTO GMETA_COLUMNS SET TABLE_NAME = ?, COLUMN_NAME = ?, DATA_TYPE = ?, TYPE_NAME = ?, COLUMN_SIZE = ?, DECIMAL_DIGITS = ?, NULLABLE = ?, REMARKS = ?, CHAR_OCTET_LENGTH = ?, ORDINAL_POSITION = ?");
 						try {
 							pstmt.setString(1, tableName);
@@ -127,7 +127,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends BlancoGenericJdbcDatabaseMet
 			}
 		}
 
-		return BlancoGenericJdbcDatabaseMetaDataUtil.getColumnsFromCache(conn.getInternalH2Connection(), catalog,
+		return BlancoGenericJdbcDatabaseMetaDataUtil.getColumnsFromCache(conn.getCacheConnection(), catalog,
 				schemaPattern, tableNamePattern, columnNamePattern);
 	}
 

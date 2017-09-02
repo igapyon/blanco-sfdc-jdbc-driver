@@ -63,23 +63,23 @@ import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMeta
 public abstract class AbstractBlancoGenericJdbcConnection implements Connection {
 	protected boolean isClosed = false;
 
-	private Connection connH2 = null;
+	private Connection connCache = null;
 
 	public AbstractBlancoGenericJdbcConnection() throws SQLException {
 		try {
 			Class.forName("org.h2.Driver");
-			connH2 = DriverManager.getConnection("jdbc:h2:mem:sfdcjdbc");
+			connCache = DriverManager.getConnection("jdbc:h2:mem:sfdcjdbc");
 
 			// Create system tables for SFDC JDBC Driver.
 			// databasemetadata.getTables();
-			BlancoGenericJdbcDatabaseMetaDataUtil.initGmetaTables(connH2);
+			BlancoGenericJdbcDatabaseMetaDataUtil.initGmetaTables(connCache);
 		} catch (Exception ex) {
 			throw new SQLException(ex);
 		}
 	}
 
-	public Connection getInternalH2Connection() {
-		return connH2;
+	public Connection getCacheConnection() {
+		return connCache;
 	}
 
 	public <T> T unwrap(Class<T> iface) throws SQLException {
@@ -121,7 +121,7 @@ public abstract class AbstractBlancoGenericJdbcConnection implements Connection 
 
 	public void close() throws SQLException {
 		isClosed = true;
-		connH2.close();
+		connCache.close();
 	}
 
 	public boolean isClosed() throws SQLException {
