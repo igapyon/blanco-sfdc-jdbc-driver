@@ -30,7 +30,13 @@ public class BlancoSfdcJdbcStatementTest extends TestCase {
 			final Connection conn = DriverManager.getConnection("blanco:sfdc:jdbc:" + url, user, pass);
 
 			final Statement stmt = conn.createStatement();
-			final String sql = "SELECT Id, Name, LastModifiedDate FROM Account";
+
+			stmt.setFetchSize(200);
+			stmt.getFetchSize();
+
+			// final String sql = "SELECT Id, Name, LastModifiedDate FROM
+			// Account";
+			final String sql = "SELECT Id, Name, LastModifiedDate FROM Contact";
 			final ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				final String id = rs.getString("id");
@@ -46,7 +52,9 @@ public class BlancoSfdcJdbcStatementTest extends TestCase {
 			conn.close();
 
 		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
 			ex.printStackTrace();
+			fail();
 		}
 	}
 

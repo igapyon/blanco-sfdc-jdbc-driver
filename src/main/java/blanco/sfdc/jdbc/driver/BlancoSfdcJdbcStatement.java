@@ -62,6 +62,18 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 	}
 
 	@Override
+	public void setFetchSize(int rows) throws SQLException {
+		final BlancoSfdcJdbcConnection pconn = ((BlancoSfdcJdbcConnection) conn);
+		pconn.getPartnerConnection().setQueryOptions(rows);
+	}
+
+	@Override
+	public int getFetchSize() throws SQLException {
+		final BlancoSfdcJdbcConnection pconn = ((BlancoSfdcJdbcConnection) conn);
+		return pconn.getPartnerConnection().getQueryOptions().getBatchSize();
+	}
+
+	@Override
 	public boolean execute(String sql) throws SQLException {
 		rs = new BlancoGenericJdbcResultSet(this);
 
@@ -88,6 +100,7 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 				// TODO This should be more better.
 				qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
 						.queryMore(qryResult.getQueryLocator());
+				System.out.println("QueryMore!!!");
 			}
 		} catch (ConnectionException ex) {
 			throw new SQLException(ex);
