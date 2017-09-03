@@ -112,6 +112,7 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		}
 
 		ddl += ")";
+		connCache.createStatement().execute(ddl);
 		System.err.println("ddl=" + ddl);
 	}
 
