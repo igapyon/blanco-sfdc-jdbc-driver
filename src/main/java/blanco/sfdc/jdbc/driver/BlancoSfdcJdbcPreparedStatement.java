@@ -41,14 +41,11 @@ import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 
 import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcPreparedStatement;
-import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSet;
 import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaDataCacheUtil;
 
 public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPreparedStatement {
 
 	protected String sql = null;
-
-	protected BlancoGenericJdbcResultSet rs = null;
 
 	public BlancoSfdcJdbcPreparedStatement(final BlancoSfdcJdbcConnection conn, final String sql) {
 		super(conn);
