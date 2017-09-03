@@ -60,8 +60,8 @@ public class BlancoGenericJdbcResultSetMetaData implements ResultSetMetaData {
 
 	public int getColumnCount() throws SQLException {
 		final ResultSet columnsRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
-				((BlancoSfdcJdbcConnection) stmt.getConnection()), "GMETA_COLUMNS_" + globalUniqueKey, null, null, null,
-				null);
+				((BlancoSfdcJdbcConnection) stmt.getConnection()).getCacheConnection(),
+				"GMETA_COLUMNS_" + globalUniqueKey, null, null, null, null);
 		int count = 0;
 		for (; columnsRs.next();) {
 			count++;
@@ -72,8 +72,8 @@ public class BlancoGenericJdbcResultSetMetaData implements ResultSetMetaData {
 
 	protected ResultSet nextResultSetTo(int column) throws SQLException {
 		final ResultSet columnsRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
-				((BlancoSfdcJdbcConnection) stmt.getConnection()), "GMETA_COLUMNS_" + globalUniqueKey, null, null, null,
-				null);
+				((BlancoSfdcJdbcConnection) stmt.getConnection()).getCacheConnection(),
+				"GMETA_COLUMNS_" + globalUniqueKey, null, null, null, null);
 		for (; column > 0; column--) {
 			columnsRs.next();
 		}
