@@ -60,7 +60,9 @@ public abstract class AbstractBlancoGenericJdbcPreparedStatement extends Abstrac
 		super(conn);
 	}
 
-	public abstract boolean execute(final String sql) throws SQLException;
+	public boolean execute(String sql) throws SQLException {
+		return firstBlock(sql, "GMETA_COLUMNS_" + timeMillis);
+	}
 
 	public ResultSet getResultSet() throws SQLException {
 		return new BlancoGenericJdbcResultSet(this, timeMillis);
