@@ -143,9 +143,6 @@ public class BlancoSfdcJdbcFillCacheCommon {
 					} else if (indexColumn == 1) {
 						rowIdString = obj.getValue().toString();
 					} else {
-						if (indexColumn > 2) {
-							sql += ",";
-						}
 						final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
 								connCache, "GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName,
 								obj.getName().getLocalPart());
@@ -153,6 +150,10 @@ public class BlancoSfdcJdbcFillCacheCommon {
 
 						if (obj.getValue() != null) {
 							// null のときはなにもしない。
+
+							if (indexColumn != 2) {
+								sql += ",";
+							}
 
 							sql += (metadataRs.getString("COLUMN_NAME") + " = ?");
 						}
@@ -185,9 +186,6 @@ public class BlancoSfdcJdbcFillCacheCommon {
 					} else if (indexColumn == 1) {
 						rowIdString = obj.getValue().toString();
 					} else {
-						if (indexColumn > 2) {
-							sql += ",";
-						}
 						final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
 								connCache, "GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName,
 								obj.getName().getLocalPart());
@@ -213,6 +211,10 @@ public class BlancoSfdcJdbcFillCacheCommon {
 							case java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
 								pstmt.setDate(pstmtIndex++, new java.sql.Date(soqlDateToDate(value).getTime()));
 								break;
+							default:
+								pstmt.setString(pstmtIndex++, value);
+								System.err.println("Non supported type: " + metadataRs.getString("TYPE_NAME"));
+								break;
 							}
 						}
 
@@ -236,12 +238,26 @@ public class BlancoSfdcJdbcFillCacheCommon {
 
 		String workDateString = soqlDateString.replace("T", " ");
 		workDateString = workDateString.replace("Z", "");
-		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
 		// FIXME TODO DO NOT USE JST.
 		final TimeZone jst = TimeZone.getTimeZone("JST");
 
 		try {
+			final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			java.util.Date result = sdf.parse(workDateString);
+
+			final Calendar calForGmt = Calendar.getInstance();
+			calForGmt.setTime(result);
+			calForGmt.add(Calendar.MILLISECOND, jst.getOffset(result.getTime()));
+			result = calForGmt.getTime();
+
+			return result;
+		} catch (ParseException e) {
+			// ignore
+		}
+
+		try {
+			final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 			java.util.Date result = sdf.parse(workDateString);
 
 			final Calendar calForGmt = Calendar.getInstance();
