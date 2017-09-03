@@ -9,12 +9,10 @@ public interface BlancoGenericJdbcBlockReadStatement extends Statement {
 	/**
 	 * 
 	 * @param sql
-	 * @param cacheTableName
-	 *            "GMETA_COLUMNS_" + timeMillis
 	 * @return
 	 * @throws SQLException
 	 */
-	boolean firstBlock(final String sql, final String cacheTableName) throws SQLException;
+	boolean firstBlock(final String sql) throws SQLException;
 
 	boolean nextBlock() throws SQLException;
 }

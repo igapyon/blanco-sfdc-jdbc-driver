@@ -61,7 +61,7 @@ public abstract class AbstractBlancoGenericJdbcPreparedStatement extends Abstrac
 	}
 
 	public boolean execute(String sql) throws SQLException {
-		return firstBlock(sql, "GMETA_COLUMNS_" + getGlobalUniqueKey());
+		return firstBlock(sql);
 	}
 
 	public ResultSet getResultSet() throws SQLException {

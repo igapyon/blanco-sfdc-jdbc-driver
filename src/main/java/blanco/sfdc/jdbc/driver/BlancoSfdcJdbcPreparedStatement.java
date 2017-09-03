@@ -73,7 +73,6 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 	}
 
 	protected QueryResult qryResult = null;
-	protected String cacheTableName = null;
 
 	public boolean hasNextBlock() throws SQLException {
 		if (qryResult == null) {
@@ -83,8 +82,7 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 		return (qryResult.isDone() == false);
 	}
 
-	public boolean firstBlock(String sql, String cacheTableName) throws SQLException {
-		this.cacheTableName = cacheTableName;
+	public boolean firstBlock(String sql) throws SQLException {
 		try {
 			qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection().query(sql);
 			final SObject[] sObjs = qryResult.getRecords();
@@ -96,8 +94,8 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 					getGlobalUniqueKey(), sObjs[0]);
 
 			// fill table
-			final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData
-					.getColumnsFromCache(conn.getCacheConnection(), cacheTableName, null, null, null, null);
+			final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
+					conn.getCacheConnection(), "GMETA_COLUMNS_" + getGlobalUniqueKey(), null, null, null, null);
 
 			BlancoGenericJdbcCacheUtilResultSet.createCacheTableOfResultSet(conn.getCacheConnection(),
 					getGlobalUniqueKey(), metadataRs);
