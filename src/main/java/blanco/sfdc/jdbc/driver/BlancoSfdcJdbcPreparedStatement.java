@@ -43,6 +43,7 @@ import com.sforce.ws.ConnectionException;
 import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcPreparedStatement;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSet;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetRow;
+import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaDataCacheUtil;
 
 public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPreparedStatement {
 	/**
@@ -78,11 +79,29 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 		try {
 			// TODO そもそもこの処理はResultSet側のフェッチ境界の考慮が必要だが、難易度が高いので一旦保留。
 			// TODO ただし、これを解決しないと、巨大な検索結果の際に全件を持ってきてしまうのでまずい実装だと思う。
+			boolean isFirstBlockOfQuery = true;
 			QueryResult qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection().query(sql);
 			for (;;) {
 				final SObject[] sObjs = qryResult.getRecords();
 				if (sObjs.length == 0) {
 					break;
+				}
+
+				if (isFirstBlockOfQuery) {
+					BlancoSfdcJdbcStatement.buildResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis,
+							sObjs[0]);
+					isFirstBlockOfQuery = false;
+				}
+
+				{
+					// create table
+
+					final ResultSet metadataRs = BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(
+							((BlancoSfdcJdbcConnection) conn).getCacheConnection(), "GMETA_COLUMNS_" + timeMillis, null,
+							null, null, null);
+
+					BlancoSfdcJdbcStatement.createCacheBlock(((BlancoSfdcJdbcConnection) conn).getCacheConnection(),
+							metadataRs, timeMillis, sObjs);
 				}
 
 				BlancoSfdcJdbcStatement.buildResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis, sObjs[0]);
@@ -108,6 +127,8 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 
 	@Override
 	public ResultSet getResultSet() throws SQLException {
+		// FIXME:
+		rs.trialReadResultSetFromCache();
 		return rs;
 	}
 
