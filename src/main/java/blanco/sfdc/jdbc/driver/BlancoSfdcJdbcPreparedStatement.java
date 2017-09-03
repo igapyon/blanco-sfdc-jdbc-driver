@@ -92,7 +92,7 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 				return false;
 			}
 
-			BlancoSfdcJdbcStatement.fillCacheTableOfResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis,
+			BlancoSfdcJdbcFillCacheUtil.fillCacheTableOfResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis,
 					sObjs[0]);
 
 			// fill table

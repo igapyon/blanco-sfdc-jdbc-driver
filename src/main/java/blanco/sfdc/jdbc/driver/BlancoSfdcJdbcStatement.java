@@ -210,63 +210,6 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		}
 	}
 
-	public static void fillCacheTableOfResultSetMetaData(final BlancoSfdcJdbcConnection conn, final long timemillisecs,
-			final SObject resultSetValue) throws SQLException {
-
-		{
-			String ddl = BlancoGenericJdbcCacheUtilDatabaseMetaData.DATABASEMETADATA_COLUMNS_DDL_H2
-					.replace("GMETA_COLUMNS", "GMETA_COLUMNS_" + timemillisecs);
-			conn.getCacheConnection().createStatement().execute(ddl);
-		}
-
-		final XmlObject xmlSObject = (XmlObject) resultSetValue;
-		final Iterator<XmlObject> ite = xmlSObject.getChildren();
-		final XmlObject objObjectName = (XmlObject) ite.next();
-
-		// First one should be : type, value=Account, children=[]}
-
-		if (objObjectName.getName().getLocalPart().equals("type") == false) {
-			System.err.println("FATAL: if(objObjectName.getName().getLocalPart().equals(type)==false){");
-		}
-		final String sObjectName = objObjectName.getValue().toString();
-
-		// TODO これを、おぶじぇくとのIDは不要なので読み飛ばし。
-		final XmlObject sObjectId = (XmlObject) ite.next();
-
-		int ordinalIndex = 1;
-		for (; ite.hasNext(); ordinalIndex++) {
-			final XmlObject objChild = (XmlObject) ite.next();
-			final ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, sObjectName,
-					objChild.getName().getLocalPart());
-			try {
-				System.out.println("child, Name:" + objChild.getName().getLocalPart());
-				System.out.println("child, Value:" + objChild.getValue());
-				rsmdRs.next();
-
-				final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement("INSERT INTO GMETA_COLUMNS_"
-						+ timemillisecs
-						+ " SET TABLE_NAME = ?, COLUMN_NAME = ?, DATA_TYPE = ?, TYPE_NAME = ?, COLUMN_SIZE = ?, DECIMAL_DIGITS = ?, NULLABLE = ?, REMARKS = ?, CHAR_OCTET_LENGTH = ?, ORDINAL_POSITION = ?");
-				try {
-					pstmt.setString(1, rsmdRs.getString("TABLE_NAME"));
-					pstmt.setString(2, rsmdRs.getString("COLUMN_NAME"));
-					pstmt.setInt(3, rsmdRs.getInt("DATA_TYPE"));
-					pstmt.setString(4, rsmdRs.getString("TYPE_NAME"));
-					pstmt.setInt(5, rsmdRs.getInt("COLUMN_SIZE"));
-					pstmt.setInt(6, rsmdRs.getInt("DECIMAL_DIGITS"));
-					pstmt.setInt(7, rsmdRs.getInt("NULLABLE"));
-					pstmt.setString(8, rsmdRs.getString("REMARKS"));
-					pstmt.setInt(9, rsmdRs.getInt("CHAR_OCTET_LENGTH"));
-					pstmt.setInt(10, ordinalIndex);
-					pstmt.execute();
-				} finally {
-					pstmt.close();
-				}
-			} finally {
-				rsmdRs.close();
-			}
-		}
-	}
-
 	QueryResult qryResult = null;
 	String cacheTableName = null;
 
@@ -287,7 +230,8 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 				return false;
 			}
 
-			fillCacheTableOfResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis, sObjs[0]);
+			BlancoSfdcJdbcFillCacheUtil.fillCacheTableOfResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis,
+					sObjs[0]);
 
 			// fill table
 			final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData
