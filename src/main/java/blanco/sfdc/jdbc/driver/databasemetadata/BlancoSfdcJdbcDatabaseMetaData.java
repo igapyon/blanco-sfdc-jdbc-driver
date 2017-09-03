@@ -20,7 +20,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 	}
 
 	@Override
-	protected void buildCacheOfGetTables(String catalog, String schemaPattern, String tableNamePattern, String[] types)
+	protected void fillCacheTableOfGetTables(String catalog, String schemaPattern, String tableNamePattern, String[] types)
 			throws SQLException {
 		try {
 			// build cache of table info
@@ -47,7 +47,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 		}
 	}
 
-	public void buildCacheOfGetColumns(String catalog, String schema, String tableName, String columnNamePattern)
+	public void fillCacheTableOfGetColumns(String catalog, String schema, String tableName, String columnNamePattern)
 			throws SQLException {
 		try {
 			// build cache of columns

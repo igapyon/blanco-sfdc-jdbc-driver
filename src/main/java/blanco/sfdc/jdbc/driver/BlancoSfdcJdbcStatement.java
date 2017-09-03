@@ -244,7 +244,7 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		}
 	}
 
-	public static void buildResultSetMetaData(final BlancoSfdcJdbcConnection conn, final long timemillisecs,
+	public static void fillCacheTableOfResultSetMetaData(final BlancoSfdcJdbcConnection conn, final long timemillisecs,
 			final SObject resultSetValue) throws SQLException {
 
 		{
@@ -321,7 +321,7 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 				return false;
 			}
 
-			buildResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis, sObjs[0]);
+			fillCacheTableOfResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis, sObjs[0]);
 
 			// fill table
 			final ResultSet metadataRs = BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(
