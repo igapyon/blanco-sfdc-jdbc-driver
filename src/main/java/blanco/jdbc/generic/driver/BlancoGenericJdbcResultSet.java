@@ -80,6 +80,8 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	public void close() throws SQLException {
 		isClosed = true;
 		rowIndex = -1;
+
+		trialReadResultSet.close();
 	}
 
 	public void trialReadResultSetFromCache() throws SQLException {
@@ -95,91 +97,38 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 
 	public String getString(final int columnIndex) throws SQLException {
 		return trialReadResultSet.getString(columnIndex);
-		// final BlancoGenericJdbcResultSetColumn column =
-		// getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
-		// return column.getColumnValue();
 	}
 
 	public String getString(final String columnLabel) throws SQLException {
 		return trialReadResultSet.getString(columnLabel);
-
-		// for (int index = 0; index <
-		// getRowList().get(rowIndex).getColumnList().size(); index++) {
-		// final BlancoGenericJdbcResultSetColumn item =
-		// getRowList().get(rowIndex).getColumnList().get(index);
-		// if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
-		// return item.getColumnValue();
-		// }
-		// }
-
-//		throw new SQLException("No such column [" + columnLabel + "]");
 	}
 
 	public Date getDate(int columnIndex) throws SQLException {
-		final BlancoGenericJdbcResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
-		if (column.getColumnValueByDate() == null) {
-			return null;
-		} else {
-			return new java.sql.Date(column.getColumnValueByDate().getTime());
-		}
+		return trialReadResultSet.getDate(columnIndex);
 	}
 
 	public Date getDate(String columnLabel) throws SQLException {
-		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
-			final BlancoGenericJdbcResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
-			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
-				if (item.getColumnValueByDate() == null) {
-					return null;
-				} else {
-					return new java.sql.Date(item.getColumnValueByDate().getTime());
-				}
-			}
-		}
-
-		throw new SQLException("No such column [" + columnLabel + "]");
+		return trialReadResultSet.getDate(columnLabel);
 	}
 
 	public Timestamp getTimestamp(int columnIndex) throws SQLException {
-		final BlancoGenericJdbcResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
-		if (column.getColumnValueByDate() == null) {
-			return null;
-		} else {
-			return new java.sql.Timestamp(column.getColumnValueByDate().getTime());
-		}
+		return trialReadResultSet.getTimestamp(columnIndex);
 	}
 
 	public Timestamp getTimestamp(String columnLabel) throws SQLException {
-		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
-			final BlancoGenericJdbcResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
-			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
-				if (item.getColumnValueByDate() == null) {
-					return null;
-				} else {
-					return new java.sql.Timestamp(item.getColumnValueByDate().getTime());
-				}
-			}
-		}
-
-		throw new SQLException("No such column [" + columnLabel + "]");
+		return trialReadResultSet.getTimestamp(columnLabel);
 	}
 
 	public int getInt(int columnIndex) throws SQLException {
-		final BlancoGenericJdbcResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
-		return column.getColumnValueByInteger();
+		return trialReadResultSet.getInt(columnIndex);
 	}
 
 	public int getInt(String columnLabel) throws SQLException {
-		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
-			final BlancoGenericJdbcResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
-			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
-				return item.getColumnValueByInteger();
-			}
-		}
-
-		throw new SQLException("No such column [" + columnLabel + "]");
+		return trialReadResultSet.getInt(columnLabel);
 	}
 
 	public ResultSetMetaData getMetaData() throws SQLException {
+		// TODO 内部で持っている metadata を返却可能なはず。
 		throw new SQLException("Not Implemented.");
 	}
 
@@ -192,15 +141,15 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	}
 
 	public boolean wasNull() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return trialReadResultSet.wasNull();
 	}
 
 	public boolean getBoolean(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return trialReadResultSet.getBoolean(columnIndex);
 	}
 
 	public byte getByte(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return trialReadResultSet.getByte(columnIndex);
 	}
 
 	public short getShort(int columnIndex) throws SQLException {
