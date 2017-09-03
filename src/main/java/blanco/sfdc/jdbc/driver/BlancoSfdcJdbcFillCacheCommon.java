@@ -50,10 +50,18 @@ import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcConnection;
 import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilDatabaseMetaData;
 
 public class BlancoSfdcJdbcFillCacheCommon {
+	/**
+	 * Investigate result of query and fill ResultSetMetaData
+	 * 
+	 * @param conn
+	 * @param globalUniqueKey
+	 * @param responseOfPartner
+	 * @throws SQLException
+	 */
 	public static void fillCacheTableOfResultSetMetaData(final AbstractBlancoGenericJdbcConnection conn,
-			final String globalUniqueKey, final SObject resultSetValue) throws SQLException {
+			final String globalUniqueKey, final SObject responseOfPartner) throws SQLException {
 
-		final XmlObject xmlSObject = (XmlObject) resultSetValue;
+		final XmlObject xmlSObject = (XmlObject) responseOfPartner;
 		final Iterator<XmlObject> ite = xmlSObject.getChildren();
 		final XmlObject objObjectName = (XmlObject) ite.next();
 
@@ -67,8 +75,7 @@ public class BlancoSfdcJdbcFillCacheCommon {
 		// TODO オブジェクトIDですが、これは不要. 読み飛ばし。
 		final XmlObject sObjectId = (XmlObject) ite.next();
 
-		int ordinalIndex = 1;
-		for (; ite.hasNext(); ordinalIndex++) {
+		for (int ordinalIndex = 1; ite.hasNext(); ordinalIndex++) {
 			final XmlObject objChild = (XmlObject) ite.next();
 			final ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, sObjectName,
 					objChild.getName().getLocalPart());
@@ -102,6 +109,14 @@ public class BlancoSfdcJdbcFillCacheCommon {
 		}
 	}
 
+	/**
+	 * Fill ResultSet
+	 * 
+	 * @param connCache
+	 * @param globalUniqueKey
+	 * @param sObjs
+	 * @throws SQLException
+	 */
 	public static void fillCacheTableOfResultSet(final Connection connCache, final String globalUniqueKey,
 			final SObject[] sObjs) throws SQLException {
 		for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
