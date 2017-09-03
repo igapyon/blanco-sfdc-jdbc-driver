@@ -38,20 +38,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class BlancoGenericJdbcCacheUtilResultSet {
-	public static void createCacheTableOfResultSet(final Connection connCache, final String globalUniqueKey,
-			final ResultSet metadataRsCreateTable) throws SQLException {
+	public static void createCacheTableOfResultSet(final Connection connCache, final String globalUniqueKey)
+			throws SQLException {
+		final ResultSet columnsRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(connCache,
+				"GMETA_COLUMNS_" + globalUniqueKey, null, null, null, null);
+
 		String ddl = "CREATE TABLE IF NOT EXISTS GMETA_RS_" + globalUniqueKey + " (";
 
 		boolean isFirst = true;
-		for (; metadataRsCreateTable.next();) {
+		for (; columnsRs.next();) {
 			if (isFirst) {
 				isFirst = false;
 			} else {
 				ddl += ",";
 			}
-			ddl += metadataRsCreateTable.getString("COLUMN_NAME");
+			ddl += columnsRs.getString("COLUMN_NAME");
 			ddl += " ";
-			switch (metadataRsCreateTable.getInt("DATA_TYPE")) {
+			switch (columnsRs.getInt("DATA_TYPE")) {
 			case java.sql.Types.VARCHAR:
 				ddl += "VARCHAR";
 				break;
@@ -65,13 +68,13 @@ public class BlancoGenericJdbcCacheUtilResultSet {
 				ddl += "TIMESTAMP";
 				break;
 			default:
-				throw new SQLException("Unsupported type:" + metadataRsCreateTable.getInt("DATA_TYPE") + " ("
-						+ metadataRsCreateTable.getString("TYPE_NAME") + ")");
+				throw new SQLException("Unsupported type:" + columnsRs.getInt("DATA_TYPE") + " ("
+						+ columnsRs.getString("TYPE_NAME") + ")");
 			}
 		}
 
 		ddl += ")";
 		connCache.createStatement().execute(ddl);
-		System.err.println("[DDL]" + ddl);
+		// System.err.println("[DDL]" + ddl);
 	}
 }

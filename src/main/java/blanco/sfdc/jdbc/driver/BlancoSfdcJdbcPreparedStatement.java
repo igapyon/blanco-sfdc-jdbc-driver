@@ -41,7 +41,6 @@ import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 
 import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcPreparedStatement;
-import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilDatabaseMetaData;
 import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilResultSet;
 
 public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPreparedStatement {
@@ -82,31 +81,31 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 		return (qryResult.isDone() == false);
 	}
 
-	public boolean firstBlock(String sql) throws SQLException {
+	public boolean firstBlock(final String sql) throws SQLException {
 		try {
+			// Do SOQL Query
 			qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection().query(sql);
-			final SObject[] sObjs = qryResult.getRecords();
-			if (sObjs.length == 0) {
-				return false;
-			}
-
-			BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSetMetaData((BlancoSfdcJdbcConnection) conn,
-					getGlobalUniqueKey(), sObjs[0]);
-
-			// fill table
-			final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
-					conn.getCacheConnection(), "GMETA_COLUMNS_" + getGlobalUniqueKey(), null, null, null, null);
-
-			BlancoGenericJdbcCacheUtilResultSet.createCacheTableOfResultSet(conn.getCacheConnection(),
-					getGlobalUniqueKey(), metadataRs);
-
-			BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSet(conn.getCacheConnection(), getGlobalUniqueKey(),
-					sObjs);
-
-			return true;
 		} catch (ConnectionException ex) {
 			throw new SQLException(ex);
 		}
+
+		final SObject[] sObjs = qryResult.getRecords();
+		if (sObjs.length == 0) {
+			return false;
+		}
+
+		// Fill Cache ResultSetMetaData
+		BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSetMetaData((BlancoSfdcJdbcConnection) conn,
+				getGlobalUniqueKey(), sObjs[0]);
+
+		// Create Cache ResultSet
+		BlancoGenericJdbcCacheUtilResultSet.createCacheTableOfResultSet(conn.getCacheConnection(),
+				getGlobalUniqueKey());
+
+		// Fill Cache ResultSet
+		BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSet(conn.getCacheConnection(), getGlobalUniqueKey(), sObjs);
+
+		return true;
 	}
 
 	public boolean nextBlock() throws SQLException {
