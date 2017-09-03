@@ -226,7 +226,7 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 
 	@Override
 	public boolean execute(String sql) throws SQLException {
-		rs = new BlancoGenericJdbcResultSet(this);
+		rs = new BlancoGenericJdbcResultSet(this, timeMillis);
 
 		try {
 			// TODO そもそもこの処理はResultSet側のフェッチ境界の考慮が必要だが、難易度が高いので一旦保留。

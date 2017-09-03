@@ -61,13 +61,16 @@ import java.util.Map;
 public class BlancoGenericJdbcResultSet implements ResultSet {
 	private Statement stmt = null;
 
+	protected long timeMillis = -1;
+
 	private boolean isClosed = false;
 
 	protected List<BlancoGenericJdbcResultSetRow> rowList = new ArrayList<BlancoGenericJdbcResultSetRow>();
 	protected int rowIndex = -1;
 
-	public BlancoGenericJdbcResultSet(final Statement stmt) {
+	public BlancoGenericJdbcResultSet(final Statement stmt, final long timeMillis) {
 		this.stmt = stmt;
+		this.timeMillis = timeMillis;
 	}
 
 	public void close() throws SQLException {
