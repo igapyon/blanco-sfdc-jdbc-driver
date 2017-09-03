@@ -61,11 +61,11 @@ public abstract class AbstractBlancoGenericJdbcPreparedStatement extends Abstrac
 	}
 
 	public boolean execute(String sql) throws SQLException {
-		return firstBlock(sql, "GMETA_COLUMNS_" + timeMillis);
+		return firstBlock(sql, "GMETA_COLUMNS_" + getGlobalUniqueKey());
 	}
 
 	public ResultSet getResultSet() throws SQLException {
-		return new BlancoGenericJdbcResultSet(this, timeMillis);
+		return new BlancoGenericJdbcResultSet(this, getGlobalUniqueKey());
 	}
 
 	public abstract ResultSet executeQuery() throws SQLException;

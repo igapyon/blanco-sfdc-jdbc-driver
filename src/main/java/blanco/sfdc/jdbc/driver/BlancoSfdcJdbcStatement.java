@@ -82,17 +82,18 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 				return false;
 			}
 
-			BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis,
-					sObjs[0]);
+			BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSetMetaData((BlancoSfdcJdbcConnection) conn,
+					getGlobalUniqueKey(), sObjs[0]);
 
 			// fill table
 			final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData
 					.getColumnsFromCache(conn.getCacheConnection(), cacheTableName, null, null, null, null);
 
-			BlancoGenericJdbcCacheUtilResultSet.createCacheTableOfResultSet(conn.getCacheConnection(), timeMillis,
-					metadataRs);
+			BlancoGenericJdbcCacheUtilResultSet.createCacheTableOfResultSet(conn.getCacheConnection(),
+					getGlobalUniqueKey(), metadataRs);
 
-			BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSet(conn.getCacheConnection(), timeMillis, sObjs);
+			BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSet(conn.getCacheConnection(), getGlobalUniqueKey(),
+					sObjs);
 
 			return true;
 		} catch (ConnectionException ex) {
@@ -106,7 +107,7 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 			return false;
 		}
 
-		BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSet(conn.getCacheConnection(), timeMillis, sObjs);
+		BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSet(conn.getCacheConnection(), getGlobalUniqueKey(), sObjs);
 
 		return true;
 	}

@@ -61,7 +61,7 @@ import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
 public class BlancoGenericJdbcResultSet implements ResultSet {
 	private AbstractBlancoGenericJdbcStatement stmt = null;
 
-	protected long timeMillis = -1;
+	protected String globalUniqueKey;
 
 	private boolean isClosed = false;
 
@@ -69,10 +69,10 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 
 	protected int rowIndex = -1;
 
-	public BlancoGenericJdbcResultSet(final AbstractBlancoGenericJdbcStatement stmt, final long timeMillis)
+	public BlancoGenericJdbcResultSet(final AbstractBlancoGenericJdbcStatement stmt, final String globalUniqueKey)
 			throws SQLException {
 		this.stmt = stmt;
-		this.timeMillis = timeMillis;
+		this.globalUniqueKey = globalUniqueKey;
 
 		trialReadResultSetFromCache();
 	}
@@ -88,7 +88,7 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 		// FIXME ENUM ALL COLUMN NAME INSTEAD OF *
 		// FIXME ORDER BY
 		cacheResultSet = ((BlancoSfdcJdbcConnection) stmt.getConnection()).getCacheConnection().createStatement()
-				.executeQuery("SELECT * FROM GMETA_RS_" + timeMillis);
+				.executeQuery("SELECT * FROM GMETA_RS_" + globalUniqueKey);
 
 	}
 

@@ -49,12 +49,12 @@ import com.sforce.ws.bind.XmlObject;
 import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilDatabaseMetaData;
 
 public class BlancoSfdcJdbcFillCacheCommon {
-	public static void fillCacheTableOfResultSetMetaData(final BlancoSfdcJdbcConnection conn, final long timemillisecs,
-			final SObject resultSetValue) throws SQLException {
+	public static void fillCacheTableOfResultSetMetaData(final BlancoSfdcJdbcConnection conn,
+			final String globalUniqueKey, final SObject resultSetValue) throws SQLException {
 
 		{
 			String ddl = BlancoGenericJdbcCacheUtilDatabaseMetaData.DATABASEMETADATA_COLUMNS_DDL_H2
-					.replace("GMETA_COLUMNS", "GMETA_COLUMNS_" + timemillisecs);
+					.replace("GMETA_COLUMNS", "GMETA_COLUMNS_" + globalUniqueKey);
 			conn.getCacheConnection().createStatement().execute(ddl);
 		}
 
@@ -83,7 +83,7 @@ public class BlancoSfdcJdbcFillCacheCommon {
 				rsmdRs.next();
 
 				final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement("INSERT INTO GMETA_COLUMNS_"
-						+ timemillisecs
+						+ globalUniqueKey
 						+ " SET TABLE_NAME = ?, COLUMN_NAME = ?, DATA_TYPE = ?, TYPE_NAME = ?, COLUMN_SIZE = ?, DECIMAL_DIGITS = ?, NULLABLE = ?, REMARKS = ?, CHAR_OCTET_LENGTH = ?, ORDINAL_POSITION = ?");
 				try {
 					pstmt.setString(1, rsmdRs.getString("TABLE_NAME"));
@@ -106,7 +106,7 @@ public class BlancoSfdcJdbcFillCacheCommon {
 		}
 	}
 
-	public static void fillCacheTableOfResultSet(final Connection connCache, final long timemillisecs,
+	public static void fillCacheTableOfResultSet(final Connection connCache, final String globalUniqueKey,
 			final SObject[] sObjs) throws SQLException {
 
 		{
@@ -114,7 +114,7 @@ public class BlancoSfdcJdbcFillCacheCommon {
 
 				final XmlObject xmlSObject = (XmlObject) sObjs[indexRow];
 
-				String sql = "INSERT INTO GMETA_RS_" + timemillisecs + " SET ";
+				String sql = "INSERT INTO GMETA_RS_" + globalUniqueKey + " SET ";
 				{
 					final Iterator<XmlObject> ite = xmlSObject.getChildren();
 					int indexColumn = 0;
@@ -138,7 +138,7 @@ public class BlancoSfdcJdbcFillCacheCommon {
 								sql += ",";
 							}
 							final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
-									connCache, "GMETA_COLUMNS_" + timemillisecs, null, null, sObjectName,
+									connCache, "GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName,
 									obj.getName().getLocalPart());
 							metadataRs.next();
 
@@ -178,7 +178,7 @@ public class BlancoSfdcJdbcFillCacheCommon {
 								sql += ",";
 							}
 							final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
-									connCache, "GMETA_COLUMNS_" + timemillisecs, null, null, sObjectName,
+									connCache, "GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName,
 									obj.getName().getLocalPart());
 							metadataRs.next();
 
