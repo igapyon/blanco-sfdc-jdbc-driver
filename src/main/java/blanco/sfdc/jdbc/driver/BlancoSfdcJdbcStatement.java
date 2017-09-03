@@ -217,48 +217,6 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 	///////////////////////////
 	// common func
 
-	/**
-	 * @deprecated
-	 * @param conn
-	 * @param sObj
-	 * @param timemillisecs
-	 * @throws SQLException
-	 */
-	public static void getRowObj(final BlancoSfdcJdbcConnection conn, final SObject sObj, final long timemillisecs)
-			throws SQLException {
-		// getRowList().add(record);
-
-		final XmlObject xmlSObject = (XmlObject) sObj;
-
-		final Iterator<XmlObject> ite = xmlSObject.getChildren();
-		int indexColumn = 0;
-		for (; ite.hasNext(); indexColumn++) {
-			final XmlObject obj = (XmlObject) ite.next();
-
-			// First one should be : type, value=Account,
-			// children=[]}
-			// Second one should be : Id, value=0012800000lbaM2AAI,
-			// children=[]}
-
-			String sObjectName = null;
-			String rowIdString = null;
-
-			if (indexColumn == 0) {
-				sObjectName = obj.getValue().toString();
-			} else if (indexColumn == 1) {
-				rowIdString = obj.getValue().toString();
-			} else {
-				final ResultSet metadataRs = BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(
-						conn.getCacheConnection(), "GMETA_COLUMNS_" + timemillisecs, null, null, sObjectName,
-						obj.getName().getLocalPart());
-				metadataRs.next();
-
-				// TODO tablename?
-				// TODO set Object ID?
-			}
-		}
-	}
-
 	public static java.util.Date soqlDateToDate(final String soqlDateString) {
 		if (soqlDateString == null || soqlDateString.length() == 0) {
 			return null;
