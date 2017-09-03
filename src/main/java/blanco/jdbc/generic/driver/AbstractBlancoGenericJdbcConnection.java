@@ -72,7 +72,7 @@ public abstract class AbstractBlancoGenericJdbcConnection implements Connection 
 
 			// Create system tables for SFDC JDBC Driver.
 			// databasemetadata.getTables();
-			BlancoGenericJdbcCacheUtilDatabaseMetaData.initGmetaTables(connCache);
+			BlancoGenericJdbcCacheUtilDatabaseMetaData.createCacheTables(connCache);
 		} catch (Exception ex) {
 			throw new SQLException(ex);
 		}

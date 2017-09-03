@@ -797,7 +797,7 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types)
 			throws SQLException {
 
-		if (BlancoGenericJdbcCacheUtilDatabaseMetaData.isGmetaTablesCached(conn.getCacheConnection()) == false) {
+		if (BlancoGenericJdbcCacheUtilDatabaseMetaData.isCacheDatabaseMetaDataTablesCached(conn.getCacheConnection()) == false) {
 			// call abstract method
 			fillCacheTableOfGetTables(catalog, schemaPattern, tableNamePattern, types);
 		}
@@ -824,7 +824,7 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 
 		// process every table.
 		for (String tableName : tableNameList) {
-			if (BlancoGenericJdbcCacheUtilDatabaseMetaData.isGmetaColumnsCached(conn.getCacheConnection(), catalog,
+			if (BlancoGenericJdbcCacheUtilDatabaseMetaData.isCacheDatabaseMetaDataColumnsCached(conn.getCacheConnection(), catalog,
 					schemaPattern, tableName) == false) {
 				// call abstract method
 				fillCacheTableOfGetColumns(catalog, schemaPattern, tableName, columnNamePattern);

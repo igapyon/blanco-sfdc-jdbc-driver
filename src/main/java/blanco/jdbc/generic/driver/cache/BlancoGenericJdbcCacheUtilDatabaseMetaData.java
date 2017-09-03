@@ -61,7 +61,7 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 			+ ", IS_GENERATEDCOLUMN VARCHAR_IGNORECASE DEFAULT ''" //
 			+ ")";
 
-	public static void initGmetaTables(final Connection connCache) throws SQLException {
+	public static void createCacheTables(final Connection connCache) throws SQLException {
 		// getTables
 		PreparedStatement pstmt = connCache.prepareStatement(DATABASEMETADATA_TABLES_DDL_H2);
 		try {
@@ -79,7 +79,7 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 		}
 	}
 
-	public static boolean isGmetaTablesCached(final Connection connCache) throws SQLException {
+	public static boolean isCacheDatabaseMetaDataTablesCached(final Connection connCache) throws SQLException {
 		boolean isCached = false;
 		final PreparedStatement pstmt = connCache.prepareStatement("SELECT COUNT(*) FROM GMETA_TABLES");
 		try {
@@ -96,8 +96,8 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 		}
 	}
 
-	public static boolean isGmetaColumnsCached(final Connection connCache, String catalog, String schemaPattern,
-			String tableName) throws SQLException {
+	public static boolean isCacheDatabaseMetaDataColumnsCached(final Connection connCache, String catalog,
+			String schemaPattern, String tableName) throws SQLException {
 		boolean isCached = false;
 
 		String sql = "SELECT COUNT(*) FROM GMETA_COLUMNS";
