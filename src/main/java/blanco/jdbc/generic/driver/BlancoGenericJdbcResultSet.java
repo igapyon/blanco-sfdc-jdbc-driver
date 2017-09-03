@@ -150,143 +150,148 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	}
 
 	public short getShort(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getShort(columnIndex);
 	}
 
 	public long getLong(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getLong(columnIndex);
 	}
 
 	public float getFloat(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getFloat(columnIndex);
 	}
 
 	public double getDouble(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getDouble(columnIndex);
 	}
 
+	@SuppressWarnings("deprecation")
 	public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getBigDecimal(columnIndex, scale);
 	}
 
 	public byte[] getBytes(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getBytes(columnIndex);
 	}
 
 	public Time getTime(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getTime(columnIndex);
 	}
 
 	public InputStream getAsciiStream(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getAsciiStream(columnIndex);
 	}
 
+	@SuppressWarnings("deprecation")
 	public InputStream getUnicodeStream(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getUnicodeStream(columnIndex);
 	}
 
 	public InputStream getBinaryStream(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getBinaryStream(columnIndex);
 	}
 
 	public boolean getBoolean(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getBoolean(columnLabel);
 	}
 
 	public byte getByte(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getByte(columnLabel);
 	}
 
 	public short getShort(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getShort(columnLabel);
 	}
 
 	public long getLong(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getLong(columnLabel);
 	}
 
 	public float getFloat(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getFloat(columnLabel);
 	}
 
 	public double getDouble(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getDouble(columnLabel);
 	}
 
+	@SuppressWarnings("deprecation")
 	public BigDecimal getBigDecimal(String columnLabel, int scale) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getBigDecimal(columnLabel, scale);
 	}
 
 	public byte[] getBytes(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getBytes(columnLabel);
 	}
 
 	public Time getTime(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getTime(columnLabel);
 	}
 
 	public InputStream getAsciiStream(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getAsciiStream(columnLabel);
 	}
 
+	@SuppressWarnings("deprecation")
 	public InputStream getUnicodeStream(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getUnicodeStream(columnLabel);
 	}
 
 	public InputStream getBinaryStream(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getBinaryStream(columnLabel);
 	}
 
 	public SQLWarning getWarnings() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// TODO こちらラッパー側のエラーと合成する必要あり。
+		return cacheResultSet.getWarnings();
 	}
 
 	public void clearWarnings() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// TODO こちらラッパー側のエラーと合成する必要あり。
+		cacheResultSet.clearWarnings();
 	}
 
 	public String getCursorName() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		// FIXME
+		return globalUniqueKey;
 	}
 
 	public Object getObject(int columnIndex) throws SQLException {
-		// for ease
-		return getString(columnIndex);
+		return cacheResultSet.getObject(columnIndex);
 	}
 
 	public Object getObject(String columnLabel) throws SQLException {
-		// for ease
-		return getString(columnLabel);
+		return cacheResultSet.getObject(columnLabel);
 	}
 
 	public int findColumn(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// TODO チェック必要。直接内部JDBCではなく自力での解決が必要かも。
+		return cacheResultSet.findColumn(columnLabel);
 	}
 
 	public Reader getCharacterStream(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getCharacterStream(columnIndex);
 	}
 
 	public Reader getCharacterStream(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getCharacterStream(columnLabel);
 	}
 
 	public BigDecimal getBigDecimal(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getBigDecimal(columnIndex);
 	}
 
 	public BigDecimal getBigDecimal(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getBigDecimal(columnLabel);
 	}
 
 	public void setFetchDirection(int direction) throws SQLException {
-		// Direct map to Statement.
+		// Direct map to Statement. Because Stmt should have the data.
 		stmt.setFetchDirection(direction);
 	}
 
 	public int getFetchDirection() throws SQLException {
-		// Direct map to Statement.
+		// Direct map to Statement. Because Stmt should have the data.
 		return stmt.getFetchDirection();
 	}
 
@@ -295,11 +300,11 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	}
 
 	public int getFetchSize() throws SQLException {
-		return 10;
+		return 20;
 	}
 
 	public int getType() throws SQLException {
-		// TODO
+		// TODO これなに？
 		throw new SQLException("Not Implemented.");
 	}
 
@@ -313,86 +318,87 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	}
 
 	public Object getObject(int columnIndex, Map<String, Class<?>> map) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getObject(columnIndex, map);
 	}
 
 	public Ref getRef(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getRef(columnIndex);
 	}
 
 	public Blob getBlob(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getBlob(columnIndex);
 	}
 
 	public Clob getClob(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getClob(columnIndex);
 	}
 
 	public Array getArray(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getArray(columnIndex);
 	}
 
 	public Object getObject(String columnLabel, Map<String, Class<?>> map) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getObject(columnLabel, map);
 	}
 
 	public Ref getRef(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getRef(columnLabel);
 	}
 
 	public Blob getBlob(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getBlob(columnLabel);
 	}
 
 	public Clob getClob(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getClob(columnLabel);
 	}
 
 	public Array getArray(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getArray(columnLabel);
 	}
 
 	public Date getDate(int columnIndex, Calendar cal) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getDate(columnIndex, cal);
 	}
 
 	public Date getDate(String columnLabel, Calendar cal) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getDate(columnLabel, cal);
 	}
 
 	public Time getTime(int columnIndex, Calendar cal) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getTime(columnIndex, cal);
 	}
 
 	public Time getTime(String columnLabel, Calendar cal) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getTime(columnLabel, cal);
 	}
 
 	public Timestamp getTimestamp(int columnIndex, Calendar cal) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getTimestamp(columnIndex, cal);
 	}
 
 	public Timestamp getTimestamp(String columnLabel, Calendar cal) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getTimestamp(columnLabel, cal);
 	}
 
 	public URL getURL(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getURL(columnIndex);
 	}
 
 	public URL getURL(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getURL(columnLabel);
 	}
 
 	public RowId getRowId(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getRowId(columnIndex);
 	}
 
 	public RowId getRowId(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getRowId(columnLabel);
 	}
 
 	public int getHoldability() throws SQLException {
+		// FIXME!!!
 		throw new SQLException("Not Implemented.");
 	}
 
@@ -401,43 +407,43 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	}
 
 	public NClob getNClob(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getNClob(columnIndex);
 	}
 
 	public NClob getNClob(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getNClob(columnLabel);
 	}
 
 	public SQLXML getSQLXML(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getSQLXML(columnIndex);
 	}
 
 	public SQLXML getSQLXML(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getSQLXML(columnLabel);
 	}
 
 	public String getNString(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getNString(columnIndex);
 	}
 
 	public String getNString(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getNString(columnLabel);
 	}
 
 	public Reader getNCharacterStream(int columnIndex) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getNCharacterStream(columnIndex);
 	}
 
 	public Reader getNCharacterStream(String columnLabel) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getNCharacterStream(columnLabel);
 	}
 
 	public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getObject(columnIndex, type);
 	}
 
 	public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return cacheResultSet.getObject(columnLabel, type);
 	}
 
 	public boolean next() throws SQLException {
