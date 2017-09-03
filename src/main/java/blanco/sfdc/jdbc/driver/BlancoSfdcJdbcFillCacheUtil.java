@@ -33,10 +33,15 @@
 
 package blanco.sfdc.jdbc.driver;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Iterator;
+import java.util.TimeZone;
 
 import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.bind.XmlObject;
@@ -98,6 +103,146 @@ public class BlancoSfdcJdbcFillCacheUtil {
 			} finally {
 				rsmdRs.close();
 			}
+		}
+	}
+
+	public static void fillCacheResultSet(final Connection connCache, final ResultSet metadataRsCreateTable,
+			final long timemillisecs, final SObject[] sObjs) throws SQLException {
+
+		{
+			for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
+
+				final XmlObject xmlSObject = (XmlObject) sObjs[indexRow];
+
+				String sql = "INSERT INTO GEMA_RS_" + timemillisecs + " SET ";
+				{
+					final Iterator<XmlObject> ite = xmlSObject.getChildren();
+					int indexColumn = 0;
+					for (; ite.hasNext(); indexColumn++) {
+						final XmlObject obj = (XmlObject) ite.next();
+
+						// First one should be : type, value=Account,
+						// children=[]}
+						// Second one should be : Id, value=0012800000lbaM2AAI,
+						// children=[]}
+
+						String sObjectName = null;
+						String rowIdString = null;
+
+						if (indexColumn == 0) {
+							sObjectName = obj.getValue().toString();
+						} else if (indexColumn == 1) {
+							rowIdString = obj.getValue().toString();
+						} else {
+							if (indexColumn > 2) {
+								sql += ",";
+							}
+							final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
+									connCache, "GMETA_COLUMNS_" + timemillisecs, null, null, sObjectName,
+									obj.getName().getLocalPart());
+							metadataRs.next();
+
+							if (obj.getValue() != null) {
+								// null のときはなにもしない。
+
+								sql += (metadataRs.getString("COLUMN_NAME") + " = ?");
+							}
+
+							// TODO tablename?
+							// TODO set Object ID?
+						}
+					}
+				}
+				final PreparedStatement pstmt = connCache.prepareStatement(sql);
+				{
+					int pstmtIndex = 1;
+					final Iterator<XmlObject> ite = xmlSObject.getChildren();
+					int indexColumn = 0;
+					for (; ite.hasNext(); indexColumn++) {
+						final XmlObject obj = (XmlObject) ite.next();
+
+						// First one should be : type, value=Account,
+						// children=[]}
+						// Second one should be : Id, value=0012800000lbaM2AAI,
+						// children=[]}
+
+						String sObjectName = null;
+						String rowIdString = null;
+
+						if (indexColumn == 0) {
+							sObjectName = obj.getValue().toString();
+						} else if (indexColumn == 1) {
+							rowIdString = obj.getValue().toString();
+						} else {
+							if (indexColumn > 2) {
+								sql += ",";
+							}
+							final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
+									connCache, "GMETA_COLUMNS_" + timemillisecs, null, null, sObjectName,
+									obj.getName().getLocalPart());
+							metadataRs.next();
+
+							if (obj.getValue() != null) {
+								// null のときはなにもしない。
+
+								String value = obj.getValue().toString();
+
+								// Date変換
+								switch (metadataRs.getInt("DATA_TYPE")) {
+								case java.sql.Types.VARCHAR:
+									pstmt.setString(pstmtIndex++, value);
+									break;
+								case java.sql.Types.INTEGER:
+									pstmt.setInt(pstmtIndex++, Integer.valueOf(value));
+									break;
+								case java.sql.Types.DATE:
+								case java.sql.Types.TIME:
+								case java.sql.Types.TIME_WITH_TIMEZONE:
+								case java.sql.Types.TIMESTAMP:
+								case java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
+									pstmt.setDate(pstmtIndex++, new java.sql.Date(soqlDateToDate(value).getTime()));
+									break;
+								}
+							}
+
+							// TODO tablename?
+							// TODO set Object ID?
+						}
+					}
+				}
+				// TODO CHECK RESULT
+				pstmt.execute();
+			}
+		}
+	}
+
+	///////////////////////////
+	// common func
+
+	public static java.util.Date soqlDateToDate(final String soqlDateString) {
+		if (soqlDateString == null || soqlDateString.length() == 0) {
+			return null;
+		}
+
+		String workDateString = soqlDateString.replace("T", " ");
+		workDateString = workDateString.replace("Z", "");
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+		// FIXME TODO DO NOT USE JST.
+		final TimeZone jst = TimeZone.getTimeZone("JST");
+
+		try {
+			java.util.Date result = sdf.parse(workDateString);
+
+			final Calendar calForGmt = Calendar.getInstance();
+			calForGmt.setTime(result);
+			calForGmt.add(Calendar.MILLISECOND, jst.getOffset(result.getTime()));
+			result = calForGmt.getTime();
+
+			return result;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e.getMessage(), e);
 		}
 	}
 }
