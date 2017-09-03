@@ -50,6 +50,7 @@ import com.sforce.ws.bind.XmlObject;
 
 import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilDatabaseMetaData;
+import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilResultSet;
 
 public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement {
 
@@ -71,41 +72,8 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 
 	static void createCacheBlock(final Connection connCache, final ResultSet metadataRsCreateTable,
 			final long timemillisecs, final SObject[] sObjs) throws SQLException {
-		{
-			String ddl = "CREATE TABLE IF NOT EXISTS GEMA_RS_" + timemillisecs + " (";
-
-			boolean isFirst = true;
-			for (; metadataRsCreateTable.next();) {
-				if (isFirst) {
-					isFirst = false;
-				} else {
-					ddl += ",";
-				}
-				ddl += metadataRsCreateTable.getString("COLUMN_NAME");
-				ddl += " ";
-				switch (metadataRsCreateTable.getInt("DATA_TYPE")) {
-				case java.sql.Types.VARCHAR:
-					ddl += "VARCHAR";
-					break;
-				case java.sql.Types.INTEGER:
-					ddl += "INTEGER";
-					break;
-				case java.sql.Types.DATE:
-					ddl += "DATE";
-					break;
-				case java.sql.Types.TIMESTAMP:
-					ddl += "TIMESTAMP";
-					break;
-				default:
-					throw new SQLException("Unsupported type:" + metadataRsCreateTable.getInt("DATA_TYPE") + " ("
-							+ metadataRsCreateTable.getString("TYPE_NAME") + ")");
-				}
-			}
-
-			ddl += ")";
-			connCache.createStatement().execute(ddl);
-			System.err.println("[DDL]" + ddl);
-		}
+		BlancoGenericJdbcCacheUtilResultSet.createCacheTableOfResultSet(connCache, timemillisecs,
+				metadataRsCreateTable);
 
 		{
 			for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {

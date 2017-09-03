@@ -33,6 +33,45 @@
 
 package blanco.jdbc.generic.driver.cache;
 
-public class BlancoGenericJdbcCacheUtilResultSet {
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
+public class BlancoGenericJdbcCacheUtilResultSet {
+	public static void createCacheTableOfResultSet(final Connection connCache, final long timeMillis,
+			final ResultSet metadataRsCreateTable) throws SQLException {
+		String ddl = "CREATE TABLE IF NOT EXISTS GEMA_RS_" + timeMillis + " (";
+
+		boolean isFirst = true;
+		for (; metadataRsCreateTable.next();) {
+			if (isFirst) {
+				isFirst = false;
+			} else {
+				ddl += ",";
+			}
+			ddl += metadataRsCreateTable.getString("COLUMN_NAME");
+			ddl += " ";
+			switch (metadataRsCreateTable.getInt("DATA_TYPE")) {
+			case java.sql.Types.VARCHAR:
+				ddl += "VARCHAR";
+				break;
+			case java.sql.Types.INTEGER:
+				ddl += "INTEGER";
+				break;
+			case java.sql.Types.DATE:
+				ddl += "DATE";
+				break;
+			case java.sql.Types.TIMESTAMP:
+				ddl += "TIMESTAMP";
+				break;
+			default:
+				throw new SQLException("Unsupported type:" + metadataRsCreateTable.getInt("DATA_TYPE") + " ("
+						+ metadataRsCreateTable.getString("TYPE_NAME") + ")");
+			}
+		}
+
+		ddl += ")";
+		connCache.createStatement().execute(ddl);
+		System.err.println("[DDL]" + ddl);
+	}
 }
