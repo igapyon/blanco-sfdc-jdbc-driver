@@ -75,9 +75,21 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 	}
 
 	protected static void createTableTrial(final ResultSetMetaData rsmd) throws SQLException {
+		String ddl = "CREATE TABLE GEMA_STMT_12345678 (";
+		// 一時テーブル名に
+		// create temporary table XXXX( 名前はプログラムで決めないとダメみたい。
+		// closeのときには、テーブルドロップかしら???
 		for (int index = 0; index < rsmd.getColumnCount(); index++) {
-// TODO
+			if (index != 0) {
+				ddl += ",";
+			}
+			// TODO
+			ddl += rsmd.getColumnName(index + 1);
+			ddl += " ";
+			ddl += rsmd.getColumnType(index + 1);
 		}
+		ddl += ")";
+		System.err.println("ddl="+ddl);
 	}
 
 	@Override
