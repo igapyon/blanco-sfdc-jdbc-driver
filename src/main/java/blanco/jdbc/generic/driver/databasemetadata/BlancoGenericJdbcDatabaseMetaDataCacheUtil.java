@@ -169,9 +169,13 @@ public class BlancoGenericJdbcDatabaseMetaDataCacheUtil {
 		return pstmt.getResultSet();
 	}
 
-	public static ResultSet getColumnsFromCache(final Connection connCache, String catalog, String schemaPattern,
-			String tableNamePattern, String columnNamePattern) throws SQLException {
-		String sql = "SELECT * FROM GMETA_COLUMNS";//
+	public static ResultSet getColumnsFromCache(final Connection connCache, String cacheTableName, String catalog,
+			String schemaPattern, String tableNamePattern, String columnNamePattern) throws SQLException {
+		if (cacheTableName == null) {
+			cacheTableName = "GMETA_COLUMNS";
+		}
+
+		String sql = "SELECT * FROM " + cacheTableName; //
 		boolean isFirstCondition = true;
 		if (catalog != null && catalog.trim().length() != 0) {
 			if (isFirstCondition) {

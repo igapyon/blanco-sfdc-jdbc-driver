@@ -84,9 +84,9 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 				ddl += ",";
 			}
 			// TODO
-			ddl += rsmd.getColumnName(index + 1);
+//TODO			ddl += rsmd.getColumnName(index + 1);
 			ddl += " ";
-			ddl += rsmd.getColumnType(index + 1);
+		//TODO	ddl += rsmd.getColumnType(index + 1);
 		}
 		ddl += ")";
 		System.err.println("ddl="+ddl);

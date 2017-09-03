@@ -831,7 +831,7 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 			}
 		}
 
-		return BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(conn.getCacheConnection(), catalog,
+		return BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(conn.getCacheConnection(), null, catalog,
 				schemaPattern, tableNamePattern, columnNamePattern);
 	}
 
