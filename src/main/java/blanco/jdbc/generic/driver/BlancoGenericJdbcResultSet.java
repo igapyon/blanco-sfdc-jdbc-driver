@@ -65,7 +65,7 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 
 	private boolean isClosed = false;
 
-	protected ResultSet trialReadResultSet = null;
+	protected ResultSet cacheResultSet = null;
 
 	protected int rowIndex = -1;
 
@@ -78,46 +78,46 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 		isClosed = true;
 		rowIndex = -1;
 
-		trialReadResultSet.close();
+		cacheResultSet.close();
 	}
 
 	public void trialReadResultSetFromCache() throws SQLException {
 		// FIXME ORDER BY
-		trialReadResultSet = ((BlancoSfdcJdbcConnection) stmt.getConnection()).getCacheConnection().createStatement()
+		cacheResultSet = ((BlancoSfdcJdbcConnection) stmt.getConnection()).getCacheConnection().createStatement()
 				.executeQuery("SELECT * FROM GEMA_RS_" + timeMillis);
 
 	}
 
 	public String getString(final int columnIndex) throws SQLException {
-		return trialReadResultSet.getString(columnIndex);
+		return cacheResultSet.getString(columnIndex);
 	}
 
 	public String getString(final String columnLabel) throws SQLException {
-		return trialReadResultSet.getString(columnLabel);
+		return cacheResultSet.getString(columnLabel);
 	}
 
 	public Date getDate(int columnIndex) throws SQLException {
-		return trialReadResultSet.getDate(columnIndex);
+		return cacheResultSet.getDate(columnIndex);
 	}
 
 	public Date getDate(String columnLabel) throws SQLException {
-		return trialReadResultSet.getDate(columnLabel);
+		return cacheResultSet.getDate(columnLabel);
 	}
 
 	public Timestamp getTimestamp(int columnIndex) throws SQLException {
-		return trialReadResultSet.getTimestamp(columnIndex);
+		return cacheResultSet.getTimestamp(columnIndex);
 	}
 
 	public Timestamp getTimestamp(String columnLabel) throws SQLException {
-		return trialReadResultSet.getTimestamp(columnLabel);
+		return cacheResultSet.getTimestamp(columnLabel);
 	}
 
 	public int getInt(int columnIndex) throws SQLException {
-		return trialReadResultSet.getInt(columnIndex);
+		return cacheResultSet.getInt(columnIndex);
 	}
 
 	public int getInt(String columnLabel) throws SQLException {
-		return trialReadResultSet.getInt(columnLabel);
+		return cacheResultSet.getInt(columnLabel);
 	}
 
 	public ResultSetMetaData getMetaData() throws SQLException {
@@ -134,15 +134,15 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	}
 
 	public boolean wasNull() throws SQLException {
-		return trialReadResultSet.wasNull();
+		return cacheResultSet.wasNull();
 	}
 
 	public boolean getBoolean(int columnIndex) throws SQLException {
-		return trialReadResultSet.getBoolean(columnIndex);
+		return cacheResultSet.getBoolean(columnIndex);
 	}
 
 	public byte getByte(int columnIndex) throws SQLException {
-		return trialReadResultSet.getByte(columnIndex);
+		return cacheResultSet.getByte(columnIndex);
 	}
 
 	public short getShort(int columnIndex) throws SQLException {
@@ -438,7 +438,7 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 
 	protected int getCurrentRecordCount() throws SQLException {
 		// TODO ブロック読み込みに対応したら連番を別途持つこと。
-		return trialReadResultSet.getRow();
+		return cacheResultSet.getRow();
 		// return rowList.size();
 	}
 
@@ -448,7 +448,7 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 		}
 
 		// TODO 次のブロック読み込みの考慮
-		trialReadResultSet.next();
+		cacheResultSet.next();
 
 		if (getCurrentRecordCount() <= 0) {
 			return false;
