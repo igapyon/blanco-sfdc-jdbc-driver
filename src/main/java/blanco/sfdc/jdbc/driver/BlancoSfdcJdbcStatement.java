@@ -106,10 +106,6 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 			return false;
 		}
 
-		// fill table
-		final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData
-				.getColumnsFromCache(conn.getCacheConnection(), cacheTableName, null, null, null, null);
-
 		BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSet(conn.getCacheConnection(), timeMillis, sObjs);
 
 		return true;
