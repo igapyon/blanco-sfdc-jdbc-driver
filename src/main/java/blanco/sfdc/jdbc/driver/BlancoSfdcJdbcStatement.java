@@ -78,21 +78,39 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		return pconn.getPartnerConnection().getQueryOptions().getBatchSize();
 	}
 
-	protected static void createTableTrial(final Connection connCache, final long timemillisecs) throws SQLException {
+	protected static void createTableTrial(final Connection connCache, final ResultSet metadataRs,
+			final long timemillisecs) throws SQLException {
 
 		String ddl = "CREATE TABLE GEMA_RS_" + timemillisecs + " (";
-		// 一時テーブル名に
-		// create temporary table XXXX( 名前はプログラムで決めないとダメみたい。
-		// closeのときには、テーブルドロップかしら???
-		// for (int index = 0; index < rsmd.getColumnCount(); index++) {
-		// if (index != 0) {
-		// ddl += ",";
-		// }
-		// TODO
-		// TODO ddl += rsmd.getColumnName(index + 1);
-		// ddl += " ";
-		// TODO ddl += rsmd.getColumnType(index + 1);
-		// }
+
+		boolean isFirst = true;
+		for (; metadataRs.next();) {
+			if (isFirst) {
+				isFirst = false;
+			} else {
+				ddl += ",";
+			}
+			ddl += metadataRs.getString("COLUMN_NAME");
+			ddl += " ";
+			switch (metadataRs.getInt("DATA_TYPE")) {
+			case java.sql.Types.VARCHAR:
+				ddl += "VARCHAR";
+				break;
+			case java.sql.Types.INTEGER:
+				ddl += "INTEGER";
+				break;
+			case java.sql.Types.DATE:
+				ddl += "DATE";
+				break;
+			case java.sql.Types.TIMESTAMP:
+				ddl += "TIMESTAMP";
+				break;
+			default:
+				throw new SQLException("Unsupported type:" + metadataRs.getInt("DATA_TYPE") + " ("
+						+ metadataRs.getString("TYPE_NAME") + ")");
+			}
+		}
+
 		ddl += ")";
 		System.err.println("ddl=" + ddl);
 	}
@@ -117,8 +135,15 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 					isFirstBlockOfQuery = false;
 				}
 
-				// create table
-				createTableTrial(((BlancoSfdcJdbcConnection) conn).getCacheConnection(), timeMillis);
+				{
+					// create table
+
+					final ResultSet metadataRs = BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(
+							((BlancoSfdcJdbcConnection) conn).getCacheConnection(), "GMETA_COLUMNS_" + timeMillis, null,
+							null, null, null);
+
+					createTableTrial(((BlancoSfdcJdbcConnection) conn).getCacheConnection(), metadataRs, timeMillis);
+				}
 
 				for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
 					final BlancoGenericJdbcResultSetRow row = getRowObj((BlancoSfdcJdbcConnection) conn,
