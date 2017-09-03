@@ -72,8 +72,9 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		return (qryResult.isDone() == false);
 	}
 
-	public boolean firstBlock(String sql) throws SQLException {
+	public boolean firstBlock(final String sql) throws SQLException {
 		try {
+			// Do SOQL Query
 			qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection().query(sql);
 			final SObject[] sObjs = qryResult.getRecords();
 			if (sObjs.length == 0) {
@@ -83,7 +84,7 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 			BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSetMetaData((BlancoSfdcJdbcConnection) conn,
 					getGlobalUniqueKey(), sObjs[0]);
 
-			// fill table
+			// TODO これ省略できないかな？
 			final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
 					conn.getCacheConnection(), "GMETA_COLUMNS_" + getGlobalUniqueKey(), null, null, null, null);
 
