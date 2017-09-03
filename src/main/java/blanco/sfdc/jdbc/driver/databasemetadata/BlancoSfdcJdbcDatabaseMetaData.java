@@ -1,6 +1,5 @@
 package blanco.sfdc.jdbc.driver.databasemetadata;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -20,8 +19,8 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 	}
 
 	@Override
-	protected void fillCacheTableOfGetTables(String catalog, String schemaPattern, String tableNamePattern, String[] types)
-			throws SQLException {
+	protected void fillCacheTableOfGetTables(String catalog, String schemaPattern, String tableNamePattern,
+			String[] types) throws SQLException {
 		try {
 			// build cache of table info
 			final DescribeGlobalResult descResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
@@ -92,10 +91,5 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 		} catch (ConnectionException ex) {
 			throw new SQLException(ex);
 		}
-	}
-
-	@Override
-	public Connection getConnection() throws SQLException {
-		return conn;
 	}
 }

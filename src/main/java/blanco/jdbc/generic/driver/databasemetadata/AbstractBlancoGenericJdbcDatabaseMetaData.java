@@ -51,6 +51,10 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 		this.conn = conn;
 	}
 
+	public Connection getConnection() throws SQLException {
+		return conn;
+	}
+
 	public <T> T unwrap(Class<T> iface) throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
@@ -676,8 +680,6 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 			throws SQLException {
 		throw new SQLException("Not Implemented.");
 	}
-
-	public abstract Connection getConnection() throws SQLException;
 
 	public boolean supportsSavepoints() throws SQLException {
 		// No!
