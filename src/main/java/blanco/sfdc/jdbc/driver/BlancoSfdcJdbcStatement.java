@@ -53,6 +53,7 @@ import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetColumn;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetMetaData;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetMetaDataColumn;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetRow;
+import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaDataCacheUtil;
 
 public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement {
 
@@ -75,7 +76,14 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 	}
 
 	protected static void createTableTrial(final ResultSetMetaData rsmd) throws SQLException {
-		String ddl = "CREATE TABLE GEMA_STMT_12345678 (";
+
+		{
+			String ddl = BlancoGenericJdbcDatabaseMetaDataCacheUtil.DATABASEMETADATA_COLUMNS_DDL_H2
+					.replace("GMETA_COLUMNS", "GMETA_COLUMNS_" + "12345678");
+			System.out.println(ddl);
+		}
+
+		String ddl = "CREATE TABLE GEMA_RS_12345678 (";
 		// 一時テーブル名に
 		// create temporary table XXXX( 名前はプログラムで決めないとダメみたい。
 		// closeのときには、テーブルドロップかしら???
@@ -84,12 +92,12 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 				ddl += ",";
 			}
 			// TODO
-//TODO			ddl += rsmd.getColumnName(index + 1);
+			// TODO ddl += rsmd.getColumnName(index + 1);
 			ddl += " ";
-		//TODO	ddl += rsmd.getColumnType(index + 1);
+			// TODO ddl += rsmd.getColumnType(index + 1);
 		}
 		ddl += ")";
-		System.err.println("ddl="+ddl);
+		System.err.println("ddl=" + ddl);
 	}
 
 	@Override
