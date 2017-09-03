@@ -69,9 +69,12 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 
 	protected int rowIndex = -1;
 
-	public BlancoGenericJdbcResultSet(final AbstractBlancoGenericJdbcStatement stmt, final long timeMillis) {
+	public BlancoGenericJdbcResultSet(final AbstractBlancoGenericJdbcStatement stmt, final long timeMillis)
+			throws SQLException {
 		this.stmt = stmt;
 		this.timeMillis = timeMillis;
+
+		trialReadResultSetFromCache();
 	}
 
 	public void close() throws SQLException {
@@ -82,6 +85,7 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	}
 
 	public void trialReadResultSetFromCache() throws SQLException {
+		// FIXME ENUM ALL COLUMN NAME INSTEAD OF *
 		// FIXME ORDER BY
 		cacheResultSet = ((BlancoSfdcJdbcConnection) stmt.getConnection()).getCacheConnection().createStatement()
 				.executeQuery("SELECT * FROM GEMA_RS_" + timeMillis);
@@ -436,31 +440,38 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 		throw new SQLException("Not Implemented.");
 	}
 
-	protected int getCurrentRecordCount() throws SQLException {
-		// TODO ブロック読み込みに対応したら連番を別途持つこと。
-		return cacheResultSet.getRow();
-		// return rowList.size();
-	}
-
 	public boolean next() throws SQLException {
 		if (isClosed()) {
 			return false;
 		}
 
-		// TODO 次のブロック読み込みの考慮
-		cacheResultSet.next();
+		// check next() in cache.
+		if (cacheResultSet.next()) {
+			return true;
+		}
 
-		if (getCurrentRecordCount() <= 0) {
+		// cache ended.
+		// check next block
+
+		if (stmt.hasNextBlock() == false) {
 			return false;
 		}
+
+		// TODO DO TRUNCATE BLOCK
+		// FIXME
+
+		// truncate table
+		// do next block
+		stmt.nextBlock();
+
+		// open cache table;
+
+		// TODO update result set;
 
 		rowIndex++;
 
-		if (rowIndex < getCurrentRecordCount()) {
-			return true;
-		} else {
-			return false;
-		}
+		// TODO call next;
+		return true; // !!!!!!!!!!!!!!1
 	}
 
 	public int getRow() throws SQLException {

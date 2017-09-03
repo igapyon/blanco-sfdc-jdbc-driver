@@ -14,5 +14,7 @@ public interface BlancoGenericJdbcBlockReadStatement extends Statement {
 	 * @return
 	 * @throws SQLException
 	 */
-	boolean nextBlock(final String sql, final String cacheTableName) throws SQLException;
+	boolean firstBlock(final String sql, final String cacheTableName) throws SQLException;
+
+	boolean nextBlock() throws SQLException;
 }

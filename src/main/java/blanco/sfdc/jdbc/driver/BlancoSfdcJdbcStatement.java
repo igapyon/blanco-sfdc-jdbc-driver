@@ -58,8 +58,6 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 	 */
 	final long timeMillis = System.currentTimeMillis();
 
-	protected BlancoGenericJdbcResultSet rs = null;
-
 	public BlancoSfdcJdbcStatement(final BlancoSfdcJdbcConnection conn) {
 		super(conn);
 	}
@@ -219,60 +217,11 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 				pstmt.execute();
 			}
 		}
-
-	}
-
-	@Override
-	public boolean execute(String sql) throws SQLException {
-		rs = new BlancoGenericJdbcResultSet(this, timeMillis);
-
-		try {
-			// TODO そもそもこの処理はResultSet側のフェッチ境界の考慮が必要だが、難易度が高いので一旦保留。
-			// TODO ただし、これを解決しないと、巨大な検索結果の際に全件を持ってきてしまうのでまずい実装だと思う。
-			boolean isFirstBlockOfQuery = true;
-			QueryResult qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection().query(sql);
-			for (;;) {
-				final SObject[] sObjs = qryResult.getRecords();
-				if (sObjs.length == 0) {
-					break;
-				}
-
-				if (isFirstBlockOfQuery) {
-					buildResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis, sObjs[0]);
-					isFirstBlockOfQuery = false;
-				}
-
-				{
-					// create table
-
-					final ResultSet metadataRs = BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(
-							((BlancoSfdcJdbcConnection) conn).getCacheConnection(), "GMETA_COLUMNS_" + timeMillis, null,
-							null, null, null);
-
-					createCacheBlock(((BlancoSfdcJdbcConnection) conn).getCacheConnection(), metadataRs, timeMillis,
-							sObjs);
-				}
-
-				if (qryResult.isDone()) {
-					break;
-				}
-				// TODO This should be more better.
-				qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection()
-						.queryMore(qryResult.getQueryLocator());
-				System.out.println("QueryMore!!!");
-			}
-		} catch (ConnectionException ex) {
-			throw new SQLException(ex);
-		}
-
-		return true;
 	}
 
 	@Override
 	public ResultSet getResultSet() throws SQLException {
-		// FIXME:
-		rs.trialReadResultSetFromCache();
-		return rs;
+		return new BlancoGenericJdbcResultSet(this, timeMillis);
 	}
 
 	///////////////////////////
@@ -404,20 +353,19 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		}
 	}
 
-	boolean isBlockReadOpened = false;
 	QueryResult qryResult = null;
-	boolean isFirstBlockOfQuery = true;
+	String cacheTableName = null;
 
 	public boolean hasNextBlock() throws SQLException {
-		if (isBlockReadOpened == false) {
+		if (qryResult == null) {
 			return true;
 		}
 
 		return (qryResult.isDone() == false);
 	}
 
-	public boolean nextBlock(final String sql, final String cacheTableName) throws SQLException {
-		isBlockReadOpened = true;
+	public boolean firstBlock(String sql, String cacheTableName) throws SQLException {
+		this.cacheTableName = cacheTableName;
 		try {
 			qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection().query(sql);
 			final SObject[] sObjs = qryResult.getRecords();
@@ -425,13 +373,9 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 				return false;
 			}
 
-			if (isFirstBlockOfQuery) {
-				buildResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis, sObjs[0]);
-				isFirstBlockOfQuery = false;
-			}
+			buildResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis, sObjs[0]);
 
 			// fill table
-
 			final ResultSet metadataRs = BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(
 					((BlancoSfdcJdbcConnection) conn).getCacheConnection(), cacheTableName, null, null, null, null);
 
@@ -441,5 +385,20 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		} catch (ConnectionException ex) {
 			throw new SQLException(ex);
 		}
+	}
+
+	public boolean nextBlock() throws SQLException {
+		final SObject[] sObjs = qryResult.getRecords();
+		if (sObjs.length == 0) {
+			return false;
+		}
+
+		// fill table
+		final ResultSet metadataRs = BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(
+				((BlancoSfdcJdbcConnection) conn).getCacheConnection(), cacheTableName, null, null, null, null);
+
+		createCacheBlock(((BlancoSfdcJdbcConnection) conn).getCacheConnection(), metadataRs, timeMillis, sObjs);
+
+		return true;
 	}
 }
