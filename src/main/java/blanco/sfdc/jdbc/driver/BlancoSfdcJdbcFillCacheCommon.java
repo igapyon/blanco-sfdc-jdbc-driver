@@ -118,10 +118,10 @@ public class BlancoSfdcJdbcFillCacheCommon {
 	 * @throws SQLException
 	 */
 	public static void fillCacheTableOfResultSet(final Connection connCache, final String globalUniqueKey,
-			final SObject[] sObjs) throws SQLException {
+			final XmlObject[] sObjs) throws SQLException {
 		for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
 
-			final XmlObject xmlSObject = (XmlObject) sObjs[indexRow];
+			final XmlObject xmlSObject = sObjs[indexRow];
 
 			String sql = "INSERT INTO GMETA_RS_" + globalUniqueKey + " SET ";
 			{
