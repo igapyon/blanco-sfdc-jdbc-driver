@@ -104,6 +104,7 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		try {
 			// TODO そもそもこの処理はResultSet側のフェッチ境界の考慮が必要だが、難易度が高いので一旦保留。
 			// TODO ただし、これを解決しないと、巨大な検索結果の際に全件を持ってきてしまうのでまずい実装だと思う。
+			boolean isFirstBlockOfQuery = true;
 			QueryResult qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection().query(sql);
 			for (;;) {
 				final SObject[] sObjs = qryResult.getRecords();
@@ -111,7 +112,10 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 					break;
 				}
 
-				buildResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis, sObjs[0]);
+				if (isFirstBlockOfQuery) {
+					buildResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis, sObjs[0]);
+					isFirstBlockOfQuery = false;
+				}
 
 				// create table
 				createTableTrial(((BlancoSfdcJdbcConnection) conn).getCacheConnection(), timeMillis);
@@ -248,7 +252,7 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		}
 		final String sObjectName = objObjectName.getValue().toString();
 
-		// TODO これを、行のユニークに利用できるはず。
+		// TODO これを、おぶじぇくとのIDは不要なので読み飛ばし。
 		final XmlObject sObjectId = (XmlObject) ite.next();
 
 		int ordinalIndex = 1;
