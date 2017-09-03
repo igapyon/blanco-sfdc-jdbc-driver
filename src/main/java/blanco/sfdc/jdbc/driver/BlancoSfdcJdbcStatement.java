@@ -72,8 +72,6 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 
 	static void createCacheBlock(final Connection connCache, final ResultSet metadataRsCreateTable,
 			final long timemillisecs, final SObject[] sObjs) throws SQLException {
-		BlancoGenericJdbcCacheUtilResultSet.createCacheTableOfResultSet(connCache, timemillisecs,
-				metadataRsCreateTable);
 
 		{
 			for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
@@ -294,6 +292,9 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 			// fill table
 			final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData
 					.getColumnsFromCache(conn.getCacheConnection(), cacheTableName, null, null, null, null);
+
+			BlancoGenericJdbcCacheUtilResultSet.createCacheTableOfResultSet(conn.getCacheConnection(), timeMillis,
+					metadataRs);
 
 			createCacheBlock(conn.getCacheConnection(), metadataRs, timeMillis, sObjs);
 

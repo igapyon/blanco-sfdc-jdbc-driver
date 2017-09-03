@@ -42,6 +42,7 @@ import com.sforce.ws.ConnectionException;
 
 import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcPreparedStatement;
 import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilDatabaseMetaData;
+import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilResultSet;
 
 public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPreparedStatement {
 
@@ -97,6 +98,9 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 			// fill table
 			final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData
 					.getColumnsFromCache(conn.getCacheConnection(), cacheTableName, null, null, null, null);
+
+			BlancoGenericJdbcCacheUtilResultSet.createCacheTableOfResultSet(conn.getCacheConnection(), timeMillis,
+					metadataRs);
 
 			BlancoSfdcJdbcStatement.createCacheBlock(conn.getCacheConnection(), metadataRs, timeMillis, sObjs);
 
