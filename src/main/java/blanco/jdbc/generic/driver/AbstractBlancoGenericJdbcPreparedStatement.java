@@ -54,6 +54,8 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilResultSetMetaData;
+
 public abstract class AbstractBlancoGenericJdbcPreparedStatement extends AbstractBlancoGenericJdbcStatement
 		implements PreparedStatement {
 	public AbstractBlancoGenericJdbcPreparedStatement(final AbstractBlancoGenericJdbcConnection conn) {
@@ -61,6 +63,8 @@ public abstract class AbstractBlancoGenericJdbcPreparedStatement extends Abstrac
 	}
 
 	public boolean execute(String sql) throws SQLException {
+		BlancoGenericJdbcCacheUtilResultSetMetaData.createCacheTableOfResultSetMetaData(conn.getCacheConnection(),
+				getGlobalUniqueKey());
 		return firstBlock(sql);
 	}
 

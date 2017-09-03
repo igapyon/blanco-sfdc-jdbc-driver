@@ -47,14 +47,10 @@ import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.bind.XmlObject;
 
 import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilDatabaseMetaData;
-import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilResultSetMetaData;
 
 public class BlancoSfdcJdbcFillCacheCommon {
 	public static void fillCacheTableOfResultSetMetaData(final BlancoSfdcJdbcConnection conn,
 			final String globalUniqueKey, final SObject resultSetValue) throws SQLException {
-
-		BlancoGenericJdbcCacheUtilResultSetMetaData.createCacheTableOfResultSetMetaData(conn.getCacheConnection(),
-				globalUniqueKey);
 
 		final XmlObject xmlSObject = (XmlObject) resultSetValue;
 		final Iterator<XmlObject> ite = xmlSObject.getChildren();

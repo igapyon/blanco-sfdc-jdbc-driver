@@ -39,6 +39,8 @@ import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.sql.SQLWarning;
 
+import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilResultSetMetaData;
+
 public abstract class AbstractBlancoGenericJdbcStatement implements BlancoGenericJdbcBlockReadStatement {
 	protected AbstractBlancoGenericJdbcConnection conn = null;
 
@@ -76,6 +78,8 @@ public abstract class AbstractBlancoGenericJdbcStatement implements BlancoGeneri
 	}
 
 	public boolean execute(String sql) throws SQLException {
+		BlancoGenericJdbcCacheUtilResultSetMetaData.createCacheTableOfResultSetMetaData(conn.getCacheConnection(),
+				getGlobalUniqueKey());
 		return firstBlock(sql);
 	}
 
