@@ -53,7 +53,7 @@ public class BlancoSfdcJdbcFillCacheCommon {
 			final String globalUniqueKey, final SObject resultSetValue) throws SQLException {
 
 		{
-			String ddl = BlancoGenericJdbcCacheUtilDatabaseMetaData.DATABASEMETADATA_COLUMNS_DDL_H2
+			String ddl = BlancoGenericJdbcCacheUtilDatabaseMetaData.DDL_CACHE_DATABASEMETADATA_COLUMNS
 					.replace("GMETA_COLUMNS", "GMETA_COLUMNS_" + globalUniqueKey);
 			conn.getCacheConnection().createStatement().execute(ddl);
 		}

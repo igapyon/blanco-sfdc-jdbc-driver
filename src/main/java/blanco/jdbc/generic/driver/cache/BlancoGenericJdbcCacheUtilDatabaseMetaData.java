@@ -43,7 +43,7 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 	///////////////////////////////////////////////
 	// DATABASEMETADATA
 
-	public static final String DATABASEMETADATA_TABLES_DDL_H2 = "CREATE TABLE IF NOT EXISTS GMETA_TABLES (" //
+	public static final String DDL_CACHE_DATABASEMETADATA_TABLES = "CREATE TABLE IF NOT EXISTS GMETA_TABLES (" //
 			+ "TABLE_CAT VARCHAR_IGNORECASE, TABLE_SCHEM VARCHAR_IGNORECASE, TABLE_NAME VARCHAR_IGNORECASE, TABLE_TYPE VARCHAR_IGNORECASE DEFAULT 'TABLE'" //
 			+ ", REMARKS VARCHAR_IGNORECASE, TYPE_CAT VARCHAR_IGNORECASE, TYPE_SCHEM VARCHAR_IGNORECASE, TYPE_NAME VARCHAR_IGNORECASE" //
 			+ ", SELF_REFERENCING_COL_NAME VARCHAR_IGNORECASE, REF_GENERATION VARCHAR_IGNORECASE DEFAULT 'USER')";
@@ -51,7 +51,7 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 	/**
 	 * Note: GMETA_COLUMNS を変更しつつ再利用しています。
 	 */
-	public static final String DATABASEMETADATA_COLUMNS_DDL_H2 = "CREATE TABLE IF NOT EXISTS GMETA_COLUMNS (" //
+	public static final String DDL_CACHE_DATABASEMETADATA_COLUMNS = "CREATE TABLE IF NOT EXISTS GMETA_COLUMNS (" //
 			+ "TABLE_CAT VARCHAR_IGNORECASE, TABLE_SCHEM VARCHAR_IGNORECASE, TABLE_NAME VARCHAR_IGNORECASE, COLUMN_NAME VARCHAR_IGNORECASE, DATA_TYPE INTEGER" //
 			+ ", TYPE_NAME VARCHAR_IGNORECASE"
 			+ ", COLUMN_SIZE INTEGER, DECIMAL_DIGITS INTEGER, NUM_PREC_RADIX INTEGER DEFAULT 10" //
@@ -63,7 +63,7 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 
 	public static void createCacheTables(final Connection connCache) throws SQLException {
 		// getTables
-		PreparedStatement pstmt = connCache.prepareStatement(DATABASEMETADATA_TABLES_DDL_H2);
+		PreparedStatement pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_TABLES);
 		try {
 			pstmt.execute();
 		} finally {
@@ -71,7 +71,7 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 		}
 
 		// getColumns
-		pstmt = connCache.prepareStatement(DATABASEMETADATA_COLUMNS_DDL_H2);
+		pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_COLUMNS);
 		try {
 			pstmt.execute();
 		} finally {
