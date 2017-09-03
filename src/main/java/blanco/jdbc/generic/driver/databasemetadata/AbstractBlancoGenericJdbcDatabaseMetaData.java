@@ -41,6 +41,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheDatabaseMetaDataUtil;
 import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
 
 public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements DatabaseMetaData {
@@ -794,12 +795,12 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types)
 			throws SQLException {
 
-		if (BlancoGenericJdbcDatabaseMetaDataCacheUtil.isGmetaTablesCached(conn.getCacheConnection()) == false) {
+		if (BlancoGenericJdbcCacheDatabaseMetaDataUtil.isGmetaTablesCached(conn.getCacheConnection()) == false) {
 			// call abstract method
 			fillCacheTableOfGetTables(catalog, schemaPattern, tableNamePattern, types);
 		}
 
-		return BlancoGenericJdbcDatabaseMetaDataCacheUtil.getTablesFromCache(conn.getCacheConnection(), catalog,
+		return BlancoGenericJdbcCacheDatabaseMetaDataUtil.getTablesFromCache(conn.getCacheConnection(), catalog,
 				schemaPattern, tableNamePattern, types);
 	}
 
@@ -821,14 +822,14 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 
 		// process every table.
 		for (String tableName : tableNameList) {
-			if (BlancoGenericJdbcDatabaseMetaDataCacheUtil.isGmetaColumnsCached(conn.getCacheConnection(), catalog,
+			if (BlancoGenericJdbcCacheDatabaseMetaDataUtil.isGmetaColumnsCached(conn.getCacheConnection(), catalog,
 					schemaPattern, tableName) == false) {
 				// call abstract method
 				fillCacheTableOfGetColumns(catalog, schemaPattern, tableName, columnNamePattern);
 			}
 		}
 
-		return BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(conn.getCacheConnection(), null, catalog,
+		return BlancoGenericJdbcCacheDatabaseMetaDataUtil.getColumnsFromCache(conn.getCacheConnection(), null, catalog,
 				schemaPattern, tableNamePattern, columnNamePattern);
 	}
 

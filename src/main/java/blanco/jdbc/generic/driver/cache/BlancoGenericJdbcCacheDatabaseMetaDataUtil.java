@@ -1,4 +1,4 @@
-package blanco.jdbc.generic.driver.databasemetadata;
+package blanco.jdbc.generic.driver.cache;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-public class BlancoGenericJdbcDatabaseMetaDataCacheUtil {
+public class BlancoGenericJdbcCacheDatabaseMetaDataUtil {
 	///////////////////////////////////////////////
 	// DATABASEMETADATA
 
