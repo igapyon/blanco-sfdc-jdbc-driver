@@ -46,10 +46,11 @@ import java.util.TimeZone;
 import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.bind.XmlObject;
 
+import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcConnection;
 import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilDatabaseMetaData;
 
 public class BlancoSfdcJdbcFillCacheCommon {
-	public static void fillCacheTableOfResultSetMetaData(final BlancoSfdcJdbcConnection conn,
+	public static void fillCacheTableOfResultSetMetaData(final AbstractBlancoGenericJdbcConnection conn,
 			final String globalUniqueKey, final SObject resultSetValue) throws SQLException {
 
 		final XmlObject xmlSObject = (XmlObject) resultSetValue;

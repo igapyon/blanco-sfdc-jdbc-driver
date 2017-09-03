@@ -95,8 +95,7 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 		}
 
 		// Fill Cache ResultSetMetaData
-		BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSetMetaData((BlancoSfdcJdbcConnection) conn,
-				getGlobalUniqueKey(), sObjs[0]);
+		BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSetMetaData(conn, getGlobalUniqueKey(), sObjs[0]);
 
 		// Create Cache ResultSet
 		BlancoGenericJdbcCacheUtilResultSet.createCacheTableOfResultSet(conn.getCacheConnection(),
