@@ -106,8 +106,8 @@ public class BlancoSfdcJdbcFillCacheCommon {
 		}
 	}
 
-	public static void fillCacheTableOfResultSet(final Connection connCache, final ResultSet metadataRsCreateTable,
-			final long timemillisecs, final SObject[] sObjs) throws SQLException {
+	public static void fillCacheTableOfResultSet(final Connection connCache, final long timemillisecs,
+			final SObject[] sObjs) throws SQLException {
 
 		{
 			for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
