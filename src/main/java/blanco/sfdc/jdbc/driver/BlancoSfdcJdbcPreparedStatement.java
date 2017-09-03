@@ -42,10 +42,14 @@ import com.sforce.ws.ConnectionException;
 
 import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcPreparedStatement;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSet;
-import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetMetaData;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetRow;
 
 public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPreparedStatement {
+	/**
+	 * FIXME ほんとうは、ユニークな何か文字列。
+	 */
+	final long timeMillis = System.currentTimeMillis();
+
 	protected String sql = null;
 
 	protected BlancoGenericJdbcResultSet rs = null;
@@ -81,11 +85,11 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 					break;
 				}
 
-				final BlancoGenericJdbcResultSetMetaData rsmd = BlancoSfdcJdbcStatement
-						.getResultSetMetaData((BlancoSfdcJdbcConnection) conn, sObjs[0]);
+				BlancoSfdcJdbcStatement.buildResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis, sObjs[0]);
 
 				for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
-					final BlancoGenericJdbcResultSetRow row = BlancoSfdcJdbcStatement.getRowObj(sObjs[indexRow], rsmd);
+					final BlancoGenericJdbcResultSetRow row = BlancoSfdcJdbcStatement
+							.getRowObj((BlancoSfdcJdbcConnection) conn, sObjs[indexRow], timeMillis);
 					rs.getRowList().add(row);
 				}
 				if (qryResult.isDone()) {

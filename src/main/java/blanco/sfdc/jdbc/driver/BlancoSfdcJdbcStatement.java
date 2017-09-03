@@ -33,8 +33,9 @@
 
 package blanco.sfdc.jdbc.driver;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,8 +51,6 @@ import com.sforce.ws.bind.XmlObject;
 import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSet;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetColumn;
-import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetMetaData;
-import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetMetaDataColumn;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetRow;
 import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaDataCacheUtil;
 
@@ -79,27 +78,21 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		return pconn.getPartnerConnection().getQueryOptions().getBatchSize();
 	}
 
-	protected static void createTableTrial(final ResultSetMetaData rsmd, final long timemillisecs) throws SQLException {
-
-		{
-			String ddl = BlancoGenericJdbcDatabaseMetaDataCacheUtil.DATABASEMETADATA_COLUMNS_DDL_H2
-					.replace("GMETA_COLUMNS", "GMETA_COLUMNS_" + timemillisecs);
-			System.out.println(ddl);
-		}
+	protected static void createTableTrial(final Connection connCache, final long timemillisecs) throws SQLException {
 
 		String ddl = "CREATE TABLE GEMA_RS_" + timemillisecs + " (";
 		// 一時テーブル名に
 		// create temporary table XXXX( 名前はプログラムで決めないとダメみたい。
 		// closeのときには、テーブルドロップかしら???
-		for (int index = 0; index < rsmd.getColumnCount(); index++) {
-			if (index != 0) {
-				ddl += ",";
-			}
-			// TODO
-			// TODO ddl += rsmd.getColumnName(index + 1);
-			ddl += " ";
-			// TODO ddl += rsmd.getColumnType(index + 1);
-		}
+		// for (int index = 0; index < rsmd.getColumnCount(); index++) {
+		// if (index != 0) {
+		// ddl += ",";
+		// }
+		// TODO
+		// TODO ddl += rsmd.getColumnName(index + 1);
+		// ddl += " ";
+		// TODO ddl += rsmd.getColumnType(index + 1);
+		// }
 		ddl += ")";
 		System.err.println("ddl=" + ddl);
 	}
@@ -118,14 +111,14 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 					break;
 				}
 
-				final BlancoGenericJdbcResultSetMetaData rsmd = getResultSetMetaData((BlancoSfdcJdbcConnection) conn,
-						sObjs[0]);
+				buildResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis, sObjs[0]);
 
 				// create table
-				createTableTrial(rsmd, timeMillis);
+				createTableTrial(((BlancoSfdcJdbcConnection) conn).getCacheConnection(), timeMillis);
 
 				for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
-					final BlancoGenericJdbcResultSetRow row = getRowObj(sObjs[indexRow], rsmd);
+					final BlancoGenericJdbcResultSetRow row = getRowObj((BlancoSfdcJdbcConnection) conn,
+							sObjs[indexRow], timeMillis);
 					rs.getRowList().add(row);
 				}
 				if (qryResult.isDone()) {
@@ -151,8 +144,8 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 	///////////////////////////
 	// common func
 
-	public static BlancoGenericJdbcResultSetRow getRowObj(final SObject sObj,
-			final BlancoGenericJdbcResultSetMetaData argRsmd) {
+	public static BlancoGenericJdbcResultSetRow getRowObj(final BlancoSfdcJdbcConnection conn, final SObject sObj,
+			final long timemillisecs) throws SQLException {
 		final BlancoGenericJdbcResultSetRow record = new BlancoGenericJdbcResultSetRow();
 		// getRowList().add(record);
 
@@ -176,17 +169,12 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 			} else if (indexColumn == 1) {
 				rowIdString = obj.getValue().toString();
 			} else {
-				// 1 origin for getString
-				final BlancoGenericJdbcResultSetMetaDataColumn metaDataColumn = argRsmd
-						.getColumnByColumnName(obj.getName().getLocalPart());
-				if (false)
-					System.err.println("TRACE: name:" + metaDataColumn.getColumnName());
-				if (false)
-					System.err.println("  TRACE: type:" + metaDataColumn.getDataType());
-				if (false)
-					System.err.println("  TRACE: type:" + metaDataColumn.getTypeName());
+				final ResultSet metadataRs = BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(
+						conn.getCacheConnection(), "GMETA_COLUMNS_" + timemillisecs, null, null, sObjectName,
+						obj.getName().getLocalPart());
+				metadataRs.next();
 
-				final BlancoGenericJdbcResultSetColumn column = new BlancoGenericJdbcResultSetColumn(metaDataColumn);
+				final BlancoGenericJdbcResultSetColumn column = new BlancoGenericJdbcResultSetColumn(metadataRs);
 				record.getColumnList().add(column);
 
 				if (obj.getValue() == null) {
@@ -195,7 +183,7 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 					column.setColumnValue(obj.getValue().toString());
 
 					// Date変換
-					switch (column.getMetaDataColumn().getDataType()) {
+					switch (column.getMetaDataColumn().getInt("DATA_TYPE")) {
 					case java.sql.Types.DATE:
 					case java.sql.Types.TIME:
 					case java.sql.Types.TIME_WITH_TIMEZONE:
@@ -240,9 +228,14 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		}
 	}
 
-	public static BlancoGenericJdbcResultSetMetaData getResultSetMetaData(final BlancoSfdcJdbcConnection conn,
+	public static void buildResultSetMetaData(final BlancoSfdcJdbcConnection conn, final long timemillisecs,
 			final SObject resultSetValue) throws SQLException {
-		final BlancoGenericJdbcResultSetMetaData rsmd = new BlancoGenericJdbcResultSetMetaData();
+
+		{
+			String ddl = BlancoGenericJdbcDatabaseMetaDataCacheUtil.DATABASEMETADATA_COLUMNS_DDL_H2
+					.replace("GMETA_COLUMNS", "GMETA_COLUMNS_" + timemillisecs);
+			conn.getCacheConnection().createStatement().execute(ddl);
+		}
 
 		final XmlObject xmlSObject = (XmlObject) resultSetValue;
 		final Iterator<XmlObject> ite = xmlSObject.getChildren();
@@ -256,9 +249,10 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		final String sObjectName = objObjectName.getValue().toString();
 
 		// TODO これを、行のユニークに利用できるはず。
-		final XmlObject objObjectId = (XmlObject) ite.next();
+		final XmlObject sObjectId = (XmlObject) ite.next();
 
-		for (; ite.hasNext();) {
+		int ordinalIndex = 1;
+		for (; ite.hasNext(); ordinalIndex++) {
 			final XmlObject objChild = (XmlObject) ite.next();
 			final ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, sObjectName,
 					objChild.getName().getLocalPart());
@@ -267,28 +261,27 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 				System.out.println("child, Value:" + objChild.getValue());
 				rsmdRs.next();
 
-				final BlancoGenericJdbcResultSetMetaDataColumn column = new BlancoGenericJdbcResultSetMetaDataColumn();
-
-				column.setColumnLabel(rsmdRs.getString("REMARKS")); // ???
-				column.setSchemaName(rsmdRs.getString("TABLE_SCHEM"));
-
-				column.setTableName(rsmdRs.getString("TABLE_NAME"));
-				column.setPrecision(rsmdRs.getInt("DECIMAL_DIGITS")); // ???
-				column.setScale(rsmdRs.getInt("COLUMN_SIZE"));// ???
-				column.setColumnName(rsmdRs.getString("COLUMN_NAME"));
-				column.setNullable("true".equals(rsmdRs.getString("NULLABLE")));
-				column.setDataType(rsmdRs.getInt("DATA_TYPE"));
-				column.setTypeName(rsmdRs.getString("TYPE_NAME"));
-				column.setColumnSize(rsmdRs.getInt("COLUMN_SIZE"));
-				column.setRemarks(rsmdRs.getString("REMARKS"));
-				column.setOrdinalPosition(rsmdRs.getInt("ORDINAL_POSITION"));
-
-				rsmd.getColumnList().add(column);
+				final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement("INSERT INTO GMETA_COLUMNS_"
+						+ timemillisecs
+						+ " SET TABLE_NAME = ?, COLUMN_NAME = ?, DATA_TYPE = ?, TYPE_NAME = ?, COLUMN_SIZE = ?, DECIMAL_DIGITS = ?, NULLABLE = ?, REMARKS = ?, CHAR_OCTET_LENGTH = ?, ORDINAL_POSITION = ?");
+				try {
+					pstmt.setString(1, rsmdRs.getString("TABLE_NAME"));
+					pstmt.setString(2, rsmdRs.getString("COLUMN_NAME"));
+					pstmt.setInt(3, rsmdRs.getInt("DATA_TYPE"));
+					pstmt.setString(4, rsmdRs.getString("TYPE_NAME"));
+					pstmt.setInt(5, rsmdRs.getInt("COLUMN_SIZE"));
+					pstmt.setInt(6, rsmdRs.getInt("DECIMAL_DIGITS"));
+					pstmt.setInt(7, rsmdRs.getInt("NULLABLE"));
+					pstmt.setString(8, rsmdRs.getString("REMARKS"));
+					pstmt.setInt(9, rsmdRs.getInt("CHAR_OCTET_LENGTH"));
+					pstmt.setInt(10, ordinalIndex);
+					pstmt.execute();
+				} finally {
+					pstmt.close();
+				}
 			} finally {
 				rsmdRs.close();
 			}
 		}
-
-		return rsmd;
 	}
 }

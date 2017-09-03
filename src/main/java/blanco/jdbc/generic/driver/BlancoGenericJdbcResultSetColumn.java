@@ -33,6 +33,9 @@
 
 package blanco.jdbc.generic.driver;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class BlancoGenericJdbcResultSetColumn {
 	protected String columnValue = null;
 
@@ -40,24 +43,20 @@ public class BlancoGenericJdbcResultSetColumn {
 
 	protected java.util.Date columnValueByDate = null;
 
-	protected BlancoGenericJdbcResultSetMetaDataColumn metaDataColumn = null;
+	protected ResultSet metaDataColumn = null;
 
-	public BlancoGenericJdbcResultSetColumn(final BlancoGenericJdbcResultSetMetaDataColumn metaDataColumn) {
-		this.metaDataColumn = metaDataColumn;
+	public BlancoGenericJdbcResultSetColumn(final ResultSet metadataRs) {
+		this.metaDataColumn = metadataRs;
 	}
 
 	// columnType ???
 
-	public BlancoGenericJdbcResultSetMetaDataColumn getMetaDataColumn() {
+	public ResultSet getMetaDataColumn() {
 		return metaDataColumn;
 	}
 
-	public void setMetaDataColumn(BlancoGenericJdbcResultSetMetaDataColumn metaDataColumn) {
-		this.metaDataColumn = metaDataColumn;
-	}
-
-	public String getColumnName() {
-		return metaDataColumn.getColumnName();
+	public String getColumnName() throws SQLException {
+		return metaDataColumn.getString("COLUMN_NAME");
 	}
 
 	public String getColumnValue() {
