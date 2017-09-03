@@ -125,13 +125,7 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	}
 
 	public ResultSetMetaData getMetaData() throws SQLException {
-		// final ResultSet columnsRs =
-		// BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
-		// ((BlancoSfdcJdbcConnection) stmt.getConnection()), "GMETA_COLUMNS_" +
-		// globalUniqueKey, null, null, null,
-		// null);
-		// TODO ResultSetMetaData の生成方法を検討必要。
-		throw new SQLException("Not Implemented.");
+		return new BlancoGenericJdbcResultSetMetaData(stmt, globalUniqueKey);
 	}
 
 	public <T> T unwrap(Class<T> iface) throws SQLException {
