@@ -33,6 +33,7 @@
 
 package blanco.jdbc.generic.driver;
 
+// TODO このクラス不要かどうかチェック。
 public class BlancoGenericJdbcResultSetMetaDataColumn {
 	// COLUMN_NAME
 	protected String columnName = "N/A";
