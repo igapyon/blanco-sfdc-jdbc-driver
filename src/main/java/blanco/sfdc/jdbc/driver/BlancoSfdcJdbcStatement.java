@@ -50,8 +50,6 @@ import com.sforce.ws.bind.XmlObject;
 
 import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSet;
-import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetColumn;
-import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetRow;
 import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaDataCacheUtil;
 
 public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement {
@@ -255,11 +253,6 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 							sObjs);
 				}
 
-				for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
-					final BlancoGenericJdbcResultSetRow row = getRowObj((BlancoSfdcJdbcConnection) conn,
-							sObjs[indexRow], timeMillis);
-					rs.getRowList().add(row);
-				}
 				if (qryResult.isDone()) {
 					break;
 				}
@@ -285,9 +278,15 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 	///////////////////////////
 	// common func
 
-	public static BlancoGenericJdbcResultSetRow getRowObj(final BlancoSfdcJdbcConnection conn, final SObject sObj,
-			final long timemillisecs) throws SQLException {
-		final BlancoGenericJdbcResultSetRow record = new BlancoGenericJdbcResultSetRow();
+	/**
+	 * @deprecated
+	 * @param conn
+	 * @param sObj
+	 * @param timemillisecs
+	 * @throws SQLException
+	 */
+	public static void getRowObj(final BlancoSfdcJdbcConnection conn, final SObject sObj, final long timemillisecs)
+			throws SQLException {
 		// getRowList().add(record);
 
 		final XmlObject xmlSObject = (XmlObject) sObj;
@@ -315,31 +314,10 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 						obj.getName().getLocalPart());
 				metadataRs.next();
 
-				final BlancoGenericJdbcResultSetColumn column = new BlancoGenericJdbcResultSetColumn(metadataRs);
-				record.getColumnList().add(column);
-
-				if (obj.getValue() == null) {
-					column.setColumnValue("");
-				} else {
-					column.setColumnValue(obj.getValue().toString());
-
-					// Date変換
-					switch (column.getMetaDataColumn().getInt("DATA_TYPE")) {
-					case java.sql.Types.DATE:
-					case java.sql.Types.TIME:
-					case java.sql.Types.TIME_WITH_TIMEZONE:
-					case java.sql.Types.TIMESTAMP:
-					case java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
-						column.setColumnValueByDate(soqlDateToDate(column.getColumnValue()));
-						break;
-					}
-				}
-
 				// TODO tablename?
 				// TODO set Object ID?
 			}
 		}
-		return record;
 	}
 
 	public static java.util.Date soqlDateToDate(final String soqlDateString) {

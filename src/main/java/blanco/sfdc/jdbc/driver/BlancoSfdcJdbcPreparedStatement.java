@@ -42,7 +42,6 @@ import com.sforce.ws.ConnectionException;
 
 import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcPreparedStatement;
 import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSet;
-import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSetRow;
 import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaDataCacheUtil;
 
 public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPreparedStatement {
@@ -106,11 +105,6 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 
 				BlancoSfdcJdbcStatement.buildResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis, sObjs[0]);
 
-				for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
-					final BlancoGenericJdbcResultSetRow row = BlancoSfdcJdbcStatement
-							.getRowObj((BlancoSfdcJdbcConnection) conn, sObjs[indexRow], timeMillis);
-					rs.getRowList().add(row);
-				}
 				if (qryResult.isDone()) {
 					break;
 				}

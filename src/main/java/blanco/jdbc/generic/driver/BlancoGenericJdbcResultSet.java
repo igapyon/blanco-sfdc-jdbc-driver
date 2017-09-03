@@ -53,9 +53,7 @@ import java.sql.SQLXML;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Map;
 
 import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
@@ -69,7 +67,6 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 
 	protected ResultSet trialReadResultSet = null;
 
-	protected List<BlancoGenericJdbcResultSetRow> rowList = new ArrayList<BlancoGenericJdbcResultSetRow>();
 	protected int rowIndex = -1;
 
 	public BlancoGenericJdbcResultSet(final Statement stmt, final long timeMillis) {
@@ -89,10 +86,6 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 		trialReadResultSet = ((BlancoSfdcJdbcConnection) stmt.getConnection()).getCacheConnection().createStatement()
 				.executeQuery("SELECT * FROM GEMA_RS_" + timeMillis);
 
-	}
-
-	public List<BlancoGenericJdbcResultSetRow> getRowList() {
-		return rowList;
 	}
 
 	public String getString(final int columnIndex) throws SQLException {
@@ -443,8 +436,10 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 		throw new SQLException("Not Implemented.");
 	}
 
-	protected int getCurrentRecordCount() {
-		return rowList.size();
+	protected int getCurrentRecordCount() throws SQLException {
+		// TODO ブロック読み込みに対応したら連番を別途持つこと。
+		return trialReadResultSet.getRow();
+		// return rowList.size();
 	}
 
 	public boolean next() throws SQLException {
