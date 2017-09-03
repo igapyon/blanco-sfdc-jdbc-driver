@@ -64,7 +64,7 @@ public class BlancoSfdcJdbcFillCacheCommon {
 		}
 		final String sObjectName = objObjectName.getValue().toString();
 
-		// TODO これを、おぶじぇくとのIDは不要なので読み飛ばし。
+		// TODO オブジェクトIDですが、これは不要. 読み飛ばし。
 		final XmlObject sObjectId = (XmlObject) ite.next();
 
 		int ordinalIndex = 1;
@@ -73,8 +73,9 @@ public class BlancoSfdcJdbcFillCacheCommon {
 			final ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, sObjectName,
 					objChild.getName().getLocalPart());
 			try {
-				System.out.println("child, Name:" + objChild.getName().getLocalPart());
-				System.out.println("child, Value:" + objChild.getValue());
+				// System.out.println("child, Name:" +
+				// objChild.getName().getLocalPart());
+				// System.out.println("child, Value:" + objChild.getValue());
 				rsmdRs.next();
 
 				final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement("INSERT INTO GMETA_COLUMNS_"
@@ -103,111 +104,110 @@ public class BlancoSfdcJdbcFillCacheCommon {
 
 	public static void fillCacheTableOfResultSet(final Connection connCache, final String globalUniqueKey,
 			final SObject[] sObjs) throws SQLException {
+		for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
 
-		{
-			for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
+			final XmlObject xmlSObject = (XmlObject) sObjs[indexRow];
 
-				final XmlObject xmlSObject = (XmlObject) sObjs[indexRow];
+			String sql = "INSERT INTO GMETA_RS_" + globalUniqueKey + " SET ";
+			{
+				final Iterator<XmlObject> ite = xmlSObject.getChildren();
+				int indexColumn = 0;
+				for (; ite.hasNext(); indexColumn++) {
+					final XmlObject obj = (XmlObject) ite.next();
 
-				String sql = "INSERT INTO GMETA_RS_" + globalUniqueKey + " SET ";
-				{
-					final Iterator<XmlObject> ite = xmlSObject.getChildren();
-					int indexColumn = 0;
-					for (; ite.hasNext(); indexColumn++) {
-						final XmlObject obj = (XmlObject) ite.next();
+					// First one should be : type, value=Account,
+					// children=[]}
+					// Second one should be : Id, value=0012800000lbaM2AAI,
+					// children=[]}
 
-						// First one should be : type, value=Account,
-						// children=[]}
-						// Second one should be : Id, value=0012800000lbaM2AAI,
-						// children=[]}
+					String sObjectName = null;
+					String rowIdString = null;
 
-						String sObjectName = null;
-						String rowIdString = null;
-
-						if (indexColumn == 0) {
-							sObjectName = obj.getValue().toString();
-						} else if (indexColumn == 1) {
-							rowIdString = obj.getValue().toString();
-						} else {
-							if (indexColumn > 2) {
-								sql += ",";
-							}
-							final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
-									connCache, "GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName,
-									obj.getName().getLocalPart());
-							metadataRs.next();
-
-							if (obj.getValue() != null) {
-								// null のときはなにもしない。
-
-								sql += (metadataRs.getString("COLUMN_NAME") + " = ?");
-							}
-
-							// TODO tablename?
-							// TODO set Object ID?
+					if (indexColumn == 0) {
+						sObjectName = obj.getValue().toString();
+					} else if (indexColumn == 1) {
+						rowIdString = obj.getValue().toString();
+					} else {
+						if (indexColumn > 2) {
+							sql += ",";
 						}
+						final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
+								connCache, "GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName,
+								obj.getName().getLocalPart());
+						metadataRs.next();
+
+						if (obj.getValue() != null) {
+							// null のときはなにもしない。
+
+							sql += (metadataRs.getString("COLUMN_NAME") + " = ?");
+						}
+
+						// TODO tablename?
+						// TODO set Object ID?
 					}
 				}
-				final PreparedStatement pstmt = connCache.prepareStatement(sql);
-				{
-					int pstmtIndex = 1;
-					final Iterator<XmlObject> ite = xmlSObject.getChildren();
-					int indexColumn = 0;
-					for (; ite.hasNext(); indexColumn++) {
-						final XmlObject obj = (XmlObject) ite.next();
-
-						// First one should be : type, value=Account,
-						// children=[]}
-						// Second one should be : Id, value=0012800000lbaM2AAI,
-						// children=[]}
-
-						String sObjectName = null;
-						String rowIdString = null;
-
-						if (indexColumn == 0) {
-							sObjectName = obj.getValue().toString();
-						} else if (indexColumn == 1) {
-							rowIdString = obj.getValue().toString();
-						} else {
-							if (indexColumn > 2) {
-								sql += ",";
-							}
-							final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
-									connCache, "GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName,
-									obj.getName().getLocalPart());
-							metadataRs.next();
-
-							if (obj.getValue() != null) {
-								// null のときはなにもしない。
-
-								String value = obj.getValue().toString();
-
-								// Date変換
-								switch (metadataRs.getInt("DATA_TYPE")) {
-								case java.sql.Types.VARCHAR:
-									pstmt.setString(pstmtIndex++, value);
-									break;
-								case java.sql.Types.INTEGER:
-									pstmt.setInt(pstmtIndex++, Integer.valueOf(value));
-									break;
-								case java.sql.Types.DATE:
-								case java.sql.Types.TIME:
-								case java.sql.Types.TIME_WITH_TIMEZONE:
-								case java.sql.Types.TIMESTAMP:
-								case java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
-									pstmt.setDate(pstmtIndex++, new java.sql.Date(soqlDateToDate(value).getTime()));
-									break;
-								}
-							}
-
-							// TODO tablename?
-							// TODO set Object ID?
-						}
-					}
-				}
-				// TODO CHECK RESULT
-				pstmt.execute();
 			}
+
+			final PreparedStatement pstmt = connCache.prepareStatement(sql);
+
+			{
+				int pstmtIndex = 1;
+				final Iterator<XmlObject> ite = xmlSObject.getChildren();
+				int indexColumn = 0;
+				for (; ite.hasNext(); indexColumn++) {
+					final XmlObject obj = (XmlObject) ite.next();
+
+					// First one should be : type, value=Account,
+					// children=[]}
+					// Second one should be : Id, value=0012800000lbaM2AAI,
+					// children=[]}
+
+					String sObjectName = null;
+					String rowIdString = null;
+
+					if (indexColumn == 0) {
+						sObjectName = obj.getValue().toString();
+					} else if (indexColumn == 1) {
+						rowIdString = obj.getValue().toString();
+					} else {
+						if (indexColumn > 2) {
+							sql += ",";
+						}
+						final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
+								connCache, "GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName,
+								obj.getName().getLocalPart());
+						metadataRs.next();
+
+						if (obj.getValue() != null) {
+							// null のときはなにもしない。
+
+							String value = obj.getValue().toString();
+
+							// Date変換
+							switch (metadataRs.getInt("DATA_TYPE")) {
+							case java.sql.Types.VARCHAR:
+								pstmt.setString(pstmtIndex++, value);
+								break;
+							case java.sql.Types.INTEGER:
+								pstmt.setInt(pstmtIndex++, Integer.valueOf(value));
+								break;
+							case java.sql.Types.DATE:
+							case java.sql.Types.TIME:
+							case java.sql.Types.TIME_WITH_TIMEZONE:
+							case java.sql.Types.TIMESTAMP:
+							case java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
+								pstmt.setDate(pstmtIndex++, new java.sql.Date(soqlDateToDate(value).getTime()));
+								break;
+							}
+						}
+
+						// TODO tablename?
+						// TODO set Object ID?
+					}
+				}
+			}
+			// TODO Check result of execute() method
+			pstmt.execute();
 		}
 	}
 

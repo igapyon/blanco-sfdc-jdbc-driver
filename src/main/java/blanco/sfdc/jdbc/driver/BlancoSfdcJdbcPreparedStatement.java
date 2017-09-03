@@ -44,7 +44,6 @@ import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcPreparedStatement;
 import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilResultSet;
 
 public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPreparedStatement {
-
 	protected String sql = null;
 
 	public BlancoSfdcJdbcPreparedStatement(final BlancoSfdcJdbcConnection conn, final String sql) {
@@ -113,6 +112,7 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 			return false;
 		}
 
+		// Fill Cache ResultSet
 		BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSet(conn.getCacheConnection(), getGlobalUniqueKey(), sObjs);
 
 		return true;

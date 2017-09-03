@@ -43,6 +43,7 @@ import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilResultSet;
 
 public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement {
+	protected QueryResult qryResult = null;
 
 	public BlancoSfdcJdbcStatement(final BlancoSfdcJdbcConnection conn) {
 		super(conn);
@@ -59,8 +60,6 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		final BlancoSfdcJdbcConnection pconn = ((BlancoSfdcJdbcConnection) conn);
 		return pconn.getPartnerConnection().getQueryOptions().getBatchSize();
 	}
-
-	QueryResult qryResult = null;
 
 	public boolean hasNextBlock() throws SQLException {
 		if (qryResult == null) {
