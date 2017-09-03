@@ -48,7 +48,7 @@ import com.sforce.ws.bind.XmlObject;
 
 import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilDatabaseMetaData;
 
-public class BlancoSfdcJdbcFillCacheUtil {
+public class BlancoSfdcJdbcFillCacheCommon {
 	public static void fillCacheTableOfResultSetMetaData(final BlancoSfdcJdbcConnection conn, final long timemillisecs,
 			final SObject resultSetValue) throws SQLException {
 
@@ -114,7 +114,7 @@ public class BlancoSfdcJdbcFillCacheUtil {
 
 				final XmlObject xmlSObject = (XmlObject) sObjs[indexRow];
 
-				String sql = "INSERT INTO GEMA_RS_" + timemillisecs + " SET ";
+				String sql = "INSERT INTO GMETA_RS_" + timemillisecs + " SET ";
 				{
 					final Iterator<XmlObject> ite = xmlSObject.getChildren();
 					int indexColumn = 0;

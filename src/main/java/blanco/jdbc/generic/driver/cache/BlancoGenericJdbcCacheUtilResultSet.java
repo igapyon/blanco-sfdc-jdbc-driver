@@ -40,7 +40,7 @@ import java.sql.SQLException;
 public class BlancoGenericJdbcCacheUtilResultSet {
 	public static void createCacheTableOfResultSet(final Connection connCache, final long timeMillis,
 			final ResultSet metadataRsCreateTable) throws SQLException {
-		String ddl = "CREATE TABLE IF NOT EXISTS GEMA_RS_" + timeMillis + " (";
+		String ddl = "CREATE TABLE IF NOT EXISTS GMETA_RS_" + timeMillis + " (";
 
 		boolean isFirst = true;
 		for (; metadataRsCreateTable.next();) {

@@ -88,7 +88,7 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 		// FIXME ENUM ALL COLUMN NAME INSTEAD OF *
 		// FIXME ORDER BY
 		cacheResultSet = ((BlancoSfdcJdbcConnection) stmt.getConnection()).getCacheConnection().createStatement()
-				.executeQuery("SELECT * FROM GEMA_RS_" + timeMillis);
+				.executeQuery("SELECT * FROM GMETA_RS_" + timeMillis);
 
 	}
 
