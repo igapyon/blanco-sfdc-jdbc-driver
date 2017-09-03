@@ -58,12 +58,16 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
+
 public class BlancoGenericJdbcResultSet implements ResultSet {
 	private Statement stmt = null;
 
 	protected long timeMillis = -1;
 
 	private boolean isClosed = false;
+
+	protected ResultSet trialReadResultSet = null;
 
 	protected List<BlancoGenericJdbcResultSetRow> rowList = new ArrayList<BlancoGenericJdbcResultSetRow>();
 	protected int rowIndex = -1;
@@ -78,24 +82,37 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 		rowIndex = -1;
 	}
 
+	public void trialReadResultSetFromCache() throws SQLException {
+		// FIXME ORDER BY
+		trialReadResultSet = ((BlancoSfdcJdbcConnection) stmt.getConnection()).getCacheConnection().createStatement()
+				.executeQuery("SELECT * FROM GEMA_RS_" + timeMillis);
+
+	}
+
 	public List<BlancoGenericJdbcResultSetRow> getRowList() {
 		return rowList;
 	}
 
 	public String getString(final int columnIndex) throws SQLException {
-		final BlancoGenericJdbcResultSetColumn column = getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
-		return column.getColumnValue();
+		return trialReadResultSet.getString(columnIndex);
+		// final BlancoGenericJdbcResultSetColumn column =
+		// getRowList().get(rowIndex).getColumnList().get(columnIndex - 1);
+		// return column.getColumnValue();
 	}
 
 	public String getString(final String columnLabel) throws SQLException {
-		for (int index = 0; index < getRowList().get(rowIndex).getColumnList().size(); index++) {
-			final BlancoGenericJdbcResultSetColumn item = getRowList().get(rowIndex).getColumnList().get(index);
-			if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
-				return item.getColumnValue();
-			}
-		}
+		return trialReadResultSet.getString(columnLabel);
 
-		throw new SQLException("No such column [" + columnLabel + "]");
+		// for (int index = 0; index <
+		// getRowList().get(rowIndex).getColumnList().size(); index++) {
+		// final BlancoGenericJdbcResultSetColumn item =
+		// getRowList().get(rowIndex).getColumnList().get(index);
+		// if (item.getColumnName().compareToIgnoreCase(columnLabel) == 0) {
+		// return item.getColumnValue();
+		// }
+		// }
+
+//		throw new SQLException("No such column [" + columnLabel + "]");
 	}
 
 	public Date getDate(int columnIndex) throws SQLException {
@@ -485,6 +502,9 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 		if (isClosed()) {
 			return false;
 		}
+
+		// TODO 次のブロック読み込みの考慮
+		trialReadResultSet.next();
 
 		if (getCurrentRecordCount() <= 0) {
 			return false;

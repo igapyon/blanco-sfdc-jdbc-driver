@@ -277,6 +277,8 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 
 	@Override
 	public ResultSet getResultSet() throws SQLException {
+		// FIXME:
+		rs.trialReadResultSetFromCache();
 		return rs;
 	}
 
