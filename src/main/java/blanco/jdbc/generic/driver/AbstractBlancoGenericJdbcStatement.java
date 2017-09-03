@@ -38,9 +38,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.sql.SQLWarning;
-import java.sql.Statement;
 
-public abstract class AbstractBlancoGenericJdbcStatement implements Statement {
+public abstract class AbstractBlancoGenericJdbcStatement implements BlancoGenericJdbcBlockReadStatement {
 	protected Connection conn = null;
 
 	protected boolean isClosed = false;

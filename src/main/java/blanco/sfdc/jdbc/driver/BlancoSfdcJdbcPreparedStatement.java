@@ -130,4 +130,44 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 	public ResultSet executeQuery() throws SQLException {
 		return executeQuery(sql);
 	}
+
+	boolean isBlockReadOpened = false;
+	QueryResult qryResult = null;
+	boolean isFirstBlockOfQuery = true;
+
+	public boolean hasNextBlock() throws SQLException {
+		if (isBlockReadOpened == false) {
+			return true;
+		}
+
+		return (qryResult.isDone() == false);
+	}
+
+	public boolean nextBlock(final String sql, final String cacheTableName) throws SQLException {
+		isBlockReadOpened = true;
+		try {
+			qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection().query(sql);
+			final SObject[] sObjs = qryResult.getRecords();
+			if (sObjs.length == 0) {
+				return false;
+			}
+
+			if (isFirstBlockOfQuery) {
+				BlancoSfdcJdbcStatement.buildResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis, sObjs[0]);
+				isFirstBlockOfQuery = false;
+			}
+
+			// fill table
+
+			final ResultSet metadataRs = BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(
+					((BlancoSfdcJdbcConnection) conn).getCacheConnection(), cacheTableName, null, null, null, null);
+
+			BlancoSfdcJdbcStatement.createCacheBlock(((BlancoSfdcJdbcConnection) conn).getCacheConnection(), metadataRs,
+					timeMillis, sObjs);
+
+			return true;
+		} catch (ConnectionException ex) {
+			throw new SQLException(ex);
+		}
+	}
 }
