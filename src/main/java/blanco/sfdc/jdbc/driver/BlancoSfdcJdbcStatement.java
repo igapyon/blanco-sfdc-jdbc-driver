@@ -78,42 +78,150 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		return pconn.getPartnerConnection().getQueryOptions().getBatchSize();
 	}
 
-	protected static void createTableTrial(final Connection connCache, final ResultSet metadataRs,
-			final long timemillisecs) throws SQLException {
+	static void createCacheBlock(final Connection connCache, final ResultSet metadataRsCreateTable,
+			final long timemillisecs, final SObject[] sObjs) throws SQLException {
+		{
+			String ddl = "CREATE TABLE IF NOT EXISTS GEMA_RS_" + timemillisecs + " (";
 
-		String ddl = "CREATE TABLE GEMA_RS_" + timemillisecs + " (";
-
-		boolean isFirst = true;
-		for (; metadataRs.next();) {
-			if (isFirst) {
-				isFirst = false;
-			} else {
-				ddl += ",";
+			boolean isFirst = true;
+			for (; metadataRsCreateTable.next();) {
+				if (isFirst) {
+					isFirst = false;
+				} else {
+					ddl += ",";
+				}
+				ddl += metadataRsCreateTable.getString("COLUMN_NAME");
+				ddl += " ";
+				switch (metadataRsCreateTable.getInt("DATA_TYPE")) {
+				case java.sql.Types.VARCHAR:
+					ddl += "VARCHAR";
+					break;
+				case java.sql.Types.INTEGER:
+					ddl += "INTEGER";
+					break;
+				case java.sql.Types.DATE:
+					ddl += "DATE";
+					break;
+				case java.sql.Types.TIMESTAMP:
+					ddl += "TIMESTAMP";
+					break;
+				default:
+					throw new SQLException("Unsupported type:" + metadataRsCreateTable.getInt("DATA_TYPE") + " ("
+							+ metadataRsCreateTable.getString("TYPE_NAME") + ")");
+				}
 			}
-			ddl += metadataRs.getString("COLUMN_NAME");
-			ddl += " ";
-			switch (metadataRs.getInt("DATA_TYPE")) {
-			case java.sql.Types.VARCHAR:
-				ddl += "VARCHAR";
-				break;
-			case java.sql.Types.INTEGER:
-				ddl += "INTEGER";
-				break;
-			case java.sql.Types.DATE:
-				ddl += "DATE";
-				break;
-			case java.sql.Types.TIMESTAMP:
-				ddl += "TIMESTAMP";
-				break;
-			default:
-				throw new SQLException("Unsupported type:" + metadataRs.getInt("DATA_TYPE") + " ("
-						+ metadataRs.getString("TYPE_NAME") + ")");
+
+			ddl += ")";
+			connCache.createStatement().execute(ddl);
+			System.err.println("ddl=" + ddl);
+		}
+
+		{
+			for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
+
+				final XmlObject xmlSObject = (XmlObject) sObjs[indexRow];
+
+				String sql = "INSERT INTO GEMA_RS_" + timemillisecs + " SET ";
+				{
+					final Iterator<XmlObject> ite = xmlSObject.getChildren();
+					int indexColumn = 0;
+					for (; ite.hasNext(); indexColumn++) {
+						final XmlObject obj = (XmlObject) ite.next();
+
+						// First one should be : type, value=Account,
+						// children=[]}
+						// Second one should be : Id, value=0012800000lbaM2AAI,
+						// children=[]}
+
+						String sObjectName = null;
+						String rowIdString = null;
+
+						if (indexColumn == 0) {
+							sObjectName = obj.getValue().toString();
+						} else if (indexColumn == 1) {
+							rowIdString = obj.getValue().toString();
+						} else {
+							if (indexColumn > 2) {
+								sql += ",";
+							}
+							final ResultSet metadataRs = BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(
+									connCache, "GMETA_COLUMNS_" + timemillisecs, null, null, sObjectName,
+									obj.getName().getLocalPart());
+							metadataRs.next();
+
+							if (obj.getValue() != null) {
+								// null のときはなにもしない。
+
+								sql += (metadataRs.getString("COLUMN_NAME") + " = ?");
+							}
+
+							// TODO tablename?
+							// TODO set Object ID?
+						}
+					}
+				}
+				final PreparedStatement pstmt = connCache.prepareStatement(sql);
+				{
+					int pstmtIndex = 1;
+					final Iterator<XmlObject> ite = xmlSObject.getChildren();
+					int indexColumn = 0;
+					for (; ite.hasNext(); indexColumn++) {
+						final XmlObject obj = (XmlObject) ite.next();
+
+						// First one should be : type, value=Account,
+						// children=[]}
+						// Second one should be : Id, value=0012800000lbaM2AAI,
+						// children=[]}
+
+						String sObjectName = null;
+						String rowIdString = null;
+
+						if (indexColumn == 0) {
+							sObjectName = obj.getValue().toString();
+						} else if (indexColumn == 1) {
+							rowIdString = obj.getValue().toString();
+						} else {
+							if (indexColumn > 2) {
+								sql += ",";
+							}
+							final ResultSet metadataRs = BlancoGenericJdbcDatabaseMetaDataCacheUtil.getColumnsFromCache(
+									connCache, "GMETA_COLUMNS_" + timemillisecs, null, null, sObjectName,
+									obj.getName().getLocalPart());
+							metadataRs.next();
+
+							if (obj.getValue() != null) {
+								// null のときはなにもしない。
+
+								String value = obj.getValue().toString();
+
+								// Date変換
+								switch (metadataRs.getInt("DATA_TYPE")) {
+								case java.sql.Types.VARCHAR:
+									pstmt.setString(pstmtIndex++, value);
+									break;
+								case java.sql.Types.INTEGER:
+									pstmt.setInt(pstmtIndex++, Integer.valueOf(value));
+									break;
+								case java.sql.Types.DATE:
+								case java.sql.Types.TIME:
+								case java.sql.Types.TIME_WITH_TIMEZONE:
+								case java.sql.Types.TIMESTAMP:
+								case java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
+									pstmt.setDate(pstmtIndex++, new java.sql.Date(soqlDateToDate(value).getTime()));
+									break;
+								}
+							}
+
+							// TODO tablename?
+							// TODO set Object ID?
+						}
+					}
+				}
+				// TODO CHECK RESULT
+				pstmt.execute();
 			}
 		}
 
-		ddl += ")";
-		connCache.createStatement().execute(ddl);
-		System.err.println("ddl=" + ddl);
 	}
 
 	@Override
@@ -143,7 +251,8 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 							((BlancoSfdcJdbcConnection) conn).getCacheConnection(), "GMETA_COLUMNS_" + timeMillis, null,
 							null, null, null);
 
-					createTableTrial(((BlancoSfdcJdbcConnection) conn).getCacheConnection(), metadataRs, timeMillis);
+					createCacheBlock(((BlancoSfdcJdbcConnection) conn).getCacheConnection(), metadataRs, timeMillis,
+							sObjs);
 				}
 
 				for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
