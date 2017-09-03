@@ -59,7 +59,7 @@ import java.util.Map;
 import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
 
 public class BlancoGenericJdbcResultSet implements ResultSet {
-	private Statement stmt = null;
+	private AbstractBlancoGenericJdbcStatement stmt = null;
 
 	protected long timeMillis = -1;
 
@@ -69,7 +69,7 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 
 	protected int rowIndex = -1;
 
-	public BlancoGenericJdbcResultSet(final Statement stmt, final long timeMillis) {
+	public BlancoGenericJdbcResultSet(final AbstractBlancoGenericJdbcStatement stmt, final long timeMillis) {
 		this.stmt = stmt;
 		this.timeMillis = timeMillis;
 	}
