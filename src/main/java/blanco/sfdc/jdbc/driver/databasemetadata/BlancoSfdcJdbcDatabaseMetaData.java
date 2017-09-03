@@ -57,6 +57,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 			for (Field field : sobjResult.getFields()) {
 				ordinalIndex++;
 
+				// TODO 型マッピングの一本化。
 				int dataType = (Integer.valueOf(java.sql.Types.VARCHAR));
 				if ("int".equals(field.getType().toString())) {
 					dataType = (Integer.valueOf(java.sql.Types.INTEGER));

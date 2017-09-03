@@ -66,11 +66,13 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 
 	@Override
 	public ResultSet executeQuery() throws SQLException {
+		// TODO ここに、パラメータを置き換える処理が入るはずです。
+
 		return executeQuery(sql);
 	}
 
-	QueryResult qryResult = null;
-	String cacheTableName = null;
+	protected QueryResult qryResult = null;
+	protected String cacheTableName = null;
 
 	public boolean hasNextBlock() throws SQLException {
 		if (qryResult == null) {
@@ -89,7 +91,8 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 				return false;
 			}
 
-			BlancoSfdcJdbcStatement.fillCacheTableOfResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis, sObjs[0]);
+			BlancoSfdcJdbcStatement.fillCacheTableOfResultSetMetaData((BlancoSfdcJdbcConnection) conn, timeMillis,
+					sObjs[0]);
 
 			// fill table
 			final ResultSet metadataRs = BlancoGenericJdbcCacheDatabaseMetaDataUtil.getColumnsFromCache(
