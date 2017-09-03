@@ -45,10 +45,6 @@ import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSet;
 import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaDataCacheUtil;
 
 public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPreparedStatement {
-	/**
-	 * FIXME ほんとうは、ユニークな何か文字列。
-	 */
-	final long timeMillis = System.currentTimeMillis();
 
 	protected String sql = null;
 

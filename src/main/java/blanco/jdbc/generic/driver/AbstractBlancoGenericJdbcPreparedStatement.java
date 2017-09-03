@@ -62,7 +62,9 @@ public abstract class AbstractBlancoGenericJdbcPreparedStatement extends Abstrac
 
 	public abstract boolean execute(final String sql) throws SQLException;
 
-	public abstract ResultSet getResultSet() throws SQLException;
+	public ResultSet getResultSet() throws SQLException {
+		return new BlancoGenericJdbcResultSet(this, timeMillis);
+	}
 
 	public abstract ResultSet executeQuery() throws SQLException;
 

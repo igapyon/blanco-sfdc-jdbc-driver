@@ -47,7 +47,7 @@ public abstract class AbstractBlancoGenericJdbcStatement implements BlancoGeneri
 	/**
 	 * FIXME ほんとうは、ユニークな何か文字列。
 	 */
-	final long timeMillis = System.currentTimeMillis();
+	protected final long timeMillis = System.currentTimeMillis();
 
 	public AbstractBlancoGenericJdbcStatement(final AbstractBlancoGenericJdbcConnection conn) {
 		this.conn = conn;
@@ -86,7 +86,9 @@ public abstract class AbstractBlancoGenericJdbcStatement implements BlancoGeneri
 		throw new SQLException("Not Implemented.");
 	}
 
-	public abstract ResultSet getResultSet() throws SQLException;
+	public ResultSet getResultSet() throws SQLException {
+		return new BlancoGenericJdbcResultSet(this, timeMillis);
+	}
 
 	public <T> T unwrap(Class<T> iface) throws SQLException {
 		throw new SQLException("Not Implemented.");

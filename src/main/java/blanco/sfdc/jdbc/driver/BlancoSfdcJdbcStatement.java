@@ -49,14 +49,9 @@ import com.sforce.ws.ConnectionException;
 import com.sforce.ws.bind.XmlObject;
 
 import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
-import blanco.jdbc.generic.driver.BlancoGenericJdbcResultSet;
 import blanco.jdbc.generic.driver.databasemetadata.BlancoGenericJdbcDatabaseMetaDataCacheUtil;
 
 public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement {
-	/**
-	 * FIXME ほんとうは、ユニークな何か文字列。
-	 */
-	final long timeMillis = System.currentTimeMillis();
 
 	public BlancoSfdcJdbcStatement(final BlancoSfdcJdbcConnection conn) {
 		super(conn);
@@ -217,11 +212,6 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 				pstmt.execute();
 			}
 		}
-	}
-
-	@Override
-	public ResultSet getResultSet() throws SQLException {
-		return new BlancoGenericJdbcResultSet(this, timeMillis);
 	}
 
 	///////////////////////////
