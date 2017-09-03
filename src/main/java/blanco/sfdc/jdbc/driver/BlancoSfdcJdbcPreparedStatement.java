@@ -41,7 +41,7 @@ import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 
 import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcPreparedStatement;
-import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheDatabaseMetaDataUtil;
+import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilDatabaseMetaData;
 
 public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPreparedStatement {
 
@@ -95,7 +95,7 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 					sObjs[0]);
 
 			// fill table
-			final ResultSet metadataRs = BlancoGenericJdbcCacheDatabaseMetaDataUtil.getColumnsFromCache(
+			final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
 					((BlancoSfdcJdbcConnection) conn).getCacheConnection(), cacheTableName, null, null, null, null);
 
 			BlancoSfdcJdbcStatement.createCacheBlock(((BlancoSfdcJdbcConnection) conn).getCacheConnection(), metadataRs,
@@ -114,7 +114,7 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 		}
 
 		// fill table
-		final ResultSet metadataRs = BlancoGenericJdbcCacheDatabaseMetaDataUtil.getColumnsFromCache(
+		final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
 				((BlancoSfdcJdbcConnection) conn).getCacheConnection(), cacheTableName, null, null, null, null);
 
 		BlancoSfdcJdbcStatement.createCacheBlock(((BlancoSfdcJdbcConnection) conn).getCacheConnection(), metadataRs,
