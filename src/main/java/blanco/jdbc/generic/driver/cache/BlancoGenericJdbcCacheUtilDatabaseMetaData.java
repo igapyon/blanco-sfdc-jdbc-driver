@@ -61,6 +61,10 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 			+ ", IS_GENERATEDCOLUMN VARCHAR_IGNORECASE DEFAULT ''" //
 			+ ")";
 
+	public static final String DDL_CACHE_DATABASEMETADATA_TABLETYPES = "CREATE TABLE IF NOT EXISTS GMETA_TABLETYPES (" //
+			+ "TABLE_TYPE VARCHAR" //
+			+ ")";
+
 	public static void createCacheTables(final Connection connCache) throws SQLException {
 		// getTables
 		PreparedStatement pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_TABLES);
@@ -72,6 +76,14 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 
 		// getColumns
 		pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_COLUMNS);
+		try {
+			pstmt.execute();
+		} finally {
+			pstmt.close();
+		}
+
+		// getColumns
+		pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_TABLETYPES);
 		try {
 			pstmt.execute();
 		} finally {

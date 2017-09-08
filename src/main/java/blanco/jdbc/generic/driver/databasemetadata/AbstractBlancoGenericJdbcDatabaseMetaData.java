@@ -329,52 +329,58 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 		throw new SQLException("Not Implemented.");
 	}
 
+	/////////////////////////////
+	// Schema シリーズ
+
 	public boolean supportsSchemasInDataManipulation() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	public boolean supportsSchemasInProcedureCalls() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	public boolean supportsSchemasInTableDefinitions() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	public boolean supportsSchemasInIndexDefinitions() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	public boolean supportsSchemasInPrivilegeDefinitions() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
+	/////////////////////////////
+	// Catalogs シリーズ
+
 	public boolean supportsCatalogsInDataManipulation() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	public boolean supportsCatalogsInProcedureCalls() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	public boolean supportsCatalogsInTableDefinitions() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	public boolean supportsCatalogsInIndexDefinitions() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	public boolean supportsCatalogsInPrivilegeDefinitions() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	public boolean supportsPositionedDelete() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	public boolean supportsPositionedUpdate() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	public boolean supportsSelectForUpdate() throws SQLException {
@@ -573,7 +579,9 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public ResultSet getTableTypes() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		conn.getCacheConnection().createStatement().execute("DELETE FROM GMETA_TABLETYPES");
+		conn.getCacheConnection().createStatement().execute("INSERT INTO GMETA_TABLETYPES SET TABLE_TYPE = 'TABLE'");
+		return conn.getCacheConnection().createStatement().executeQuery("SELECT * FROM GMETA_TABLETYPES");
 	}
 
 	public ResultSet getColumnPrivileges(String catalog, String schema, String table, String columnNamePattern)
