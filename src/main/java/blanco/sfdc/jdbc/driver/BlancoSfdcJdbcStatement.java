@@ -88,6 +88,8 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 			return false;
 		}
 
+		// TODO maxRows (SOQL LIMIT) への対応を検討すること。
+
 		// Fill Cache ResultSetMetaData
 		BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSetMetaData(conn, getGlobalUniqueKey(), sObjs[0]);
 

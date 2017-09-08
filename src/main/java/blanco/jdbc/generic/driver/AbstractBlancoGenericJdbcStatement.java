@@ -46,6 +46,8 @@ public abstract class AbstractBlancoGenericJdbcStatement implements BlancoGeneri
 
 	protected boolean isClosed = false;
 
+	protected int maxRows = 0;
+
 	/**
 	 * グローバルにユニークな文字列の必要性。
 	 */
@@ -120,11 +122,11 @@ public abstract class AbstractBlancoGenericJdbcStatement implements BlancoGeneri
 	}
 
 	public int getMaxRows() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return maxRows;
 	}
 
 	public void setMaxRows(int max) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		maxRows = max;
 	}
 
 	public void setEscapeProcessing(boolean enable) throws SQLException {
