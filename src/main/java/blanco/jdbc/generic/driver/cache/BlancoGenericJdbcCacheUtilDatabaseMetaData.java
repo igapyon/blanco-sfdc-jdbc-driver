@@ -65,6 +65,18 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 			+ "TABLE_TYPE VARCHAR" //
 			+ ")";
 
+	public static final String DDL_CACHE_DATABASEMETADATA_PROCEDURES = "CREATE TABLE IF NOT EXISTS GMETA_PROCEDURES (" //
+			+ "PROCEDURE_CAT VARCHAR, PROCEDURE_SCHEM VARCHAR, PROCEDURE_NAME VARCHAR, RESERVED1 VARCHAR, RESERVED2 VARCHAR, RESERVED3 VARCHAR, REMARKS VARCHAR, PROCEDURE_TYPE SMALLINT, SPECIFIC_NAME VARCHAR" //
+			+ ")";
+
+	public static final String DDL_CACHE_DATABASEMETADATA_SCHEMAS = "CREATE TABLE IF NOT EXISTS GMETA_SCHEMAS (" //
+			+ "TABLE_SCHEM VARCHAR, TABLE_CATALOG VARCHAR" //
+			+ ")";
+
+	public static final String DDL_CACHE_DATABASEMETADATA_CATALOGS = "CREATE TABLE IF NOT EXISTS GMETA_CATALOGS (" //
+			+ "TABLE_CAT" //
+			+ ")";
+
 	public static void createCacheTables(final Connection connCache) throws SQLException {
 		// getTables
 		PreparedStatement pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_TABLES);
@@ -82,8 +94,21 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 			pstmt.close();
 		}
 
-		// getColumns
-		pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_TABLETYPES);
+		pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_PROCEDURES);
+		try {
+			pstmt.execute();
+		} finally {
+			pstmt.close();
+		}
+
+		pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_SCHEMAS);
+		try {
+			pstmt.execute();
+		} finally {
+			pstmt.close();
+		}
+
+		pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_CATALOGS);
 		try {
 			pstmt.execute();
 		} finally {

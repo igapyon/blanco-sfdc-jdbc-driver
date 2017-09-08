@@ -562,7 +562,7 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 
 	public ResultSet getProcedures(String catalog, String schemaPattern, String procedureNamePattern)
 			throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return conn.getCacheConnection().createStatement().executeQuery("SELECT * FROM GMETA_PROCEDURES");
 	}
 
 	public ResultSet getProcedureColumns(String catalog, String schemaPattern, String procedureNamePattern,
@@ -571,11 +571,11 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public ResultSet getSchemas() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return conn.getCacheConnection().createStatement().executeQuery("SELECT * FROM GMETA_SCHEMAS");
 	}
 
 	public ResultSet getCatalogs() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return conn.getCacheConnection().createStatement().executeQuery("SELECT * FROM GMETA_CATALOGS");
 	}
 
 	public ResultSet getTableTypes() throws SQLException {
