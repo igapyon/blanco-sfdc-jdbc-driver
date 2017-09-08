@@ -259,11 +259,13 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 
 	public boolean supportsMinimumSQLGrammar() throws SQLException {
 		// No!
+		// TODO
 		return false;
 	}
 
 	public boolean supportsCoreSQLGrammar() throws SQLException {
 		// No!
+		// TODO
 		return false;
 	}
 
@@ -620,7 +622,18 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public boolean supportsResultSetType(int type) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		if (type == ResultSet.TYPE_FORWARD_ONLY) {
+			return true;
+		}
+		if (type == ResultSet.TYPE_SCROLL_INSENSITIVE) {
+			// TODO あとでよく見る。
+			return false;
+		}
+		if (type == ResultSet.TYPE_SCROLL_SENSITIVE) {
+			// TODO あとでよく見る。
+			return true;
+		}
+		return false;
 	}
 
 	public boolean supportsResultSetConcurrency(int type, int concurrency) throws SQLException {
