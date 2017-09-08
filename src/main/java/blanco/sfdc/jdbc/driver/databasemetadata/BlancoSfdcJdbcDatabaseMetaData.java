@@ -93,4 +93,34 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 			throw new SQLException(ex);
 		}
 	}
+
+	@Override
+	public String getDatabaseProductName() throws SQLException {
+		return "Salesforce (FIXME)";
+	}
+
+	@Override
+	public String getDatabaseProductVersion() throws SQLException {
+		return "40.0.0 (FIXME)";
+	}
+
+	@Override
+	public int getDatabaseMajorVersion() throws SQLException {
+		return 40;
+	}
+
+	@Override
+	public int getDatabaseMinorVersion() throws SQLException {
+		return 0;
+	}
+
+	@Override
+	public String getDriverName() throws SQLException {
+		return "Blanco SFDC SOQL JDBC Driver";
+	}
+
+	@Override
+	public String getDriverVersion() throws SQLException {
+		return "1.0.0";
+	}
 }

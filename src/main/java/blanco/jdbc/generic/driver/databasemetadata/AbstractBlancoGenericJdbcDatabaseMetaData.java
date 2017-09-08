@@ -101,21 +101,13 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 		throw new SQLException("Not Implemented.");
 	}
 
-	public String getDatabaseProductName() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
+	public abstract String getDatabaseProductName() throws SQLException;
 
-	public String getDatabaseProductVersion() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
+	public abstract String getDatabaseProductVersion() throws SQLException;
 
-	public String getDriverName() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
+	public abstract String getDriverName() throws SQLException;
 
-	public String getDriverVersion() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
+	public abstract String getDriverVersion() throws SQLException;
 
 	public int getDriverMajorVersion() {
 		return 1;
@@ -722,20 +714,16 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 		throw new SQLException("Not Implemented.");
 	}
 
-	public int getDatabaseMajorVersion() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
+	public abstract int getDatabaseMajorVersion() throws SQLException;
 
-	public int getDatabaseMinorVersion() throws SQLException {
-		throw new SQLException("Not Implemented.");
-	}
+	public abstract int getDatabaseMinorVersion() throws SQLException;
 
 	public int getJDBCMajorVersion() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return 4;
 	}
 
 	public int getJDBCMinorVersion() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return 2;
 	}
 
 	public int getSQLStateType() throws SQLException {
@@ -797,7 +785,8 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types)
 			throws SQLException {
 
-		if (BlancoGenericJdbcCacheUtilDatabaseMetaData.isCacheDatabaseMetaDataTablesCached(conn.getCacheConnection()) == false) {
+		if (BlancoGenericJdbcCacheUtilDatabaseMetaData
+				.isCacheDatabaseMetaDataTablesCached(conn.getCacheConnection()) == false) {
 			// call abstract method
 			fillCacheTableOfGetTables(catalog, schemaPattern, tableNamePattern, types);
 		}
@@ -824,8 +813,8 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 
 		// process every table.
 		for (String tableName : tableNameList) {
-			if (BlancoGenericJdbcCacheUtilDatabaseMetaData.isCacheDatabaseMetaDataColumnsCached(conn.getCacheConnection(), catalog,
-					schemaPattern, tableName) == false) {
+			if (BlancoGenericJdbcCacheUtilDatabaseMetaData.isCacheDatabaseMetaDataColumnsCached(
+					conn.getCacheConnection(), catalog, schemaPattern, tableName) == false) {
 				// call abstract method
 				fillCacheTableOfGetColumns(catalog, schemaPattern, tableName, columnNamePattern);
 			}
