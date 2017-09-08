@@ -67,7 +67,10 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 
 	protected ResultSet cacheResultSet = null;
 
-	protected int rowIndex = -1;
+	/**
+	 * 1 origin. 0 means not selected. -1 means closed.
+	 */
+	protected int currentRow = 0;
 
 	public BlancoGenericJdbcResultSet(final AbstractBlancoGenericJdbcStatement stmt, final String globalUniqueKey)
 			throws SQLException {
@@ -79,17 +82,21 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 
 	public void close() throws SQLException {
 		isClosed = true;
-		rowIndex = -1;
+		currentRow = -1;
 
 		cacheResultSet.close();
 	}
 
-	public void trialReadResultSetFromCache() throws SQLException {
+	/**
+	 * TODO 名前を変更しよう。
+	 * 
+	 * @throws SQLException
+	 */
+	protected void trialReadResultSetFromCache() throws SQLException {
 		// FIXME ENUM ALL COLUMN NAME INSTEAD OF *
 		// FIXME ORDER BY
 		cacheResultSet = ((BlancoSfdcJdbcConnection) stmt.getConnection()).getCacheConnection().createStatement()
 				.executeQuery("SELECT * FROM GMETA_RS_" + globalUniqueKey);
-
 	}
 
 	public String getString(final int columnIndex) throws SQLException {
@@ -452,6 +459,7 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 
 		// check next() in cache.
 		if (cacheResultSet.next()) {
+			currentRow++;
 			return true;
 		}
 
@@ -470,64 +478,151 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 		stmt.nextBlock();
 
 		// open cache table;
+		trialReadResultSetFromCache();
 
-		// TODO update result set;
+		currentRow++;
 
-		rowIndex++;
-
-		// TODO call next;
-		return true; // !!!!!!!!!!!!!!1
+		return cacheResultSet.next();
 	}
 
 	public int getRow() throws SQLException {
-		return rowIndex;
+		return currentRow;
 	}
 
 	/////////////////////////////////////////////////////////
 	// No Cursor related JDBC API supported.
 
 	public boolean previous() throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
+		if (isClosed()) {
+			return false;
+		}
+
+		// check previous() in cache.
+		if (cacheResultSet.previous()) {
+			currentRow--;
+			return true;
+		}
+
+		// traverse from begining.
+		final int targetCurrentRow = currentRow;
+
+		// statement should remember sql
+		stmt.firstBlock(null);
+
+		// open cache table;
+		trialReadResultSetFromCache();
+
+		int index = 0;
+
+		for (;;) {
+			if (this.next() == false) {
+				return false;
+			}
+			index++;
+			if (index >= targetCurrentRow) {
+				break;
+			}
+		}
+
+		return true;
 	}
 
 	public boolean isBeforeFirst() throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
+		if (currentRow < 1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public boolean isAfterLast() throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
+		if (stmt.hasNextBlock() == false) {
+			return cacheResultSet.isAfterLast();
+		}
+
+		return false;
 	}
 
 	public boolean isFirst() throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
+		if (currentRow == 0) {
+			return true;
+		}
+		return false;
 	}
 
 	public boolean isLast() throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
+		if (stmt.hasNextBlock() == true) {
+			return true;
+		}
+
+		return cacheResultSet.isLast();
 	}
 
 	public void beforeFirst() throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
+		if (this.first() == false) {
+			// TODO これはこまる。
+			return;
+		}
+		this.previous();
 	}
 
 	public void afterLast() throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
+		if (this.last() == false) {
+			// TODO これはこまる。
+			return;
+		}
+		this.next();
 	}
 
 	public boolean first() throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
+		// statement should remember sql
+		stmt.firstBlock(null);
+
+		// open cache table;
+		trialReadResultSetFromCache();
+
+		return this.next();
 	}
 
 	public boolean last() throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
+		for (;;) {
+			if (this.next() == false) {
+				break;
+			}
+		}
+		return this.previous();
 	}
 
 	public boolean absolute(int row) throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
+		for (;;) {
+			if (row == currentRow) {
+				// do nothing.
+				return true;
+			}
+
+			if (row > currentRow) {
+				this.next();
+			} else {
+				this.previous();
+			}
+		}
 	}
 
 	public boolean relative(int rows) throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_FORWARD_ONLY_SUPPORTED);
+		for (;;) {
+			if (rows == 0) {
+				// do nothing.
+				return true;
+			}
+
+			if (rows > 0) {
+				this.next();
+				rows--;
+			} else {
+				this.previous();
+				rows++;
+			}
+		}
 	}
 
 	// No Cursor related JDBC API supported.

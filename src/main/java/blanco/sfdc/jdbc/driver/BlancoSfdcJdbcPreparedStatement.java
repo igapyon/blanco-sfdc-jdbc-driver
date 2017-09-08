@@ -80,7 +80,11 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 		return (qryResult.isDone() == false);
 	}
 
-	public boolean firstBlock(final String sql) throws SQLException {
+	public boolean firstBlock(final String argSql) throws SQLException {
+		if (argSql != null) {
+			// overwrite if argSql not null only.
+			sql = argSql;
+		}
 		try {
 			// Do SOQL Query
 			qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection().query(sql);

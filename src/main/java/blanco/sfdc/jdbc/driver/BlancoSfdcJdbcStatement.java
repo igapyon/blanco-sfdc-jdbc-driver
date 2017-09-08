@@ -45,6 +45,8 @@ import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilResultSet;
 public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement {
 	protected QueryResult qryResult = null;
 
+	protected String sql = null;
+
 	public BlancoSfdcJdbcStatement(final BlancoSfdcJdbcConnection conn) {
 		super(conn);
 	}
@@ -69,7 +71,11 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		return (qryResult.isDone() == false);
 	}
 
-	public boolean firstBlock(final String sql) throws SQLException {
+	public boolean firstBlock(final String argSql) throws SQLException {
+		if (argSql != null) {
+			// overwrite if argSql not null only.
+			sql = argSql;
+		}
 		try {
 			// Do SOQL Query
 			qryResult = ((BlancoSfdcJdbcConnection) conn).getPartnerConnection().query(sql);
