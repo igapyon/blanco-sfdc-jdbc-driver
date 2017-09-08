@@ -69,7 +69,7 @@ public abstract class AbstractBlancoGenericJdbcDriver implements Driver {
 	}
 
 	public boolean jdbcCompliant() {
-		// Default as No.
+		// ドライバ互換テストをパスした場合にのみ true.このため、デフォルトとしては false とします.
 		return false;
 	}
 
