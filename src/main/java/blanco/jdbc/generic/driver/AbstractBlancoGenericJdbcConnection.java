@@ -144,11 +144,12 @@ public abstract class AbstractBlancoGenericJdbcConnection implements Connection 
 	}
 
 	public void setCatalog(String catalog) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// ignore
 	}
 
 	public String getCatalog() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// TODO カタログ名に対応したDBの場合、これをうわがきしてください。
+		return null;
 	}
 
 	public void setTransactionIsolation(int level) throws SQLException {
@@ -284,11 +285,13 @@ public abstract class AbstractBlancoGenericJdbcConnection implements Connection 
 	}
 
 	public void setSchema(String schema) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// TODO Scheme名に対応したDBの場合、これをうわがきしてください。
+		// ignore
 	}
 
 	public String getSchema() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// TODO Scheme名に対応したDBの場合、これをうわがきしてください。
+		return null;
 	}
 
 	public void abort(Executor executor) throws SQLException {
