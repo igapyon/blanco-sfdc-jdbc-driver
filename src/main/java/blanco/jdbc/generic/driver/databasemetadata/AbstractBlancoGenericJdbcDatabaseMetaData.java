@@ -691,7 +691,7 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 
 	public ResultSet getUDTs(String catalog, String schemaPattern, String typeNamePattern, int[] types)
 			throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return conn.getCacheConnection().createStatement().executeQuery("SELECT * FROM GMETA_UDTS");
 	}
 
 	public boolean supportsSavepoints() throws SQLException {

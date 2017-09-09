@@ -77,6 +77,10 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 			+ "TABLE_CAT VARCHAR" //
 			+ ")";
 
+	public static final String DDL_CACHE_DATABASEMETADATA_UDTS = "CREATE TABLE IF NOT EXISTS GMETA_UDTS (" //
+			+ "TYPE_CAT VARCHAR, TYPE_SCHEM VARCHAR, TYPE_NAME VARCHAR, CLASS_NAME VARCHAR, DATA_TYPE INT, REMARKS VARCHAR, BASE_TYPE TINYINT" //
+			+ ")";
+
 	public static void createCacheTables(final Connection connCache) throws SQLException {
 		// getTables
 		PreparedStatement pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_TABLES);
@@ -121,7 +125,14 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 		} finally {
 			pstmt.close();
 		}
-	}
+
+		pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_UDTS);
+		try {
+			pstmt.execute();
+		} finally {
+			pstmt.close();
+		}
+}
 
 	public static boolean isCacheDatabaseMetaDataTablesCached(final Connection connCache) throws SQLException {
 		boolean isCached = false;
