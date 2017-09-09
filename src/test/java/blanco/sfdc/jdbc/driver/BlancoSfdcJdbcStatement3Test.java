@@ -30,7 +30,7 @@ public class BlancoSfdcJdbcStatement3Test extends TestCase {
 		final Connection conn = DriverManager.getConnection("blanco:sfdc:jdbc:" + url, user, pass);
 
 		final Statement stmt = conn.createStatement();
-		final String sql = "select Id, Name, LastModifiedDate from Account";
+		final String sql = "select Name from Account";
 		final ResultSet rs = stmt.executeQuery(sql);
 
 		{

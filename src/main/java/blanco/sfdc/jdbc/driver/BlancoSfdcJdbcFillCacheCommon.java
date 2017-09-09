@@ -228,6 +228,9 @@ public class BlancoSfdcJdbcFillCacheCommon {
 					String rowIdString = null;
 
 					if (indexColumn == 0) {
+						if ("type".equals(obj.getName().getLocalPart()) == false) {
+							throw new SQLException("Unexpected result it must be 'type': " + obj.toString());
+						}
 						sObjectName = obj.getValue().toString();
 					} else if (indexColumn == 1) {
 						try {
