@@ -107,7 +107,7 @@ public class BlancoSfdcJdbcFillCacheCommon {
 					pstmt.setInt(rowNum++, rsmdRs.getInt("NUM_PREC_RADIX"));
 
 					pstmt.setInt(rowNum++, rsmdRs.getInt("NULLABLE"));
-					pstmt.setInt(rowNum++, rsmdRs.getInt("COLUMN_DEF"));
+					pstmt.setString(rowNum++, rsmdRs.getString("COLUMN_DEF"));
 					pstmt.setString(rowNum++, rsmdRs.getString("REMARKS"));
 					pstmt.setInt(rowNum++, rsmdRs.getInt("SQL_DATA_TYPE"));
 					pstmt.setInt(rowNum++, rsmdRs.getInt("SQL_DATETIME_SUB"));
