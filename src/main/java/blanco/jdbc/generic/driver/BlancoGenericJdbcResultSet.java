@@ -632,27 +632,30 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	// No update supported
 
 	public boolean rowUpdated() throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+		return false;
 	}
 
 	public boolean rowInserted() throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+		return false;
 	}
 
 	public boolean rowDeleted() throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+		return false;
 	}
 
 	public void updateNull(int columnIndex) throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+		throw new SQLFeatureNotSupportedException(
+				BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED + ": updateNull(int columnIndex)");
 	}
 
 	public void updateBoolean(int columnIndex, boolean x) throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+		throw new SQLFeatureNotSupportedException(
+				BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED + ": updateBoolean(int columnIndex, boolean x)");
 	}
 
 	public void updateByte(int columnIndex, byte x) throws SQLException {
-		throw new SQLFeatureNotSupportedException(BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED);
+		throw new SQLFeatureNotSupportedException(
+				BlancoGenericJdbcConstants.MESSAGE_NO_UPDATE_SUPPORTED + ": updateByte(int columnIndex, byte x)");
 	}
 
 	public void updateShort(int columnIndex, short x) throws SQLException {
