@@ -225,20 +225,33 @@ public class BlancoSfdcJdbcFillCacheCommon {
 
 							String value = obj.getValue().toString();
 
-							// Date変換
+							// DATA変換
 							switch (metadataRs.getInt("DATA_TYPE")) {
 							case java.sql.Types.VARCHAR:
+							case java.sql.Types.LONGVARCHAR:
 								pstmt.setString(pstmtIndex++, value);
+								break;
+							case java.sql.Types.BOOLEAN:
+								pstmt.setBoolean(pstmtIndex++, Boolean.valueOf(value));
 								break;
 							case java.sql.Types.INTEGER:
 								pstmt.setInt(pstmtIndex++, Integer.valueOf(value));
 								break;
+							case java.sql.Types.BIGINT:
+								pstmt.setLong(pstmtIndex++, Long.valueOf(value));
+								break;
+							case java.sql.Types.DOUBLE:
+								pstmt.setDouble(pstmtIndex++, Double.valueOf(value));
+								break;
 							case java.sql.Types.DATE:
-							case java.sql.Types.TIME:
-							case java.sql.Types.TIME_WITH_TIMEZONE:
-							case java.sql.Types.TIMESTAMP:
-							case java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
+							case java.sql.Types.TIME: /// ????????
+							case java.sql.Types.TIME_WITH_TIMEZONE: /// ???????????????
 								pstmt.setDate(pstmtIndex++, new java.sql.Date(soqlDateToDate(value).getTime()));
+								break;
+							case java.sql.Types.TIMESTAMP:
+							case java.sql.Types.TIMESTAMP_WITH_TIMEZONE: /// ???????????????
+								pstmt.setTimestamp(pstmtIndex++,
+										new java.sql.Timestamp(soqlDateToDate(value).getTime()));
 								break;
 							default:
 								pstmt.setString(pstmtIndex++, value);
