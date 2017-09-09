@@ -74,7 +74,7 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 			+ ")";
 
 	public static final String DDL_CACHE_DATABASEMETADATA_CATALOGS = "CREATE TABLE IF NOT EXISTS GMETA_CATALOGS (" //
-			+ "TABLE_CAT" //
+			+ "TABLE_CAT VARCHAR" //
 			+ ")";
 
 	public static void createCacheTables(final Connection connCache) throws SQLException {

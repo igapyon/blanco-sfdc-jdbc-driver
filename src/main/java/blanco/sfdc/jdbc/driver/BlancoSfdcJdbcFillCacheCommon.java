@@ -87,18 +87,43 @@ public class BlancoSfdcJdbcFillCacheCommon {
 
 				final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement("INSERT INTO GMETA_COLUMNS_"
 						+ globalUniqueKey
-						+ " SET TABLE_NAME = ?, COLUMN_NAME = ?, DATA_TYPE = ?, TYPE_NAME = ?, COLUMN_SIZE = ?, DECIMAL_DIGITS = ?, NULLABLE = ?, REMARKS = ?, CHAR_OCTET_LENGTH = ?, ORDINAL_POSITION = ?");
+						+ " SET TABLE_CAT = ?, TABLE_SCHEM = ?, TABLE_NAME = ?, COLUMN_NAME = ?, DATA_TYPE = ?, TYPE_NAME = ?" //
+						+ ", COLUMN_SIZE = ?, DECIMAL_DIGITS = ?, NUM_PREC_RADIX = ?, NULLABLE = ?, COLUMN_DEF= ?, REMARKS = ?" //
+						+ ", SQL_DATA_TYPE = ?, SQL_DATETIME_SUB = ?, CHAR_OCTET_LENGTH = ?, ORDINAL_POSITION = ?" //
+						+ " , IS_NULLABLE = ?, SCOPE_CATALOG = ?, SCOPE_SCHEMA = ?, SCOPE_TABLE = ?, SOURCE_DATA_TYPE = ?" //
+						+ ", IS_AUTOINCREMENT = ?, IS_GENERATEDCOLUMN = ?");
+
 				try {
-					pstmt.setString(1, rsmdRs.getString("TABLE_NAME"));
-					pstmt.setString(2, rsmdRs.getString("COLUMN_NAME"));
-					pstmt.setInt(3, rsmdRs.getInt("DATA_TYPE"));
-					pstmt.setString(4, rsmdRs.getString("TYPE_NAME"));
-					pstmt.setInt(5, rsmdRs.getInt("COLUMN_SIZE"));
-					pstmt.setInt(6, rsmdRs.getInt("DECIMAL_DIGITS"));
-					pstmt.setInt(7, rsmdRs.getInt("NULLABLE"));
-					pstmt.setString(8, rsmdRs.getString("REMARKS"));
-					pstmt.setInt(9, rsmdRs.getInt("CHAR_OCTET_LENGTH"));
-					pstmt.setInt(10, ordinalIndex);
+					int rowNum = 1;
+
+					pstmt.setString(rowNum++, rsmdRs.getString("TABLE_CAT"));
+					pstmt.setString(rowNum++, rsmdRs.getString("TABLE_SCHEM"));
+					pstmt.setString(rowNum++, rsmdRs.getString("TABLE_NAME"));
+					pstmt.setString(rowNum++, rsmdRs.getString("COLUMN_NAME"));
+					pstmt.setInt(rowNum++, rsmdRs.getInt("DATA_TYPE"));
+					pstmt.setString(rowNum++, rsmdRs.getString("TYPE_NAME"));
+					pstmt.setInt(rowNum++, rsmdRs.getInt("COLUMN_SIZE"));
+					pstmt.setInt(rowNum++, rsmdRs.getInt("DECIMAL_DIGITS"));
+					pstmt.setInt(rowNum++, rsmdRs.getInt("NUM_PREC_RADIX"));
+
+					pstmt.setInt(rowNum++, rsmdRs.getInt("NULLABLE"));
+					pstmt.setInt(rowNum++, rsmdRs.getInt("COLUMN_DEF"));
+					pstmt.setString(rowNum++, rsmdRs.getString("REMARKS"));
+					pstmt.setInt(rowNum++, rsmdRs.getInt("SQL_DATA_TYPE"));
+					pstmt.setInt(rowNum++, rsmdRs.getInt("SQL_DATETIME_SUB"));
+					pstmt.setInt(rowNum++, rsmdRs.getInt("CHAR_OCTET_LENGTH"));
+
+					// ORDINAL_POSITION should not populate
+					pstmt.setInt(rowNum++, ordinalIndex);
+
+					pstmt.setString(rowNum++, rsmdRs.getString("IS_NULLABLE"));
+					pstmt.setString(rowNum++, rsmdRs.getString("SCOPE_CATALOG"));
+					pstmt.setString(rowNum++, rsmdRs.getString("SCOPE_SCHEMA"));
+					pstmt.setString(rowNum++, rsmdRs.getString("SCOPE_TABLE"));
+					pstmt.setString(rowNum++, rsmdRs.getString("SOURCE_DATA_TYPE"));
+					pstmt.setString(rowNum++, rsmdRs.getString("IS_AUTOINCREMENT"));
+					pstmt.setString(rowNum++, rsmdRs.getString("IS_GENERATEDCOLUMN"));
+
 					pstmt.execute();
 				} finally {
 					pstmt.close();
