@@ -94,6 +94,13 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 			pstmt.close();
 		}
 
+		pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_TABLETYPES);
+		try {
+			pstmt.execute();
+		} finally {
+			pstmt.close();
+		}
+
 		pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_PROCEDURES);
 		try {
 			pstmt.execute();
