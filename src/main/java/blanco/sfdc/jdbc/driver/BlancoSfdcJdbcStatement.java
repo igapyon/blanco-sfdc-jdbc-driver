@@ -33,6 +33,7 @@
 
 package blanco.sfdc.jdbc.driver;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.sforce.soap.partner.QueryResult;
@@ -77,6 +78,30 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 			sql = argSql;
 			sql = sql.replace("count(*)", "count()");
 			sql = sql.replace("COUNT(*)", "count()");
+			sql = sql.trim();
+
+			{
+				// FIXME 気合
+				if (sql.startsWith("select * from ")) {
+					String newSql = "select ";
+					String tableName = sql.substring("select * from ".length());
+					tableName = tableName.split("\\s+")[0];
+					final ResultSet rs = conn.getMetaData().getColumns(null, null, tableName, null);
+					boolean isFirstColumn = true;
+					for (; rs.next();) {
+						final String columnName = rs.getString("COLUMN_NAME");
+						if (isFirstColumn) {
+							isFirstColumn = false;
+							newSql += columnName;
+						} else {
+							newSql += ("," + columnName);
+						}
+					}
+					newSql += " from ";
+					newSql += sql.substring("select * from ".length());
+					sql = newSql;
+				}
+			}
 		}
 		try {
 			// Do SOQL Query
