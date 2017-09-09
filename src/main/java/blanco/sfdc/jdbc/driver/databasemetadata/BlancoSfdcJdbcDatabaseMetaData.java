@@ -67,20 +67,67 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 					dataType = (Integer.valueOf(java.sql.Types.TIMESTAMP));
 				}
 
-				final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement(
-						"INSERT INTO GMETA_COLUMNS SET TABLE_NAME = ?, COLUMN_NAME = ?, DATA_TYPE = ?, TYPE_NAME = ?, COLUMN_SIZE = ?, DECIMAL_DIGITS = ?, NULLABLE = ?, REMARKS = ?, CHAR_OCTET_LENGTH = ?, ORDINAL_POSITION = ?");
+				final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement("INSERT INTO GMETA_COLUMNS "
+						+ " SET TABLE_CAT = ?, TABLE_SCHEM = ?, TABLE_NAME = ?, COLUMN_NAME = ?, DATA_TYPE = ?, TYPE_NAME = ?" //
+						+ ", COLUMN_SIZE = ?, DECIMAL_DIGITS = ?, NUM_PREC_RADIX = ?, NULLABLE = ?, COLUMN_DEF= ?, REMARKS = ?" //
+						+ ", SQL_DATA_TYPE = ?, SQL_DATETIME_SUB = ?, CHAR_OCTET_LENGTH = ?, ORDINAL_POSITION = ?" //
+						+ " , IS_NULLABLE = ?, SCOPE_CATALOG = ?, SCOPE_SCHEMA = ?, SCOPE_TABLE = ?, SOURCE_DATA_TYPE = ?" //
+						+ ", IS_AUTOINCREMENT = ?, IS_GENERATEDCOLUMN = ?");
+
 				try {
-					pstmt.setString(1, tableName);
-					pstmt.setString(2, field.getName());
-					pstmt.setInt(3, dataType);
-					pstmt.setString(4, field.getType().toString());
-					pstmt.setInt(5, field.getLength());
-					pstmt.setInt(6, field.getDigits());
-					pstmt.setInt(7,
-							(field.getNillable() ? ResultSetMetaData.columnNullable : ResultSetMetaData.columnNoNulls));
-					pstmt.setString(8, field.getLabel());
-					pstmt.setInt(9, field.getLength());
-					pstmt.setInt(10, ordinalIndex);
+					int rowNum = 1;
+
+					// "TABLE_CAT"
+					pstmt.setString(rowNum++, null);
+					// "TABLE_SCHEM"
+					pstmt.setString(rowNum++, null);
+					// "TABLE_NAME"
+					pstmt.setString(rowNum++, tableName);
+					// "COLUMN_NAME"
+					pstmt.setString(rowNum++, field.getName());
+					// rsmdRs.getInt("DATA_TYPE")
+					pstmt.setInt(rowNum++, dataType);
+					// rsmdRs.getString("TYPE_NAME")
+					pstmt.setString(rowNum++, field.getType().toString());
+					// rsmdRs.getInt("COLUMN_SIZE")
+					pstmt.setInt(rowNum++, field.getLength());
+					// "DECIMAL_DIGITS"
+					pstmt.setInt(rowNum++, field.getDigits());
+					// "NUM_PREC_RADIX"
+					pstmt.setInt(rowNum++, 10);
+					/// rsmdRs.getInt("NULLABLE")
+					pstmt.setInt(rowNum++,
+							field.getNillable() ? ResultSetMetaData.columnNullable : ResultSetMetaData.columnNoNulls);
+					// "COLUMN_DEF"
+					pstmt.setString(rowNum++,
+							(field.getDefaultValue() == null ? null : field.getDefaultValue().toString()));
+					// "REMARKS"
+					pstmt.setString(rowNum++, field.getLabel());
+					// "SQL_DATA_TYPE" // reserved future
+					pstmt.setInt(rowNum++, 0);
+					// "SQL_DATETIME_SUB"
+					pstmt.setInt(rowNum++, -1 /* FIXME */);
+					// rsmdRs.getInt("CHAR_OCTET_LENGTH")
+					pstmt.setInt(rowNum++, field.getLength());
+
+					// ORDINAL_POSITION should not populate
+					pstmt.setInt(rowNum++, ordinalIndex);
+
+					// "IS_NULLABLE"
+					pstmt.setString(rowNum++, String.valueOf(field.getNillable()));
+					// "SCOPE_CATALOG"
+					pstmt.setString(rowNum++, null);
+					// "SCOPE_SCHEMA"
+					pstmt.setString(rowNum++, null);
+					// "SCOPE_TABLE"
+					pstmt.setString(rowNum++, null);
+					// "SOURCE_DATA_TYPE"
+					pstmt.setString(rowNum++, null);
+					// "IS_AUTOINCREMENT"
+					pstmt.setString(rowNum++, null);
+					// "IS_GENERATEDCOLUMN"
+					pstmt.setString(rowNum++, null);
+
 					pstmt.execute();
 				} finally {
 					pstmt.close();
