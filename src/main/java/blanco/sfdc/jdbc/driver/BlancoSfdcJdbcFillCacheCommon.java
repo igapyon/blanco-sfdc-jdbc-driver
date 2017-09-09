@@ -50,7 +50,7 @@ import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcConnection;
 import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilDatabaseMetaData;
 
 public class BlancoSfdcJdbcFillCacheCommon {
-	public static final boolean IS_DEBUG = true;
+	public static final boolean IS_DEBUG = false;
 
 	public static final String getInsertIntoGmetaColumnsSql(final String globalUniqueKey) {
 		return "INSERT INTO GMETA_COLUMNS_" + globalUniqueKey

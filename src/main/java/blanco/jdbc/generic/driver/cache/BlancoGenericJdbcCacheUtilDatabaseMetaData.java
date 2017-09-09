@@ -78,6 +78,31 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 			+ ",IS_GENERATEDCOLUMN VARCHAR_IGNORECASE DEFAULT 'NO'" //
 			+ ")";
 
+	public static final String DML_CACHE_DATABASEMETADATA_COLUMNS_INSERT = "INSERT INTO GMETA_COLUMNS "
+			+ " SET TABLE_CAT = ?"//
+			+ ", TABLE_SCHEM = ?"//
+			+ ", TABLE_NAME = ?"//
+			+ ", COLUMN_NAME = ?"//
+			+ ", DATA_TYPE = ?"//
+			+ ", TYPE_NAME = ?" //
+			+ ", COLUMN_SIZE = ?"//
+			+ ", DECIMAL_DIGITS = ?"//
+			+ ", NUM_PREC_RADIX = ?"//
+			+ ", NULLABLE = ?"//
+			+ ", COLUMN_DEF= ?"//
+			+ ", REMARKS = ?" //
+			+ ", SQL_DATA_TYPE = ?"//
+			+ ", SQL_DATETIME_SUB = ?"//
+			+ ", CHAR_OCTET_LENGTH = ?"//
+			+ ", ORDINAL_POSITION = ?" //
+			+ " , IS_NULLABLE = ?"//
+			+ ", SCOPE_CATALOG = ?"//
+			+ ", SCOPE_SCHEMA = ?"//
+			+ ", SCOPE_TABLE = ?"//
+			+ ", SOURCE_DATA_TYPE = ?" //
+			+ ", IS_AUTOINCREMENT = ?"//
+			+ ", IS_GENERATEDCOLUMN = ?";
+
 	public static final String DDL_CACHE_DATABASEMETADATA_TABLETYPES = "CREATE TABLE IF NOT EXISTS GMETA_TABLETYPES (" //
 			+ "TABLE_TYPE VARCHAR" //
 			+ ")";

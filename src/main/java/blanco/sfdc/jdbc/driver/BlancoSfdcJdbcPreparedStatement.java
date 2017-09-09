@@ -84,8 +84,8 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 		if (argSql != null) {
 			// overwrite if argSql not null only.
 			sql = argSql;
-			sql = sql.replace("count(*)", "count()");
-			sql = sql.replace("COUNT(*)", "count()");
+			sql = sql.replace("count(*)", "count(Id)");
+			sql = sql.replace("COUNT(*)", "count(Id)");
 			sql = sql.trim();
 
 			{

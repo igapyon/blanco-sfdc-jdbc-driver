@@ -11,6 +11,7 @@ import com.sforce.soap.partner.Field;
 import com.sforce.ws.ConnectionException;
 
 import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcDatabaseMetaData;
+import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilDatabaseMetaData;
 import blanco.sfdc.jdbc.driver.util.BlancoSfdcJdbcTypeUtil;
 
 public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDatabaseMetaData {
@@ -57,12 +58,8 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 			for (Field field : sobjResult.getFields()) {
 				ordinalIndex++;
 
-				final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement("INSERT INTO GMETA_COLUMNS "
-						+ " SET TABLE_CAT = ?, TABLE_SCHEM = ?, TABLE_NAME = ?, COLUMN_NAME = ?, DATA_TYPE = ?, TYPE_NAME = ?" //
-						+ ", COLUMN_SIZE = ?, DECIMAL_DIGITS = ?, NUM_PREC_RADIX = ?, NULLABLE = ?, COLUMN_DEF= ?, REMARKS = ?" //
-						+ ", SQL_DATA_TYPE = ?, SQL_DATETIME_SUB = ?, CHAR_OCTET_LENGTH = ?, ORDINAL_POSITION = ?" //
-						+ " , IS_NULLABLE = ?, SCOPE_CATALOG = ?, SCOPE_SCHEMA = ?, SCOPE_TABLE = ?, SOURCE_DATA_TYPE = ?" //
-						+ ", IS_AUTOINCREMENT = ?, IS_GENERATEDCOLUMN = ?");
+				final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement(
+						BlancoGenericJdbcCacheUtilDatabaseMetaData.DML_CACHE_DATABASEMETADATA_COLUMNS_INSERT);
 
 				try {
 					int rowNum = 1;

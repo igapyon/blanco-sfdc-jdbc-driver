@@ -44,7 +44,7 @@ import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilResultSet;
 
 public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement {
-	public static final boolean IS_DEBUG = true;
+	public static final boolean IS_DEBUG = false;
 
 	protected QueryResult qryResult = null;
 
@@ -84,8 +84,8 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		if (argSql != null) {
 			// overwrite if argSql not null only.
 			sql = argSql;
-			sql = sql.replace("count(*)", "count()");
-			sql = sql.replace("COUNT(*)", "count()");
+			sql = sql.replace("count(*)", "count(Id)");
+			sql = sql.replace("COUNT(*)", "count(Id)");
 			sql = sql.trim();
 
 			{
@@ -126,7 +126,8 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 		final SObject[] sObjs = qryResult.getRecords();
 		if (sObjs.length == 0) {
 			if (IS_DEBUG)
-				System.err.println("BlancoSfdcJdbcStatement#firstBlock(" + argSql + "): RECORD_NOT_FOUND");
+				System.err.println("BlancoSfdcJdbcStatement#firstBlock(" + argSql + "): RECORD_NOT_FOUND: "
+						+ qryResult.toString());
 
 			// 特殊ルート
 			BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSetMetaDataNOTFOUND(conn, getGlobalUniqueKey());

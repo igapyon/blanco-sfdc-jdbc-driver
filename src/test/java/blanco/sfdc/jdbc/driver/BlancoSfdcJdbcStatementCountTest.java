@@ -15,7 +15,7 @@ import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 import junit.framework.TestCase;
 
 public class BlancoSfdcJdbcStatementCountTest extends TestCase {
-	public void test004() throws Exception {
+	public void test001() throws Exception {
 		Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
 
 		final Properties prop = new Properties();
@@ -30,7 +30,7 @@ public class BlancoSfdcJdbcStatementCountTest extends TestCase {
 		final Connection conn = DriverManager.getConnection("blanco:sfdc:jdbc:" + url, user, pass);
 
 		final Statement stmt = conn.createStatement();
-		final String sql = "select count(*) from Account";
+		final String sql = "select count(Id) from Account";
 		final ResultSet rs = stmt.executeQuery(sql);
 
 		assertTrue("Result set should be true", rs.next() == true);
