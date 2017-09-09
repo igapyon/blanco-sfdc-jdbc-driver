@@ -117,11 +117,23 @@ public class BlancoGenericJdbcResultSetMetaData implements ResultSetMetaData {
 	}
 
 	public int getColumnDisplaySize(int column) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// FIXME ディスプレイサイズは 別途カラムに格納しよう。
+		final ResultSet columnRs = nextResultSetTo(column);
+		try {
+			return columnRs.getString("COLUMN_NAME").length();
+		} finally {
+			columnRs.close();
+		}
 	}
 
 	public String getColumnLabel(int column) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// FIXME カラムラベルは 別途カラムに格納しよう。
+		final ResultSet columnRs = nextResultSetTo(column);
+		try {
+			return columnRs.getString("COLUMN_NAME");
+		} finally {
+			columnRs.close();
+		}
 	}
 
 	public String getColumnName(int column) throws SQLException {
@@ -134,15 +146,32 @@ public class BlancoGenericJdbcResultSetMetaData implements ResultSetMetaData {
 	}
 
 	public String getSchemaName(int column) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		final ResultSet columnRs = nextResultSetTo(column);
+		try {
+			return columnRs.getString("TABLE_SCHEM");
+		} finally {
+			columnRs.close();
+		}
 	}
 
 	public int getPrecision(int column) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		final ResultSet columnRs = nextResultSetTo(column);
+		try {
+			// FIXME
+			return columnRs.getInt("DECIMAL_DIGITS");
+		} finally {
+			columnRs.close();
+		}
 	}
 
 	public int getScale(int column) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		final ResultSet columnRs = nextResultSetTo(column);
+		try {
+			// FIXME
+			return columnRs.getInt("DECIMAL_DIGITS");
+		} finally {
+			columnRs.close();
+		}
 	}
 
 	public String getTableName(int column) throws SQLException {
@@ -155,7 +184,12 @@ public class BlancoGenericJdbcResultSetMetaData implements ResultSetMetaData {
 	}
 
 	public String getCatalogName(int column) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		final ResultSet columnRs = nextResultSetTo(column);
+		try {
+			return columnRs.getString("TABLE_CAT");
+		} finally {
+			columnRs.close();
+		}
 	}
 
 	public int getColumnType(int column) throws SQLException {

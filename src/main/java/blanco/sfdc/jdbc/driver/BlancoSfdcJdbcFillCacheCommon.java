@@ -152,13 +152,18 @@ public class BlancoSfdcJdbcFillCacheCommon {
 			{
 				final Iterator<XmlObject> ite = xmlSObject.getChildren();
 				int indexColumn = 0;
-				for (; ite.hasNext(); indexColumn++) {
+				for (; ite.hasNext();) {
 					final XmlObject obj = (XmlObject) ite.next();
 
 					// First one should be : type, value=Account,
 					// children=[]}
 					// Second one should be : Id, value=0012800000lbaM2AAI,
 					// children=[]}
+
+					if (obj.getName().equals("BillingAddress") || obj.getName().equals("ShippingAddress")) {
+						// FIXME 他の方法でスキップするすべを探すべき。
+						continue;
+					}
 
 					String sObjectName = null;
 					String rowIdString = null;
@@ -190,6 +195,7 @@ public class BlancoSfdcJdbcFillCacheCommon {
 						// TODO tablename?
 						// TODO set Object ID?
 					}
+					indexColumn++;
 				}
 			}
 

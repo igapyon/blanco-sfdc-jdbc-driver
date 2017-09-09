@@ -117,6 +117,7 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 
 		final SObject[] sObjs = qryResult.getRecords();
 		if (sObjs.length == 0) {
+			// FIXME !!!! 0の正常終了として true で処理すべきです。しかし解決方法が現時点では不明。
 			return false;
 		}
 
