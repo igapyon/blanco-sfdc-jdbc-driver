@@ -56,6 +56,7 @@ public class BlancoGenericJdbcCacheUtilResultSet {
 			ddl += " ";
 			switch (columnsRs.getInt("DATA_TYPE")) {
 			case java.sql.Types.VARCHAR:
+			case java.sql.Types.LONGVARCHAR:
 				ddl += "VARCHAR";
 				break;
 			case java.sql.Types.BIT:

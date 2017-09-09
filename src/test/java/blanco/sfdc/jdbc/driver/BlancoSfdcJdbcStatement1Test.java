@@ -13,7 +13,7 @@ import java.util.Properties;
 
 import junit.framework.TestCase;
 
-public class BlancoSfdcJdbcStatementTest extends TestCase {
+public class BlancoSfdcJdbcStatement1Test extends TestCase {
 
 	public void test001() throws Exception {
 		Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
