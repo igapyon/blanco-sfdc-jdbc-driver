@@ -638,6 +638,7 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 			pstmt.setShort(rowNum++, (short) DatabaseMetaData.typeSearchable);
 			pstmt.setString(rowNum++, "id");
 			// 18桁 FIXME
+			pstmt.execute();
 		}
 
 		{
@@ -652,6 +653,7 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 			pstmt.setBoolean(rowNum++, true);
 			pstmt.setShort(rowNum++, (short) DatabaseMetaData.typeSearchable);
 			pstmt.setString(rowNum++, "string");
+			pstmt.execute();
 		}
 
 		{
@@ -666,6 +668,7 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 			pstmt.setBoolean(rowNum++, true);
 			pstmt.setShort(rowNum++, (short) DatabaseMetaData.typeSearchable);
 			pstmt.setString(rowNum++, "picklist");
+			pstmt.execute();
 		}
 
 		return conn.getCacheConnection().createStatement()
