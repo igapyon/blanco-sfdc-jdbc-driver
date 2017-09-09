@@ -68,6 +68,8 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 				try {
 					int rowNum = 1;
 
+					final int sqlDataType = BlancoSfdcJdbcTypeUtil.soqlTypeName2SqlTypes(field.getType().name());
+
 					// "TABLE_CAT"
 					pstmt.setString(rowNum++, null);
 					// "TABLE_SCHEM"
@@ -77,7 +79,7 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 					// "COLUMN_NAME"
 					pstmt.setString(rowNum++, field.getName());
 					// "DATA_TYPE"
-					pstmt.setInt(rowNum++, BlancoSfdcJdbcTypeUtil.soqlTypeName2SqlTypes(field.getType().name()));
+					pstmt.setInt(rowNum++, sqlDataType);
 					// "TYPE_NAME"
 					{
 						// FIXME
@@ -90,10 +92,35 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 					}
 					// "COLUMN_SIZE"
 					pstmt.setInt(rowNum++, field.getLength());
+
 					// "DECIMAL_DIGITS"
-					pstmt.setInt(rowNum++, field.getDigits());
 					// "NUM_PREC_RADIX"
-					pstmt.setInt(rowNum++, 10);
+					{
+						switch (sqlDataType) {
+						case java.sql.Types.BIGINT:
+						case java.sql.Types.DECIMAL:
+						case java.sql.Types.DOUBLE:
+						case java.sql.Types.FLOAT:
+						case java.sql.Types.INTEGER:
+						case java.sql.Types.NUMERIC:
+						case java.sql.Types.REAL:
+						case java.sql.Types.SMALLINT:
+						case java.sql.Types.TINYINT: {
+							// "DECIMAL_DIGITS"
+							pstmt.setInt(rowNum++, field.getDigits());
+							// "NUM_PREC_RADIX"
+							pstmt.setInt(rowNum++, 10);
+							break;
+						}
+						default:
+							// "DECIMAL_DIGITS"
+							pstmt.setNull(rowNum++, sqlDataType);
+							// "NUM_PREC_RADIX"
+							pstmt.setNull(rowNum++, sqlDataType);
+							break;
+						}
+
+					}
 					/// "NULLABLE"
 					pstmt.setInt(rowNum++,
 							field.getNillable() ? ResultSetMetaData.columnNullable : ResultSetMetaData.columnNoNulls);
@@ -103,9 +130,13 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 					// "REMARKS"
 					pstmt.setString(rowNum++, field.getLabel());
 					// "SQL_DATA_TYPE" // reserved future
-					pstmt.setInt(rowNum++, BlancoSfdcJdbcTypeUtil.soqlTypeName2SqlTypes(field.getType().name()));
+					// always null
+					pstmt.setNull(rowNum++, sqlDataType);
+
 					// "SQL_DATETIME_SUB"
-					pstmt.setInt(rowNum++, -1 /* FIXME */);
+					// always null.
+					pstmt.setNull(rowNum++, sqlDataType);
+
 					// "CHAR_OCTET_LENGTH"
 					pstmt.setInt(rowNum++, field.getLength());
 
