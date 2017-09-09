@@ -671,6 +671,21 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 			pstmt.execute();
 		}
 
+		{
+			int rowNum = 1;
+			final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement(
+					"INSERT INTO GMETA_TYPEINFO SET TYPE_NAME = ?, DATA_TYPE = ?, LITERAL_PREFIX = ?, LITERAL_SUFFIX = ?, NULLABLE = ?, CASE_SENSITIVE = ?, SEARCHABLE = ?, LOCAL_TYPE_NAME = ?");
+			pstmt.setString(rowNum++, "address");
+			pstmt.setInt(rowNum++, java.sql.Types.VARCHAR);
+			pstmt.setString(rowNum++, "'");
+			pstmt.setString(rowNum++, "'");
+			pstmt.setShort(rowNum++, (short) ResultSetMetaData.columnNullableUnknown);
+			pstmt.setBoolean(rowNum++, true);
+			pstmt.setShort(rowNum++, (short) DatabaseMetaData.typeSearchable/* FIXME */);
+			pstmt.setString(rowNum++, "address");
+			pstmt.execute();
+		}
+
 		return conn.getCacheConnection().createStatement()
 				.executeQuery("SELECT * FROM GMETA_TYPEINFO ORDER BY DATA_TYPE");
 	}
