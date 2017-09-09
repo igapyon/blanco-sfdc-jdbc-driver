@@ -14,7 +14,7 @@ import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcConnection;
 import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 import junit.framework.TestCase;
 
-public class BlancoSfdcJdbcStatement4Test extends TestCase {
+public class BlancoSfdcJdbcStatementCountTest extends TestCase {
 	public void test004() throws Exception {
 		Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
 

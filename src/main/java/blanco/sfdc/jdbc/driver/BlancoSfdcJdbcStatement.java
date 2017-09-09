@@ -44,6 +44,8 @@ import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcStatement;
 import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilResultSet;
 
 public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement {
+	public static final boolean IS_DEBUG = true;
+
 	protected QueryResult qryResult = null;
 
 	protected String sql = null;
@@ -65,6 +67,9 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 	}
 
 	public boolean hasNextBlock() throws SQLException {
+		if (IS_DEBUG)
+			System.err.println("BlancoSfdcJdbcStatement#hasNextBlock()");
+
 		if (qryResult == null) {
 			return true;
 		}
@@ -73,6 +78,9 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 	}
 
 	public boolean firstBlock(final String argSql) throws SQLException {
+		if (IS_DEBUG)
+			System.err.println("BlancoSfdcJdbcStatement#firstBlock(" + argSql + ")");
+
 		if (argSql != null) {
 			// overwrite if argSql not null only.
 			sql = argSql;
@@ -142,6 +150,9 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 	}
 
 	public boolean nextBlock() throws SQLException {
+		if (IS_DEBUG)
+			System.err.println("BlancoSfdcJdbcStatement#nextBlock()");
+
 		final SObject[] sObjs = qryResult.getRecords();
 		if (sObjs.length == 0) {
 			return false;

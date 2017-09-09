@@ -50,6 +50,8 @@ import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcConnection;
 import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilDatabaseMetaData;
 
 public class BlancoSfdcJdbcFillCacheCommon {
+	public static final boolean IS_DEBUG = true;
+
 	public static final String getInsertIntoGmetaColumnsSql(final String globalUniqueKey) {
 		return "INSERT INTO GMETA_COLUMNS_" + globalUniqueKey
 				+ " SET TABLE_CAT = ?, TABLE_SCHEM = ?, TABLE_NAME = ?, COLUMN_NAME = ?, DATA_TYPE = ?, TYPE_NAME = ?" //
@@ -203,6 +205,8 @@ public class BlancoSfdcJdbcFillCacheCommon {
 	 */
 	public static void fillCacheTableOfResultSet(final Connection connCache, final String globalUniqueKey,
 			final XmlObject[] sObjs) throws SQLException {
+		if (IS_DEBUG)
+			System.err.println("TRACE: BlancoSfdcJdbcFillCacheCommon#fillCacheTableOfResultSet");
 		for (int indexRow = 0; indexRow < sObjs.length; indexRow++) {
 
 			final XmlObject xmlSObject = sObjs[indexRow];
@@ -228,11 +232,15 @@ public class BlancoSfdcJdbcFillCacheCommon {
 					String rowIdString = null;
 
 					if (indexColumn == 0) {
+						if (IS_DEBUG)
+							System.err.println("TRACE: XmlObject#0: " + obj.toString());
 						if ("type".equals(obj.getName().getLocalPart()) == false) {
 							throw new SQLException("Unexpected result it must be 'type': " + obj.toString());
 						}
 						sObjectName = obj.getValue().toString();
 					} else if (indexColumn == 1) {
+						if (IS_DEBUG)
+							System.err.println("TRACE: XmlObject#1: " + obj.toString());
 						if ("Id".compareToIgnoreCase(obj.getName().getLocalPart()) != 0) {
 							throw new SQLException("Unexpected result it must be 'Id': " + obj.toString());
 						}
@@ -242,6 +250,8 @@ public class BlancoSfdcJdbcFillCacheCommon {
 							rowIdString = obj.getValue().toString();
 						}
 					} else {
+						if (IS_DEBUG)
+							System.err.println("TRACE: XmlObject#" + indexColumn + ": " + obj.toString());
 						final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
 								connCache, "GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName,
 								obj.getName().getLocalPart());
