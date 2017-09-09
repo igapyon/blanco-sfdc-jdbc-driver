@@ -125,6 +125,9 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 
 		final SObject[] sObjs = qryResult.getRecords();
 		if (sObjs.length == 0) {
+			if (IS_DEBUG)
+				System.err.println("BlancoSfdcJdbcStatement#firstBlock(" + argSql + "): RECORD_NOT_FOUND");
+
 			// 特殊ルート
 			BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSetMetaDataNOTFOUND(conn, getGlobalUniqueKey());
 
@@ -133,6 +136,9 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 					getGlobalUniqueKey());
 			return true;
 		}
+
+		if (IS_DEBUG)
+			System.err.println("BlancoSfdcJdbcStatement#firstBlock(" + argSql + "): has result");
 
 		// TODO maxRows (SOQL LIMIT) への対応を検討すること。
 
