@@ -43,8 +43,8 @@ public class BlancoSfdcJdbcStatement2Test extends TestCase {
 			final ResultSetMetaData rsmd2 = rs2.getMetaData();
 			for (; rs2.next();) {
 				for (int colNum2 = 1; colNum2 <= rs2.getMetaData().getColumnCount(); colNum2++) {
-					System.out.print(rsmd2.getColumnName(colNum2) + " ");
-					System.out.println(rs2.getString(colNum2));
+					rsmd2.getColumnName(colNum2);
+					rs2.getString(colNum2);
 				}
 			}
 		}
@@ -55,7 +55,7 @@ public class BlancoSfdcJdbcStatement2Test extends TestCase {
 			String result = "";
 			result += rsmd.getColumnName(indexCol) + " (" + rsmd.getColumnTypeName(indexCol) + "): "
 					+ rsmd.getColumnType(indexCol);
-			System.out.println(result);
+			// System.out.println(result);
 		}
 
 		rs.close();
