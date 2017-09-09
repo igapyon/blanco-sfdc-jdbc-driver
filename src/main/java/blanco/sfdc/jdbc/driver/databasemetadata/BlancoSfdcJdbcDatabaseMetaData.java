@@ -69,7 +69,8 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 					int rowNum = 1;
 
 					final int sqlDataType = BlancoSfdcJdbcTypeUtil.soqlTypeName2SqlTypes(field.getType().name());
-					System.err.println("TRACE: " + field.getType().name() + "=>" + sqlDataType);
+					// System.err.println("TRACE: " + field.getType().name() +
+					// "=>" + sqlDataType);
 
 					// "TABLE_CAT"
 					pstmt.setString(rowNum++, null);
