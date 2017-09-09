@@ -58,6 +58,7 @@ public class BlancoGenericJdbcCacheUtilResultSet {
 			case java.sql.Types.VARCHAR:
 				ddl += "VARCHAR";
 				break;
+			case java.sql.Types.BIT:
 			case java.sql.Types.BOOLEAN:
 				ddl += "BOOLEAN";
 				break;
@@ -72,6 +73,12 @@ public class BlancoGenericJdbcCacheUtilResultSet {
 				break;
 			case java.sql.Types.BIGINT:
 				ddl += "BIGINT";
+				break;
+			case java.sql.Types.FLOAT:
+				ddl += "FLOAT";
+				break;
+			case java.sql.Types.DOUBLE:
+				ddl += "DOUBLE";
 				break;
 			case java.sql.Types.DATE:
 				ddl += "DATE";

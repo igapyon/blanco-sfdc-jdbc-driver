@@ -8,6 +8,8 @@ public class BlancoSfdcJdbcTypeUtil {
 			return java.sql.Types.VARCHAR;
 		} else if ("string".compareToIgnoreCase(soqlTypeName) == 0) {
 			return java.sql.Types.VARCHAR;
+		} else if ("textarea".compareToIgnoreCase(soqlTypeName) == 0) {
+			return java.sql.Types.VARCHAR;
 		} else if ("ID".compareToIgnoreCase(soqlTypeName) == 0) {
 			return java.sql.Types.VARCHAR;
 		} else if ("picklist".compareToIgnoreCase(soqlTypeName) == 0) {
