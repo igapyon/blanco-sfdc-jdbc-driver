@@ -107,16 +107,6 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 			for (Field field : sobjResult.getFields()) {
 				ordinalIndex++;
 
-				// TODO 型マッピングの一本化。
-				int dataType = (Integer.valueOf(java.sql.Types.VARCHAR));
-				if ("int".equals(field.getType().toString())) {
-					dataType = (Integer.valueOf(java.sql.Types.INTEGER));
-				} else if ("date".equals(field.getType().toString())) {
-					dataType = (Integer.valueOf(java.sql.Types.DATE));
-				} else if ("datetime".equals(field.getType().toString())) {
-					dataType = (Integer.valueOf(java.sql.Types.TIMESTAMP));
-				}
-
 				final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement("INSERT INTO GMETA_COLUMNS "
 						+ " SET TABLE_CAT = ?, TABLE_SCHEM = ?, TABLE_NAME = ?, COLUMN_NAME = ?, DATA_TYPE = ?, TYPE_NAME = ?" //
 						+ ", COLUMN_SIZE = ?, DECIMAL_DIGITS = ?, NUM_PREC_RADIX = ?, NULLABLE = ?, COLUMN_DEF= ?, REMARKS = ?" //
@@ -135,17 +125,17 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 					pstmt.setString(rowNum++, tableName);
 					// "COLUMN_NAME"
 					pstmt.setString(rowNum++, field.getName());
-					// rsmdRs.getInt("DATA_TYPE")
-					pstmt.setInt(rowNum++, dataType);
-					// rsmdRs.getString("TYPE_NAME")
+					// "DATA_TYPE"
+					pstmt.setInt(rowNum++, soqlTypeName2SqlTypes(field.getType().name()));
+					// "TYPE_NAME"
 					pstmt.setString(rowNum++, field.getType().toString());
-					// rsmdRs.getInt("COLUMN_SIZE")
+					// "COLUMN_SIZE"
 					pstmt.setInt(rowNum++, field.getLength());
 					// "DECIMAL_DIGITS"
 					pstmt.setInt(rowNum++, field.getDigits());
 					// "NUM_PREC_RADIX"
 					pstmt.setInt(rowNum++, 10);
-					/// rsmdRs.getInt("NULLABLE")
+					/// "NULLABLE"
 					pstmt.setInt(rowNum++,
 							field.getNillable() ? ResultSetMetaData.columnNullable : ResultSetMetaData.columnNoNulls);
 					// "COLUMN_DEF"
