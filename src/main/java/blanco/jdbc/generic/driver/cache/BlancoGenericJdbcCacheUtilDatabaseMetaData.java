@@ -39,6 +39,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
+import blanco.sfdc.jdbc.driver.util.BlancoSfdcJdbcTypeUtil;
+
 public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 	///////////////////////////////////////////////
 	// DATABASEMETADATA
@@ -159,6 +161,80 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 			pstmt.execute();
 		} finally {
 			pstmt.close();
+		}
+
+		{
+			// COLUMNS にダミーを追加。
+			pstmt = connCache.prepareStatement(
+					BlancoGenericJdbcCacheUtilDatabaseMetaData.DML_CACHE_DATABASEMETADATA_COLUMNS_INSERT);
+
+			int rowNum = 1;
+			try {
+				final int sqlDataType = BlancoSfdcJdbcTypeUtil.soqlTypeName2SqlTypes("VARCHAR");
+
+				// "TABLE_CAT"
+				pstmt.setString(rowNum++, null);
+				// "TABLE_SCHEM"
+				pstmt.setString(rowNum++, null);
+				// "TABLE_NAME"
+				pstmt.setString(rowNum++, "GMETA_STRING_COLUMN");
+				// "COLUMN_NAME"
+				pstmt.setString(rowNum++, "GMETA_STRING_COLUMN");
+				// "DATA_TYPE"
+				pstmt.setInt(rowNum++, sqlDataType);
+				// "TYPE_NAME"
+				pstmt.setString(rowNum++, "VARCHAR");
+
+				// "COLUMN_SIZE"
+				pstmt.setInt(rowNum++, 255);
+
+				// "DECIMAL_DIGITS"
+				// "NUM_PREC_RADIX"
+
+				// "DECIMAL_DIGITS"
+				pstmt.setNull(rowNum++, sqlDataType);
+				// "NUM_PREC_RADIX"
+				pstmt.setNull(rowNum++, sqlDataType);
+
+				/// "NULLABLE"
+				pstmt.setInt(rowNum++, ResultSetMetaData.columnNullable);
+				// "COLUMN_DEF"
+				pstmt.setString(rowNum++, null);
+				// "REMARKS"
+				pstmt.setString(rowNum++, null);
+				// "SQL_DATA_TYPE" // reserved future
+				// always null
+				pstmt.setNull(rowNum++, sqlDataType);
+
+				// "SQL_DATETIME_SUB"
+				// always null.
+				pstmt.setNull(rowNum++, sqlDataType);
+
+				// "CHAR_OCTET_LENGTH"
+				pstmt.setInt(rowNum++, 255);
+
+				// ORDINAL_POSITION should not populate
+				pstmt.setInt(rowNum++, 1);
+
+				// "IS_NULLABLE"
+				pstmt.setString(rowNum++, "");
+				// "SCOPE_CATALOG"
+				pstmt.setString(rowNum++, null);
+				// "SCOPE_SCHEMA"
+				pstmt.setString(rowNum++, null);
+				// "SCOPE_TABLE"
+				pstmt.setString(rowNum++, null);
+				// "SOURCE_DATA_TYPE"
+				pstmt.setString(rowNum++, null);
+				// "IS_AUTOINCREMENT"
+				pstmt.setString(rowNum++, null);
+				// "IS_GENERATEDCOLUMN"
+				pstmt.setString(rowNum++, null);
+
+				pstmt.execute();
+			} finally {
+				pstmt.close();
+			}
 		}
 
 		pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_TABLETYPES);

@@ -144,13 +144,19 @@ public class BlancoSfdcJdbcFillCacheCommon {
 
 		for (int ordinalIndex = 1; ite.hasNext(); ordinalIndex++) {
 			final XmlObject objChild = (XmlObject) ite.next();
-			final ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, sObjectName,
+			ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, sObjectName,
 					objChild.getName().getLocalPart());
 			try {
 				// System.out.println("child, Name:" +
 				// objChild.getName().getLocalPart());
 				// System.out.println("child, Value:" + objChild.getValue());
-				rsmdRs.next();
+				if (rsmdRs.next() == false) {
+					// 見つからなかったのでダミー利用。
+					rsmdRs = conn.getMetaData().getColumns(null, null, "GMETA_STRING_COLUMN", "GMETA_STRING_COLUMN");
+					if (rsmdRs.next() == false) {
+						throw new SQLException("IllegalCase: NOT FOUND GMETA_STRING_COLUMN.");
+					}
+				}
 
 				final PreparedStatement pstmt = conn.getCacheConnection()
 						.prepareStatement(getInsertIntoGmetaColumnsSql(globalUniqueKey));
@@ -252,10 +258,18 @@ public class BlancoSfdcJdbcFillCacheCommon {
 					} else {
 						if (IS_DEBUG)
 							System.err.println("TRACE: XmlObject#" + indexColumn + ": " + obj.toString());
-						final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
-								connCache, "GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName,
+						ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(connCache,
+								"GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName,
 								obj.getName().getLocalPart());
-						metadataRs.next();
+						if (metadataRs.next() == false) {
+							// 落ちるのを防止。
+							// COUNT(Id) の際にここに入るはず。
+							metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(connCache,
+									"GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName, "GMETA_STRING_COLUMN");
+							if (metadataRs.next() == false) {
+								throw new SQLException("ここに入ってはダメ:270");
+							}
+						}
 
 						if (obj.getValue() != null) {
 							// null のときはなにもしない。
@@ -300,10 +314,18 @@ public class BlancoSfdcJdbcFillCacheCommon {
 							rowIdString = obj.getValue().toString();
 						}
 					} else {
-						final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
-								connCache, "GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName,
+						ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(connCache,
+								"GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName,
 								obj.getName().getLocalPart());
-						metadataRs.next();
+						if (metadataRs.next() == false) {
+							// 落ちるのを防止。
+							// COUNT(Id) の際にここに入るはず。
+							metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(connCache,
+									"GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName, "GMETA_STRING_COLUMN");
+							if (metadataRs.next() == false) {
+								throw new SQLException("ここに入ってはダメ:326");
+							}
+						}
 
 						if (obj.getValue() != null) {
 							// null のときはなにもしない。
