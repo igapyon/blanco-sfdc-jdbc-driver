@@ -82,7 +82,12 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 
 			{
 				// FIXME 気合
-				if (sql.startsWith("select * from ")) {
+				if (sql.startsWith("select tbl.")) {
+					String newSql = sql;
+					newSql = newSql.replace("select tbl.", "select ");
+					newSql = newSql.replaceAll(",tbl.", ",");
+					sql = newSql;
+				} else if (sql.startsWith("select * from ")) {
 					String newSql = "select ";
 					String tableName = sql.substring("select * from ".length());
 					tableName = tableName.split("\\s+")[0];
