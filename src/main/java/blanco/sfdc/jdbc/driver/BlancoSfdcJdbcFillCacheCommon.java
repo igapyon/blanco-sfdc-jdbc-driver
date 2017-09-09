@@ -50,6 +50,71 @@ import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcConnection;
 import blanco.jdbc.generic.driver.cache.BlancoGenericJdbcCacheUtilDatabaseMetaData;
 
 public class BlancoSfdcJdbcFillCacheCommon {
+	public static final String getInsertIntoGmetaColumnsSql(final String globalUniqueKey) {
+		return "INSERT INTO GMETA_COLUMNS_" + globalUniqueKey
+				+ " SET TABLE_CAT = ?, TABLE_SCHEM = ?, TABLE_NAME = ?, COLUMN_NAME = ?, DATA_TYPE = ?, TYPE_NAME = ?" //
+				+ ", COLUMN_SIZE = ?, DECIMAL_DIGITS = ?, NUM_PREC_RADIX = ?, NULLABLE = ?, COLUMN_DEF= ?, REMARKS = ?" //
+				+ ", SQL_DATA_TYPE = ?, SQL_DATETIME_SUB = ?, CHAR_OCTET_LENGTH = ?, ORDINAL_POSITION = ?" //
+				+ " , IS_NULLABLE = ?, SCOPE_CATALOG = ?, SCOPE_SCHEMA = ?, SCOPE_TABLE = ?, SOURCE_DATA_TYPE = ?" //
+				+ ", IS_AUTOINCREMENT = ?, IS_GENERATEDCOLUMN = ?";
+	}
+
+	/**
+	 * ０件の検索結果
+	 */
+	public static void fillCacheTableOfResultSetMetaDataNOTFOUND(final AbstractBlancoGenericJdbcConnection conn,
+			final String globalUniqueKey) throws SQLException {
+
+		// FIXME 仮でアカウントから借りてきています。
+		final ResultSet rsmdRs = conn.getMetaData().getColumns(null, null, "Account", "Name");
+		try {
+			// System.out.println("child, Name:" +
+			// objChild.getName().getLocalPart());
+			// System.out.println("child, Value:" + objChild.getValue());
+			rsmdRs.next();
+
+			final PreparedStatement pstmt = conn.getCacheConnection()
+					.prepareStatement(getInsertIntoGmetaColumnsSql(globalUniqueKey));
+			try {
+				int rowNum = 1;
+
+				pstmt.setString(rowNum++, rsmdRs.getString("TABLE_CAT"));
+				pstmt.setString(rowNum++, rsmdRs.getString("TABLE_SCHEM"));
+				pstmt.setString(rowNum++, rsmdRs.getString("TABLE_NAME"));
+				pstmt.setString(rowNum++, rsmdRs.getString("COLUMN_NAME"));
+				pstmt.setInt(rowNum++, rsmdRs.getInt("DATA_TYPE"));
+				pstmt.setString(rowNum++, rsmdRs.getString("TYPE_NAME"));
+				pstmt.setInt(rowNum++, rsmdRs.getInt("COLUMN_SIZE"));
+				pstmt.setInt(rowNum++, rsmdRs.getInt("DECIMAL_DIGITS"));
+				pstmt.setInt(rowNum++, rsmdRs.getInt("NUM_PREC_RADIX"));
+
+				pstmt.setInt(rowNum++, rsmdRs.getInt("NULLABLE"));
+				pstmt.setString(rowNum++, rsmdRs.getString("COLUMN_DEF"));
+				pstmt.setString(rowNum++, rsmdRs.getString("REMARKS"));
+				pstmt.setInt(rowNum++, rsmdRs.getInt("SQL_DATA_TYPE"));
+				pstmt.setInt(rowNum++, rsmdRs.getInt("SQL_DATETIME_SUB"));
+				pstmt.setInt(rowNum++, rsmdRs.getInt("CHAR_OCTET_LENGTH"));
+
+				// ORDINAL_POSITION should not populate
+				pstmt.setInt(rowNum++, 1);
+
+				pstmt.setString(rowNum++, rsmdRs.getString("IS_NULLABLE"));
+				pstmt.setString(rowNum++, rsmdRs.getString("SCOPE_CATALOG"));
+				pstmt.setString(rowNum++, rsmdRs.getString("SCOPE_SCHEMA"));
+				pstmt.setString(rowNum++, rsmdRs.getString("SCOPE_TABLE"));
+				pstmt.setString(rowNum++, rsmdRs.getString("SOURCE_DATA_TYPE"));
+				pstmt.setString(rowNum++, rsmdRs.getString("IS_AUTOINCREMENT"));
+				pstmt.setString(rowNum++, rsmdRs.getString("IS_GENERATEDCOLUMN"));
+
+				pstmt.execute();
+			} finally {
+				pstmt.close();
+			}
+		} finally {
+			rsmdRs.close();
+		}
+	}
+
 	/**
 	 * Investigate result of query and fill ResultSetMetaData
 	 * 
@@ -85,14 +150,8 @@ public class BlancoSfdcJdbcFillCacheCommon {
 				// System.out.println("child, Value:" + objChild.getValue());
 				rsmdRs.next();
 
-				final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement("INSERT INTO GMETA_COLUMNS_"
-						+ globalUniqueKey
-						+ " SET TABLE_CAT = ?, TABLE_SCHEM = ?, TABLE_NAME = ?, COLUMN_NAME = ?, DATA_TYPE = ?, TYPE_NAME = ?" //
-						+ ", COLUMN_SIZE = ?, DECIMAL_DIGITS = ?, NUM_PREC_RADIX = ?, NULLABLE = ?, COLUMN_DEF= ?, REMARKS = ?" //
-						+ ", SQL_DATA_TYPE = ?, SQL_DATETIME_SUB = ?, CHAR_OCTET_LENGTH = ?, ORDINAL_POSITION = ?" //
-						+ " , IS_NULLABLE = ?, SCOPE_CATALOG = ?, SCOPE_SCHEMA = ?, SCOPE_TABLE = ?, SOURCE_DATA_TYPE = ?" //
-						+ ", IS_AUTOINCREMENT = ?, IS_GENERATEDCOLUMN = ?");
-
+				final PreparedStatement pstmt = conn.getCacheConnection()
+						.prepareStatement(getInsertIntoGmetaColumnsSql(globalUniqueKey));
 				try {
 					int rowNum = 1;
 

@@ -125,7 +125,13 @@ public class BlancoSfdcJdbcPreparedStatement extends AbstractBlancoGenericJdbcPr
 
 		final SObject[] sObjs = qryResult.getRecords();
 		if (sObjs.length == 0) {
-			return false;
+			// 特殊ルート
+			BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSetMetaDataNOTFOUND(conn, getGlobalUniqueKey());
+
+			// Create Cache ResultSet
+			BlancoGenericJdbcCacheUtilResultSet.createCacheTableOfResultSet(conn.getCacheConnection(),
+					getGlobalUniqueKey());
+			return true;
 		}
 
 		// Fill Cache ResultSetMetaData

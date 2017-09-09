@@ -117,8 +117,13 @@ public class BlancoSfdcJdbcStatement extends AbstractBlancoGenericJdbcStatement 
 
 		final SObject[] sObjs = qryResult.getRecords();
 		if (sObjs.length == 0) {
-			// FIXME !!!! 0の正常終了として true で処理すべきです。しかし解決方法が現時点では不明。
-			return false;
+			// 特殊ルート
+			BlancoSfdcJdbcFillCacheCommon.fillCacheTableOfResultSetMetaDataNOTFOUND(conn, getGlobalUniqueKey());
+
+			// Create Cache ResultSet
+			BlancoGenericJdbcCacheUtilResultSet.createCacheTableOfResultSet(conn.getCacheConnection(),
+					getGlobalUniqueKey());
+			return true;
 		}
 
 		// TODO maxRows (SOQL LIMIT) への対応を検討すること。
