@@ -231,6 +231,7 @@ public class BlancoSfdcJdbcFillCacheCommon {
 							case java.sql.Types.LONGVARCHAR:
 								pstmt.setString(pstmtIndex++, value);
 								break;
+							case java.sql.Types.BIT:
 							case java.sql.Types.BOOLEAN:
 								pstmt.setBoolean(pstmtIndex++, Boolean.valueOf(value));
 								break;
