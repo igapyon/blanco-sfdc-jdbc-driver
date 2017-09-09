@@ -166,7 +166,11 @@ public class BlancoSfdcJdbcFillCacheCommon {
 					if (indexColumn == 0) {
 						sObjectName = obj.getValue().toString();
 					} else if (indexColumn == 1) {
-						rowIdString = obj.getValue().toString();
+						try {
+							rowIdString = obj.getValue().toString();
+						} catch (NullPointerException ex) {
+							throw new IllegalArgumentException(obj.toString());
+						}
 					} else {
 						final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
 								connCache, "GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName,
