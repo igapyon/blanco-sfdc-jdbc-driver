@@ -44,7 +44,6 @@ import com.sforce.ws.ConnectionException;
 import com.sforce.ws.ConnectorConfig;
 
 import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcConnection;
-import blanco.sfdc.jdbc.driver.databasemetadata.BlancoSfdcJdbcDatabaseMetaData;
 
 public class BlancoSfdcJdbcConnection extends AbstractBlancoGenericJdbcConnection {
 	protected PartnerConnection partnerConn = null;

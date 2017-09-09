@@ -1,4 +1,4 @@
-package blanco.sfdc.jdbc.driver.databasemetadata;
+package blanco.sfdc.jdbc.driver;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSetMetaData;
@@ -10,8 +10,7 @@ import com.sforce.soap.partner.DescribeSObjectResult;
 import com.sforce.soap.partner.Field;
 import com.sforce.ws.ConnectionException;
 
-import blanco.jdbc.generic.driver.databasemetadata.AbstractBlancoGenericJdbcDatabaseMetaData;
-import blanco.sfdc.jdbc.driver.BlancoSfdcJdbcConnection;
+import blanco.jdbc.generic.driver.AbstractBlancoGenericJdbcDatabaseMetaData;
 import blanco.sfdc.jdbc.driver.util.BlancoSfdcJdbcTypeUtil;
 
 public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDatabaseMetaData {
