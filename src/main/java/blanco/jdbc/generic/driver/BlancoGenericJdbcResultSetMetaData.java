@@ -51,11 +51,11 @@ public class BlancoGenericJdbcResultSetMetaData implements ResultSetMetaData {
 	}
 
 	public <T> T unwrap(Class<T> iface) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: unwrap(Class<T> iface)");
 	}
 
 	public boolean isWrapperFor(Class<?> iface) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: isWrapperFor(Class<?> iface)");
 	}
 
 	public int getColumnCount() throws SQLException {
@@ -90,7 +90,7 @@ public class BlancoGenericJdbcResultSetMetaData implements ResultSetMetaData {
 	}
 
 	public boolean isCaseSensitive(int column) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: isCaseSensitive(int column)");
 	}
 
 	public boolean isSearchable(int column) throws SQLException {
@@ -113,7 +113,7 @@ public class BlancoGenericJdbcResultSetMetaData implements ResultSetMetaData {
 	}
 
 	public boolean isSigned(int column) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: isSigned(int column)");
 	}
 
 	public int getColumnDisplaySize(int column) throws SQLException {
@@ -226,6 +226,6 @@ public class BlancoGenericJdbcResultSetMetaData implements ResultSetMetaData {
 	}
 
 	public String getColumnClassName(int column) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getColumnClassName(int column)");
 	}
 }

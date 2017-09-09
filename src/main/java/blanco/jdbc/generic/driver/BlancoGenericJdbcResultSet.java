@@ -136,11 +136,11 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	}
 
 	public <T> T unwrap(Class<T> iface) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: unwrap(Class<T> iface)");
 	}
 
 	public boolean isWrapperFor(Class<?> iface) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: isWrapperFor(Class<?> iface)");
 	}
 
 	public boolean wasNull() throws SQLException {
@@ -302,7 +302,7 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 	}
 
 	public void setFetchSize(int rows) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: setFetchSize(int rows)");
 	}
 
 	public int getFetchSize() throws SQLException {
@@ -311,7 +311,7 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 
 	public int getType() throws SQLException {
 		// TODO これなに？
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getType()");
 	}
 
 	public int getConcurrency() throws SQLException {
