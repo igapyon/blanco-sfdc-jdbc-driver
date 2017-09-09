@@ -81,6 +81,27 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 			+ "TYPE_CAT VARCHAR, TYPE_SCHEM VARCHAR, TYPE_NAME VARCHAR, CLASS_NAME VARCHAR, DATA_TYPE INT, REMARKS VARCHAR, BASE_TYPE TINYINT" //
 			+ ")";
 
+	public static final String DDL_CACHE_DATABASEMETADATA_TYPEINFO = "CREATE TABLE IF NOT EXISTS GMETA_TYPEINFO (" //
+			+ "TYPE_NAME VARCHAR_IGNORECASE" //
+			+ ",DATA_TYPE INT"//
+			+ ",PRECISION INT"//
+			+ ",LITERAL_PREFIX VARCHAR"//
+			+ ",LITERAL_SUFFIX VARCHAR"//
+			+ ",CREATE_PARAMS VARCHAR"//
+			+ ",NULLABLE TINYINT"//
+			+ ",CASE_SENSITIVE BOOLEAN"//
+			+ ",SEARCHABLE TINYINT"//
+			+ ",UNSIGNED_ATTRIBUTE BOOLEAN"//
+			+ ",FIXED_PREC_SCALE BOOLEAN"//
+			+ ",AUTO_INCREMENT BOOLEAN DEFAULT FALSE"//
+			+ ",LOCAL_TYPE_NAME VARCHAR"//
+			+ ",MINIMUM_SCALE TINYINT"//
+			+ ",MAXIMUM_SCALE TINYINT"//
+			+ ",SQL_DATA_TYPE INTEGER"// unused
+			+ ",SQL_DATETIME_SUB INTEGER"// unused
+			+ ",NUM_PREC_RADIX INTEGER DEFAULT 10"//
+			+ ")";
+
 	public static void createCacheTables(final Connection connCache) throws SQLException {
 		// getTables
 		PreparedStatement pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_TABLES);
@@ -132,7 +153,14 @@ public class BlancoGenericJdbcCacheUtilDatabaseMetaData {
 		} finally {
 			pstmt.close();
 		}
-}
+
+		pstmt = connCache.prepareStatement(DDL_CACHE_DATABASEMETADATA_TYPEINFO);
+		try {
+			pstmt.execute();
+		} finally {
+			pstmt.close();
+		}
+	}
 
 	public static boolean isCacheDatabaseMetaDataTablesCached(final Connection connCache) throws SQLException {
 		boolean isCached = false;

@@ -35,7 +35,9 @@ package blanco.jdbc.generic.driver.databasemetadata;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.RowIdLifetime;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -621,7 +623,53 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public ResultSet getTypeInfo() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		conn.getCacheConnection().createStatement().execute("DELETE FROM GMETA_TYPEINFO");
+
+		{
+			int rowNum = 1;
+			final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement(
+					"INSERT INTO GMETA_TYPEINFO SET TYPE_NAME = ?, DATA_TYPE = ?, LITERAL_PREFIX = ?, LITERAL_SUFFIX = ?, NULLABLE = ?, CASE_SENSITIVE = ?, SEARCHABLE = ?, LOCAL_TYPE_NAME = ?");
+			pstmt.setString(rowNum++, "id");
+			pstmt.setInt(rowNum++, java.sql.Types.VARCHAR);
+			pstmt.setString(rowNum++, "'");
+			pstmt.setString(rowNum++, "'");
+			pstmt.setShort(rowNum++, (short) ResultSetMetaData.columnNullableUnknown);
+			pstmt.setBoolean(rowNum++, true);
+			pstmt.setShort(rowNum++, (short) DatabaseMetaData.typeSearchable);
+			pstmt.setString(rowNum++, "id");
+			// 18桁 FIXME
+		}
+
+		{
+			int rowNum = 1;
+			final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement(
+					"INSERT INTO GMETA_TYPEINFO SET TYPE_NAME = ?, DATA_TYPE = ?, LITERAL_PREFIX = ?, LITERAL_SUFFIX = ?, NULLABLE = ?, CASE_SENSITIVE = ?, SEARCHABLE = ?, LOCAL_TYPE_NAME = ?");
+			pstmt.setString(rowNum++, "string");
+			pstmt.setInt(rowNum++, java.sql.Types.VARCHAR);
+			pstmt.setString(rowNum++, "'");
+			pstmt.setString(rowNum++, "'");
+			pstmt.setShort(rowNum++, (short) ResultSetMetaData.columnNullableUnknown);
+			pstmt.setBoolean(rowNum++, true);
+			pstmt.setShort(rowNum++, (short) DatabaseMetaData.typeSearchable);
+			pstmt.setString(rowNum++, "string");
+		}
+
+		{
+			int rowNum = 1;
+			final PreparedStatement pstmt = conn.getCacheConnection().prepareStatement(
+					"INSERT INTO GMETA_TYPEINFO SET TYPE_NAME = ?, DATA_TYPE = ?, LITERAL_PREFIX = ?, LITERAL_SUFFIX = ?, NULLABLE = ?, CASE_SENSITIVE = ?, SEARCHABLE = ?, LOCAL_TYPE_NAME = ?");
+			pstmt.setString(rowNum++, "picklist");
+			pstmt.setInt(rowNum++, java.sql.Types.VARCHAR);
+			pstmt.setString(rowNum++, "'");
+			pstmt.setString(rowNum++, "'");
+			pstmt.setShort(rowNum++, (short) ResultSetMetaData.columnNullableUnknown);
+			pstmt.setBoolean(rowNum++, true);
+			pstmt.setShort(rowNum++, (short) DatabaseMetaData.typeSearchable);
+			pstmt.setString(rowNum++, "picklist");
+		}
+
+		return conn.getCacheConnection().createStatement()
+				.executeQuery("SELECT * FROM GMETA_TYPEINFO ORDER BY DATA_TYPE");
 	}
 
 	public ResultSet getIndexInfo(String catalog, String schema, String table, boolean unique, boolean approximate)
