@@ -405,7 +405,7 @@ public class BlancoGenericJdbcResultSet implements ResultSet {
 
 	public int getHoldability() throws SQLException {
 		// FIXME!!!
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getHoldability()");
 	}
 
 	public boolean isClosed() throws SQLException {

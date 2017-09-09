@@ -199,7 +199,7 @@ public abstract class AbstractBlancoGenericJdbcStatement implements BlancoGeneri
 	}
 
 	public boolean getMoreResults(int current) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMoreResults(int current)");
 	}
 
 	public ResultSet getGeneratedKeys() throws SQLException {
