@@ -64,7 +64,7 @@ public abstract class AbstractBlancoGenericJdbcDriver implements Driver {
 
 	public DriverPropertyInfo[] getPropertyInfo(final String url, final Properties info) throws SQLException {
 		// TODO Auto-generated method stub
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getPropertyInfo(final String url, final Properties info)");
 		// return null;
 	}
 
@@ -74,7 +74,7 @@ public abstract class AbstractBlancoGenericJdbcDriver implements Driver {
 	}
 
 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-		throw new SQLFeatureNotSupportedException("Not Implemented.");
+		throw new SQLFeatureNotSupportedException("Not Implemented: getParentLogger()");
 	}
 
 }

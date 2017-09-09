@@ -58,15 +58,15 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public <T> T unwrap(Class<T> iface) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: unwrap(Class<T> iface)");
 	}
 
 	public boolean isWrapperFor(Class<?> iface) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: isWrapperFor(Class<?> iface)");
 	}
 
 	public boolean allProceduresAreCallable() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	public boolean allTablesAreSelectable() throws SQLException {
@@ -75,11 +75,11 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public String getURL() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getURL()");
 	}
 
 	public String getUserName() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getUserName()");
 	}
 
 	public boolean isReadOnly() throws SQLException {
@@ -88,19 +88,19 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public boolean nullsAreSortedHigh() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: nullsAreSortedHigh()");
 	}
 
 	public boolean nullsAreSortedLow() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: nullsAreSortedLow()");
 	}
 
 	public boolean nullsAreSortedAtStart() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: nullsAreSortedAtStart()");
 	}
 
 	public boolean nullsAreSortedAtEnd() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: nullsAreSortedAtEnd()");
 	}
 
 	public abstract String getDatabaseProductName() throws SQLException;
@@ -120,143 +120,149 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public boolean usesLocalFiles() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// default impl do not use local file.
+		return false;
 	}
 
 	public boolean usesLocalFilePerTable() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// default impl do not use local file.
+		return false;
 	}
 
 	public boolean supportsMixedCaseIdentifiers() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: supportsMixedCaseIdentifiers()");
 	}
 
 	public boolean storesUpperCaseIdentifiers() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: storesUpperCaseIdentifiers()");
 	}
 
 	public boolean storesLowerCaseIdentifiers() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: storesLowerCaseIdentifiers()");
 	}
 
 	public boolean storesMixedCaseIdentifiers() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: storesMixedCaseIdentifiers()");
 	}
 
 	public boolean supportsMixedCaseQuotedIdentifiers() throws SQLException {
+		// FIXME
 		return false;
 	}
 
 	public boolean storesUpperCaseQuotedIdentifiers() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: storesUpperCaseQuotedIdentifiers()");
 	}
 
 	public boolean storesLowerCaseQuotedIdentifiers() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: storesLowerCaseQuotedIdentifiers()");
 	}
 
 	public boolean storesMixedCaseQuotedIdentifiers() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: storesMixedCaseQuotedIdentifiers()");
 	}
 
 	public String getIdentifierQuoteString() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getIdentifierQuoteString()");
 	}
 
 	public String getSQLKeywords() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getSQLKeywords()");
 	}
 
 	public String getNumericFunctions() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getNumericFunctions()");
 	}
 
 	public String getStringFunctions() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getStringFunctions()");
 	}
 
 	public String getSystemFunctions() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getSystemFunctions()");
 	}
 
 	public String getTimeDateFunctions() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getTimeDateFunctions()");
 	}
 
 	public String getSearchStringEscape() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getSearchStringEscape()");
 	}
 
 	public String getExtraNameCharacters() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getExtraNameCharacters()");
 	}
 
 	public boolean supportsAlterTableWithAddColumn() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// this driver is read only
+		return false;
 	}
 
 	public boolean supportsAlterTableWithDropColumn() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// this driver is read only
+		return false;
 	}
 
 	public boolean supportsColumnAliasing() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: supportsColumnAliasing()");
 	}
 
 	public boolean nullPlusNonNullIsNull() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: nullPlusNonNullIsNull()");
 	}
 
 	public boolean supportsConvert() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: supportsConvert()");
 	}
 
 	public boolean supportsConvert(int fromType, int toType) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: supportsConvert(int fromType, int toType)");
 	}
 
 	public boolean supportsTableCorrelationNames() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: supportsTableCorrelationNames()");
 	}
 
 	public boolean supportsDifferentTableCorrelationNames() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: supportsDifferentTableCorrelationNames()");
 	}
 
 	public boolean supportsExpressionsInOrderBy() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: supportsExpressionsInOrderBy()");
 	}
 
 	public boolean supportsOrderByUnrelated() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	public boolean supportsGroupBy() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return true;
 	}
 
 	public boolean supportsGroupByUnrelated() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	public boolean supportsGroupByBeyondSelect() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: supportsGroupByBeyondSelect()");
 	}
 
 	public boolean supportsLikeEscapeClause() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: supportsLikeEscapeClause()");
 	}
 
 	public boolean supportsMultipleResultSets() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// do not support multiple resultset
+		return false;
 	}
 
 	public boolean supportsMultipleTransactions() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	public boolean supportsNonNullableColumns() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return true;
 	}
 
 	public boolean supportsMinimumSQLGrammar() throws SQLException {
@@ -312,23 +318,23 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public String getSchemaTerm() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getSchemaTerm()");
 	}
 
 	public String getProcedureTerm() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getProcedureTerm()");
 	}
 
 	public String getCatalogTerm() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getCatalogTerm()");
 	}
 
 	public boolean isCatalogAtStart() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: isCatalogAtStart()");
 	}
 
 	public String getCatalogSeparator() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getCatalogSeparator()");
 	}
 
 	/////////////////////////////
@@ -451,115 +457,121 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public int getMaxBinaryLiteralLength() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxBinaryLiteralLength()");
 	}
 
 	public int getMaxCharLiteralLength() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxCharLiteralLength()");
 	}
 
 	public int getMaxColumnNameLength() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxColumnNameLength()");
 	}
 
 	public int getMaxColumnsInGroupBy() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxColumnsInGroupBy()");
 	}
 
 	public int getMaxColumnsInIndex() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxColumnsInIndex()");
 	}
 
 	public int getMaxColumnsInOrderBy() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxColumnsInOrderBy()");
 	}
 
 	public int getMaxColumnsInSelect() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxColumnsInSelect()");
 	}
 
 	public int getMaxColumnsInTable() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxColumnsInTable()");
 	}
 
 	public int getMaxConnections() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxConnections()");
 	}
 
 	public int getMaxCursorNameLength() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxCursorNameLength()");
 	}
 
 	public int getMaxIndexLength() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxIndexLength()");
 	}
 
 	public int getMaxSchemaNameLength() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxSchemaNameLength()");
 	}
 
 	public int getMaxProcedureNameLength() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxProcedureNameLength()");
 	}
 
 	public int getMaxCatalogNameLength() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxCatalogNameLength()");
 	}
 
 	public int getMaxRowSize() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxRowSize()");
 	}
 
 	public boolean doesMaxRowSizeIncludeBlobs() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: doesMaxRowSizeIncludeBlobs()");
 	}
 
 	public int getMaxStatementLength() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxStatementLength()");
 	}
 
 	public int getMaxStatements() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxStatements()");
 	}
 
 	public int getMaxTableNameLength() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxTableNameLength()");
 	}
 
 	public int getMaxTablesInSelect() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxTablesInSelect()");
 	}
 
 	public int getMaxUserNameLength() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getMaxUserNameLength()");
 	}
 
 	public int getDefaultTransactionIsolation() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// FIXME
+		throw new SQLException("Not Implemented: getDefaultTransactionIsolation()");
 	}
 
 	public boolean supportsTransactions() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// read only
+		return false;
 	}
 
 	public boolean supportsTransactionIsolationLevel(int level) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: supportsTransactionIsolationLevel(int level)");
 	}
 
 	public boolean supportsDataDefinitionAndDataManipulationTransactions() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// read only
+		return false;
 	}
 
 	public boolean supportsDataManipulationTransactionsOnly() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// read only
+		return false;
 	}
 
 	public boolean dataDefinitionCausesTransactionCommit() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// read only
+		return false;
 	}
 
 	public boolean dataDefinitionIgnoredInTransactions() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// read only
+		return false;
 	}
 
 	public ResultSet getProcedures(String catalog, String schemaPattern, String procedureNamePattern)
@@ -569,7 +581,8 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 
 	public ResultSet getProcedureColumns(String catalog, String schemaPattern, String procedureNamePattern,
 			String columnNamePattern) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException(
+				"Not Implemented: getProcedureColumns(String catalog, String schemaPattern, String procedureNamePattern, String columnNamePattern)");
 	}
 
 	public ResultSet getSchemas() throws SQLException {
@@ -588,38 +601,42 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 
 	public ResultSet getColumnPrivileges(String catalog, String schema, String table, String columnNamePattern)
 			throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException(
+				"Not Implemented: getColumnPrivileges(String catalog, String schema, String table, String columnNamePattern)");
 	}
 
 	public ResultSet getTablePrivileges(String catalog, String schemaPattern, String tableNamePattern)
 			throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException(
+				"Not Implemented: getTablePrivileges(String catalog, String schemaPattern, String tableNamePattern)");
 	}
 
 	public ResultSet getBestRowIdentifier(String catalog, String schema, String table, int scope, boolean nullable)
 			throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException(
+				"Not Implemented: getBestRowIdentifier(String catalog, String schema, String table, int scope, boolean nullable)");
 	}
 
 	public ResultSet getVersionColumns(String catalog, String schema, String table) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getVersionColumns(String catalog, String schema, String table)");
 	}
 
 	public ResultSet getPrimaryKeys(String catalog, String schema, String table) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getPrimaryKeys(String catalog, String schema, String table)");
 	}
 
 	public ResultSet getImportedKeys(String catalog, String schema, String table) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getImportedKeys(String catalog, String schema, String table)");
 	}
 
 	public ResultSet getExportedKeys(String catalog, String schema, String table) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getExportedKeys(String catalog, String schema, String table)");
 	}
 
 	public ResultSet getCrossReference(String parentCatalog, String parentSchema, String parentTable,
 			String foreignCatalog, String foreignSchema, String foreignTable) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException(
+				"Not Implemented: getCrossReference(String parentCatalog, String parentSchema, String parentTable, String foreignCatalog, String foreignSchema, String foreignTable)");
 	}
 
 	public ResultSet getTypeInfo() throws SQLException {
@@ -692,7 +709,8 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 
 	public ResultSet getIndexInfo(String catalog, String schema, String table, boolean unique, boolean approximate)
 			throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException(
+				"Not Implemented: getIndexInfo(String catalog, String schema, String table, boolean unique, boolean approximate)");
 	}
 
 	public boolean supportsResultSetType(int type) throws SQLException {
@@ -711,43 +729,52 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public boolean supportsResultSetConcurrency(int type, int concurrency) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: supportsResultSetConcurrency(int type, int concurrency)");
 	}
 
 	public boolean ownUpdatesAreVisible(int type) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// read only
+		return false;
 	}
 
 	public boolean ownDeletesAreVisible(int type) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// read only
+		return false;
 	}
 
 	public boolean ownInsertsAreVisible(int type) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// read only
+		return false;
 	}
 
 	public boolean othersUpdatesAreVisible(int type) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// FIXME
+		return false;
 	}
 
 	public boolean othersDeletesAreVisible(int type) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// FIXME
+		return false;
 	}
 
 	public boolean othersInsertsAreVisible(int type) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// FIXME
+		return false;
 	}
 
 	public boolean updatesAreDetected(int type) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// FIXME
+		return false;
 	}
 
 	public boolean deletesAreDetected(int type) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// FIXME
+		return false;
 	}
 
 	public boolean insertsAreDetected(int type) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		// FIXME
+		return false;
 	}
 
 	public boolean supportsBatchUpdates() throws SQLException {
@@ -780,16 +807,19 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public ResultSet getSuperTypes(String catalog, String schemaPattern, String typeNamePattern) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException(
+				"Not Implemented: getSuperTypes(String catalog, String schemaPattern, String typeNamePattern)");
 	}
 
 	public ResultSet getSuperTables(String catalog, String schemaPattern, String tableNamePattern) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException(
+				"Not Implemented: getSuperTables(String catalog, String schemaPattern, String tableNamePattern)");
 	}
 
 	public ResultSet getAttributes(String catalog, String schemaPattern, String typeNamePattern,
 			String attributeNamePattern) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException(
+				"Not Implemented: getAttributes(String catalog, String schemaPattern, String typeNamePattern, String attributeNamePattern)");
 	}
 
 	public boolean supportsResultSetHoldability(int holdability) throws SQLException {
@@ -798,7 +828,7 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public int getResultSetHoldability() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getResultSetHoldability()");
 	}
 
 	public abstract int getDatabaseMajorVersion() throws SQLException;
@@ -814,11 +844,11 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public int getSQLStateType() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getSQLStateType()");
 	}
 
 	public boolean locatorsUpdateCopy() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: locatorsUpdateCopy()");
 	}
 
 	public boolean supportsStatementPooling() throws SQLException {
@@ -827,11 +857,11 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public RowIdLifetime getRowIdLifetime() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getRowIdLifetime()");
 	}
 
 	public ResultSet getSchemas(String catalog, String schemaPattern) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getSchemas(String catalog, String schemaPattern)");
 	}
 
 	public boolean supportsStoredFunctionsUsingCallSyntax() throws SQLException {
@@ -840,30 +870,33 @@ public abstract class AbstractBlancoGenericJdbcDatabaseMetaData implements Datab
 	}
 
 	public boolean autoCommitFailureClosesAllResultSets() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: autoCommitFailureClosesAllResultSets()");
 	}
 
 	public ResultSet getClientInfoProperties() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException("Not Implemented: getClientInfoProperties()");
 	}
 
 	public ResultSet getFunctions(String catalog, String schemaPattern, String functionNamePattern)
 			throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException(
+				"Not Implemented: getFunctions(String catalog, String schemaPattern, String functionNamePattern)");
 	}
 
 	public ResultSet getFunctionColumns(String catalog, String schemaPattern, String functionNamePattern,
 			String columnNamePattern) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException(
+				"Not Implemented: getFunctionColumns(String catalog, String schemaPattern, String functionNamePattern, String columnNamePattern)");
 	}
 
 	public ResultSet getPseudoColumns(String catalog, String schemaPattern, String tableNamePattern,
 			String columnNamePattern) throws SQLException {
-		throw new SQLException("Not Implemented.");
+		throw new SQLException(
+				"Not Implemented: getPseudoColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern)");
 	}
 
 	public boolean generatedKeyAlwaysReturned() throws SQLException {
-		throw new SQLException("Not Implemented.");
+		return false;
 	}
 
 	/**
