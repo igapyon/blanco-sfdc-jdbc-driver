@@ -233,10 +233,13 @@ public class BlancoSfdcJdbcFillCacheCommon {
 						}
 						sObjectName = obj.getValue().toString();
 					} else if (indexColumn == 1) {
-						try {
+						if ("Id".compareToIgnoreCase(obj.getName().getLocalPart()) != 0) {
+							throw new SQLException("Unexpected result it must be 'Id': " + obj.toString());
+						}
+						if (obj.getValue() == null) {
+							rowIdString = null;
+						} else {
 							rowIdString = obj.getValue().toString();
-						} catch (NullPointerException ex) {
-							throw new IllegalArgumentException(obj.toString());
 						}
 					} else {
 						final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
@@ -281,7 +284,11 @@ public class BlancoSfdcJdbcFillCacheCommon {
 					if (indexColumn == 0) {
 						sObjectName = obj.getValue().toString();
 					} else if (indexColumn == 1) {
-						rowIdString = obj.getValue().toString();
+						if (obj.getValue() == null) {
+							rowIdString = null;
+						} else {
+							rowIdString = obj.getValue().toString();
+						}
 					} else {
 						final ResultSet metadataRs = BlancoGenericJdbcCacheUtilDatabaseMetaData.getColumnsFromCache(
 								connCache, "GMETA_COLUMNS_" + globalUniqueKey, null, null, sObjectName,
