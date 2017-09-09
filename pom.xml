@@ -15,11 +15,11 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- force-partner-api-40.0.0.jar : partner.wsdl -->
+		<!-- force-partner-api : partner.wsdl -->
 		<dependency>
 			<groupId>com.force.api</groupId>
 			<artifactId>force-partner-api</artifactId>
-			<version>40.0.0</version>
+			<version>41.0.0</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
