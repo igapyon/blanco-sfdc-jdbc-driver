@@ -254,9 +254,9 @@ public class BlancoSfdcJdbcFillCacheCommon {
 										new java.sql.Timestamp(soqlDateToDate(value).getTime()));
 								break;
 							default:
-								pstmt.setString(pstmtIndex++, value);
-								System.err.println("Non supported type: " + metadataRs.getString("TYPE_NAME"));
-								break;
+//								pstmt.setString(pstmtIndex++, value);
+								throw new SQLException("Non supported type: " + metadataRs.getString("TYPE_NAME"));
+	//							break;
 							}
 						}
 

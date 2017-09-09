@@ -128,7 +128,15 @@ public class BlancoSfdcJdbcDatabaseMetaData extends AbstractBlancoGenericJdbcDat
 					// "DATA_TYPE"
 					pstmt.setInt(rowNum++, soqlTypeName2SqlTypes(field.getType().name()));
 					// "TYPE_NAME"
-					pstmt.setString(rowNum++, field.getType().toString());
+					{
+						// FIXME
+						String typeName = field.getType().toString();
+						// if (typeName.compareToIgnoreCase("id") == 0) {
+						// typeName = typeName + "_SFDC";
+						// }
+						pstmt.setString(rowNum++, typeName);
+
+					}
 					// "COLUMN_SIZE"
 					pstmt.setInt(rowNum++, field.getLength());
 					// "DECIMAL_DIGITS"
