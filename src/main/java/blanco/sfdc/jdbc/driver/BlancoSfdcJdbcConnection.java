@@ -63,11 +63,11 @@ public class BlancoSfdcJdbcConnection extends AbstractBlancoGenericJdbcConnectio
 
 			partnerConn = new PartnerConnection(connectorCfg);
 		} catch (LoginFault ex) {
-			System.err.println("[" + ex.getExceptionCode() + "] " + ex.getExceptionMessage());
-			throw new SQLException("SFDC connection failed: " + ex.getExceptionCode() + ": " + ex.getExceptionMessage(),
-					ex);
+			ex.printStackTrace();
+			throw new SQLException("Login to SFDC failed: " + ex.getMessage(), ex);
 		} catch (ConnectionException ex) {
-			throw new SQLException("SFDC connection failed: " + ex.toString(), ex);
+			ex.printStackTrace();
+			throw new SQLException("Connect to SFDC failed: " + ex.getMessage(), ex);
 		}
 	}
 
