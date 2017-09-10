@@ -63,8 +63,10 @@ public class BlancoSfdcJdbcConnection extends AbstractBlancoGenericJdbcConnectio
 
 			partnerConn = new PartnerConnection(connectorCfg);
 		} catch (LoginFault ex) {
+			// 元の ex を SQLException に引き継ぐと具合が悪いので引き継ぎを抑制しています。
 			throw new SQLException("Fail to Login SFDC: [" + ex.getExceptionCode() + "] " + ex.getExceptionMessage());
 		} catch (ConnectionException ex) {
+			// 元の ex を SQLException に引き継ぐと具合が悪いので引き継ぎを抑制しています。
 			throw new SQLException("Fail to Connect SFDC: " + ex.getMessage());
 		}
 	}

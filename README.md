@@ -29,18 +29,18 @@ ls ./target/blanco-sfdc-jdbc-driver-1.0-SNAPSHOT.jar
 ls ./target/dependency/
 ```
 
-## How to run with squirrelsql
+## How to run with SQuirreL
 
-[squirrelsql](http://squirrel-sql.sourceforge.net/) によって大雑把に動作するところまで確認済みです。
+[SQuirreL](http://squirrel-sql.sourceforge.net/) によって大雑把に動作するところまで確認済みです。
 
-ちなみに squirrelsql を乱暴に上書きして動作させる場合の手順は以下です。もっと正しい手順については各自検討してください。
+ちなみに [SQuirreL](http://squirrel-sql.sourceforge.net/) を乱暴に上書きして動作させる場合の手順は以下です。もっと正しい手順については各自検討してください。
 
 ```sh
 cp -p ./target/blanco-sfdc-jdbc-driver-1.0-SNAPSHOT.jar /tmp/squirrelsql-3.8.0-standard/lib/
 cp -p ./target/dependency/* /tmp/squirrelsql-3.8.0-standard/lib/
 ```
 
-### How to connect from squirrelsql to SFDC
+### How to connect to SFDC using SQuirreL
 
 ```
 Name: Salesforce SOQL RO
