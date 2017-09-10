@@ -17,6 +17,21 @@ Blanco SFDC JDBC Driver is a JDBC Driver to access SFDC using SOQL.
 - No support.
 - Read source code yourself.
 
+## How to build
+
+```sh
+git clone https://github.com/igapyon/blanco-sfdc-jdbc-driver.git
+cd blanco-sfdc-jdbc-driver/
+mvn package
+ls ./target/blanco-sfdc-jdbc-driver-1.0-SNAPSHOT.jar 
+ls ./target/dependency/
+```
+
+## How to run with squirrelsql
+
+
+
+
 # LICENSE
 
 This software is licensed under the Apache License or the GNU Lesser General Public License or both.
@@ -59,5 +74,3 @@ This software is licensed under the Apache License or the GNU Lesser General Pub
  */
 ```
 
-# TODO
-- 双方向カーソルのサポート。
