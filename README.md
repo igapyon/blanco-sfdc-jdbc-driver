@@ -91,3 +91,7 @@ This software is licensed under the Apache License or the GNU Lesser General Pub
  */
 ```
 
+## 依存ファイル
+
+依存ファイルの一覧及びライセンスの確認をおこないたい場合は pom.xml ファイルの内容およびその依存先を確認してください。
+
