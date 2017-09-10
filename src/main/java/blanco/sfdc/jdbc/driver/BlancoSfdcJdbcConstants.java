@@ -38,4 +38,16 @@ public class BlancoSfdcJdbcConstants {
 	 * jdbc:blanco:sfdc:soqlro://login.salesforce.com/services/Soap/u/40.0
 	 */
 	public static final String JDBC_DRIVER_URL_PREFIX = "jdbc:blanco:sfdc:soqlro:";
+
+	public static final String[] SOQLKEYWORDS = new String[] { "SELECT", "TYPEOF", "FROM", "USING", "SCOPE", "WHERE",
+			"IN", "LIKE", "NOT", "INCLUDES", "EXCLUDES", "WITH", "ABOVE", "BELOW", "ABOVE_OR_BELOW", "OR", "AND", "AT",
+			"NULL", "DATA", "CATEGORY", "GROUP", "BY", "ROLLUP", "CUBE", "HAVING", "ORDER", "ASC", "DESC", "NULLS",
+			"FIRST", "LAST", "LIMIT", "OFFSET", "FOR", "VIEW", "REFERENCE", "UPDATE", "TRACKING", "VIEWSTAT", };
+
+	/*
+	 * TODO ...
+	 * 
+	 * FUNCTINOS AVG() COUNT() COUNT_DISTINCT() MIN() MAX() SUM()
+	 */
+
 }
