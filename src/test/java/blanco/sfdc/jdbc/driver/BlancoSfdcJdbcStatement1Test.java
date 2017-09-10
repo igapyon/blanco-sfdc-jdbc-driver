@@ -16,6 +16,9 @@ import junit.framework.TestCase;
 public class BlancoSfdcJdbcStatement1Test extends TestCase {
 
 	public void test001() throws Exception {
+		if (BlancoSfdcJdbcTestConstants.isTestWithSfdc() == false)
+			return;
+
 		Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
 
 		try {
@@ -66,6 +69,9 @@ public class BlancoSfdcJdbcStatement1Test extends TestCase {
 	}
 
 	public void test002() throws Exception {
+		if (BlancoSfdcJdbcTestConstants.isTestWithSfdc() == false)
+			return;
+
 		Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
 
 		final Properties prop = new Properties();
@@ -95,6 +101,9 @@ public class BlancoSfdcJdbcStatement1Test extends TestCase {
 	}
 
 	public void test003() throws Exception {
+		if (BlancoSfdcJdbcTestConstants.isTestWithSfdc() == false)
+			return;
+
 		Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
 
 		final Properties prop = new Properties();

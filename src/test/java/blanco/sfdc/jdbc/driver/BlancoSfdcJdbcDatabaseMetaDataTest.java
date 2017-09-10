@@ -14,6 +14,9 @@ import junit.framework.TestCase;
 public class BlancoSfdcJdbcDatabaseMetaDataTest extends TestCase {
 
 	public void test001() throws Exception {
+		if (BlancoSfdcJdbcTestConstants.isTestWithSfdc() == false)
+			return;
+
 		Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
 		try {
 			final Properties prop = new Properties();

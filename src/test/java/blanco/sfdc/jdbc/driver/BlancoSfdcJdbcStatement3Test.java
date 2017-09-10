@@ -16,6 +16,9 @@ import junit.framework.TestCase;
 
 public class BlancoSfdcJdbcStatement3Test extends TestCase {
 	public void test004() throws Exception {
+		if (BlancoSfdcJdbcTestConstants.isTestWithSfdc() == false)
+			return;
+
 		Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
 
 		final Properties prop = new Properties();
