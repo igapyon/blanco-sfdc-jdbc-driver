@@ -19,6 +19,8 @@ Blanco SFDC JDBC Driver is a JDBC Driver to access SFDC using SOQL.
 
 ## How to build
 
+You can build 'Blanco SFDC JDBC Driver' with command line below:
+
 ```sh
 git clone https://github.com/igapyon/blanco-sfdc-jdbc-driver.git
 cd blanco-sfdc-jdbc-driver/
@@ -29,7 +31,7 @@ ls ./target/dependency/
 
 ## How to run with squirrelsql
 
-[squirrelsql](http://squirrel-sql.sourceforge.net/) により大雑把に動作します。
+[squirrelsql](http://squirrel-sql.sourceforge.net/) によって大雑把に動作するところまで確認済みです。
 
 ちなみに squirrelsql を乱暴に上書きして動作させる場合の手順は以下です。もっと正しい手順については各自検討してください。
 
