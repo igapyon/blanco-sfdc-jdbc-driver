@@ -29,10 +29,14 @@ ls ./target/dependency/
 
 ## How to run with squirrelsql
 
+squirrelsql を乱暴に上書きする場合は以下の手順です。もっと正しい手順については各自検討してください。
+
 ```sh
 cp -p ./target/blanco-sfdc-jdbc-driver-1.0-SNAPSHOT.jar /tmp/squirrelsql-3.8.0-standard/lib/
 cp -p ./target/dependency/* /tmp/squirrelsql-3.8.0-standard/lib/
 ```
+
+### How to connect from squirrelsql to SFDC
 
 ```
 Name: Salesforce SOQL RO
