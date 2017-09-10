@@ -44,7 +44,7 @@ cp -p ./target/dependency/* /tmp/squirrelsql-3.8.0-standard/lib/
 
 ```
 Name: Salesforce SOQL RO
-Example URL: blanco:sfdc:jdbc:https://login.salesforce.com/services/Soap/u/40.0
+Example URL: jdbc:blanco:sfdc:soqlro://login.salesforce.com/services/Soap/u/40.0
 Website URL: https://github.com/igapyon/blanco-sfdc-jdbc-driver
 Class Name: blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver
 ```

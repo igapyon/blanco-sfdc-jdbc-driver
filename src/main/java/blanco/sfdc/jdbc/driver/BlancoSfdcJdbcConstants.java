@@ -34,5 +34,8 @@
 package blanco.sfdc.jdbc.driver;
 
 public class BlancoSfdcJdbcConstants {
-	public static final String JDBC_DRIVER_URL_PREFIX = "blanco:sfdc:jdbc:";
+	/**
+	 * jdbc:blanco:sfdc:soqlro://login.salesforce.com/services/Soap/u/40.0
+	 */
+	public static final String JDBC_DRIVER_URL_PREFIX = "jdbc:blanco:sfdc:soqlro:";
 }

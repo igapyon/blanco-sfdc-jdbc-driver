@@ -56,7 +56,8 @@ public class BlancoSfdcJdbcConnection extends AbstractBlancoGenericJdbcConnectio
 		try {
 			final ConnectorConfig connectorCfg = new ConnectorConfig();
 
-			connectorCfg.setAuthEndpoint(url.substring(BlancoSfdcJdbcConstants.JDBC_DRIVER_URL_PREFIX.length()));
+			connectorCfg
+					.setAuthEndpoint("https:" + url.substring(BlancoSfdcJdbcConstants.JDBC_DRIVER_URL_PREFIX.length()));
 			connectorCfg.setUsername(user);
 			connectorCfg.setPassword(pass);
 

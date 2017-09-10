@@ -20,18 +20,18 @@ public class BlancoSfdcJdbcStatement1Test extends TestCase {
 			return;
 
 		Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
-
 		try {
 			final Properties prop = new Properties();
-			final InputStream inStream = new FileInputStream("sfdc.properties");
+			final InputStream inStream = new FileInputStream("soqlro.properties");
 			prop.load(new BufferedInputStream(inStream));
 			inStream.close();
 
-			final String url = prop.getProperty("url", "https://login.salesforce.com/services/Soap/u/40.0");
+			final String url = prop.getProperty("url",
+					"jdbc:blanco:sfdc:soqlro://login.salesforce.com/services/Soap/u/40.0");
 			final String user = prop.getProperty("user", "NoUserSpesified");
 			final String pass = prop.getProperty("password", "NoPassSpecified");
 
-			final Connection conn = DriverManager.getConnection("blanco:sfdc:jdbc:" + url, user, pass);
+			final Connection conn = DriverManager.getConnection(url, user, pass);
 
 			final Statement stmt = conn.createStatement();
 
@@ -54,8 +54,8 @@ public class BlancoSfdcJdbcStatement1Test extends TestCase {
 				final java.sql.Date lastModifiedDate = rs.getDate("LastModifiedDate");
 				final java.sql.Timestamp lastModifiedDateTimestamp = rs.getTimestamp("LastModifiedDate");
 
-				System.err.println("id: " + id + ", name:" + name + ", LastModifiedDate:" + lastModifiedDate
-						+ ", LastModifiedDate2:" + lastModifiedDateTimestamp);
+				final String line = "id: " + id + ", name:" + name + ", LastModifiedDate:" + lastModifiedDate
+						+ ", LastModifiedDate2:" + lastModifiedDateTimestamp;
 			}
 			rs.close();
 			stmt.close();
@@ -73,31 +73,35 @@ public class BlancoSfdcJdbcStatement1Test extends TestCase {
 			return;
 
 		Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
+		try {
+			final Properties prop = new Properties();
+			final InputStream inStream = new FileInputStream("soqlro.properties");
+			prop.load(new BufferedInputStream(inStream));
+			inStream.close();
 
-		final Properties prop = new Properties();
-		final InputStream inStream = new FileInputStream("sfdc.properties");
-		prop.load(new BufferedInputStream(inStream));
-		inStream.close();
+			final String url = prop.getProperty("url",
+					"jdbc:blanco:sfdc:soqlro://login.salesforce.com/services/Soap/u/40.0");
+			final String user = prop.getProperty("user", "NoUserSpesified");
+			final String pass = prop.getProperty("password", "NoPassSpecified");
 
-		final String url = prop.getProperty("url", "https://login.salesforce.com/services/Soap/u/40.0");
-		final String user = prop.getProperty("user", "NoUserSpesified");
-		final String pass = prop.getProperty("password", "NoPassSpecified");
+			final Connection conn = DriverManager.getConnection(url, user, pass);
 
-		final Connection conn = DriverManager.getConnection("blanco:sfdc:jdbc:" + url, user, pass);
-
-		final Statement stmt = conn.createStatement();
-		final String sql = "SELECT Id, Name, LastModifiedDate FROM Account";
-		final ResultSet rs = stmt.executeQuery(sql);
-		if (true)
-			while (rs.next()) {
-				final String id = rs.getString(1);
-				final String name = rs.getString(2);
-				final java.sql.Date lastModifiedDate = rs.getDate(3);
-				System.err.println("id: " + id + ", name:" + name + ", LastModifiedDate:" + lastModifiedDate);
-			}
-		rs.close();
-		stmt.close();
-		conn.close();
+			final Statement stmt = conn.createStatement();
+			final String sql = "SELECT Id, Name, LastModifiedDate FROM Account";
+			final ResultSet rs = stmt.executeQuery(sql);
+			if (true)
+				while (rs.next()) {
+					final String id = rs.getString(1);
+					final String name = rs.getString(2);
+					final java.sql.Date lastModifiedDate = rs.getDate(3);
+					final String line = "id: " + id + ", name:" + name + ", LastModifiedDate:" + lastModifiedDate;
+				}
+			rs.close();
+			stmt.close();
+			conn.close();
+		} catch (Exception ex) {
+			fail();
+		}
 	}
 
 	public void test003() throws Exception {
@@ -105,33 +109,36 @@ public class BlancoSfdcJdbcStatement1Test extends TestCase {
 			return;
 
 		Class.forName("blanco.sfdc.jdbc.driver.BlancoSfdcJdbcDriver");
+		try {
+			final Properties prop = new Properties();
+			final InputStream inStream = new FileInputStream("soqlro.properties");
+			prop.load(new BufferedInputStream(inStream));
+			inStream.close();
 
-		final Properties prop = new Properties();
-		final InputStream inStream = new FileInputStream("sfdc.properties");
-		prop.load(new BufferedInputStream(inStream));
-		inStream.close();
+			final String url = prop.getProperty("url",
+					"jdbc:blanco:sfdc:soqlro://login.salesforce.com/services/Soap/u/40.0");
+			final String user = prop.getProperty("user", "NoUserSpesified");
+			final String pass = prop.getProperty("password", "NoPassSpecified");
 
-		final String url = prop.getProperty("url", "https://login.salesforce.com/services/Soap/u/40.0");
-		final String user = prop.getProperty("user", "NoUserSpesified");
-		final String pass = prop.getProperty("password", "NoPassSpecified");
+			final Connection conn = DriverManager.getConnection(url, user, pass);
 
-		final Connection conn = DriverManager.getConnection("blanco:sfdc:jdbc:" + url, user, pass);
+			final Statement stmt = conn.createStatement();
+			final String sql = "SELECT Id, Name, LastModifiedDate FROM Account";
+			final ResultSet rs = stmt.executeQuery(sql);
 
-		final Statement stmt = conn.createStatement();
-		final String sql = "SELECT Id, Name, LastModifiedDate FROM Account";
-		final ResultSet rs = stmt.executeQuery(sql);
+			rs.next();
+			final ResultSetMetaData rsmd = rs.getMetaData();
+			for (int indexCol = 1; indexCol <= rsmd.getColumnCount(); indexCol++) {
+				String result = "";
+				result += rsmd.getColumnName(indexCol) + " (" + rsmd.getColumnTypeName(indexCol) + "): "
+						+ rsmd.getColumnType(indexCol);
+			}
 
-		rs.next();
-		final ResultSetMetaData rsmd = rs.getMetaData();
-		for (int indexCol = 1; indexCol <= rsmd.getColumnCount(); indexCol++) {
-			String result = "";
-			result += rsmd.getColumnName(indexCol) + " (" + rsmd.getColumnTypeName(indexCol) + "): "
-					+ rsmd.getColumnType(indexCol);
-			System.out.println(result);
+			rs.close();
+			stmt.close();
+			conn.close();
+		} catch (Exception ex) {
+			fail();
 		}
-
-		rs.close();
-		stmt.close();
-		conn.close();
 	}
 }
